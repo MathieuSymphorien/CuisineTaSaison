@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { Header } from "../header/header";
+
 @Component({
-  selector: "app-recipe",
+  selector: "app-recipe-page",
   imports: [Header],
   template: `
     <app-header></app-header>
-    <p>recipe works!</p>
+    <p>recipe-page works!</p>
   `,
   styles: ``,
 })
-export class Recipe {}
+export class RecipePage {}

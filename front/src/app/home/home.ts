@@ -1,15 +1,11 @@
 import { Component } from "@angular/core";
-
+import { Header } from "../header/header";
 @Component({
   selector: "app-home",
-  imports: [],
+  imports: [Header],
   template: `
-    <section>
-      <form>
-        <input type="text" placeholder="Filter by city" />
-        <button class="primary" type="button">Search</button>
-      </form>
-    </section>
+    <app-header></app-header>
+    <h1>Bienvenue sur CuisineTaSaison !</h1>
   `,
   styleUrls: ["./home.css"],
 })
