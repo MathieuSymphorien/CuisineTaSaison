@@ -8,19 +8,15 @@ import { RouterLink, RouterOutlet } from "@angular/router";
     <header class="brand-name">
       <nav>
         <a routerLink="/">
-          <img
-            class="brand-logo"
-            src="/assets/logo.svg"
-            alt="logo"
-            aria-hidden="true"
-          />
+          <img src="/assets/logo.svg" alt="logo" aria-hidden="true" />
         </a>
-        <a routerLink="/">Accueil</a>
-        <a routerLink="/recipe">Recette</a>
+        <a routerLink="/proposition">Proposition</a>
+        <a routerLink="/recette">Recette</a>
+        <a routerLink="/aliment">Aliment</a>
+        <a routerLink="/connexion">Connexion</a>
       </nav>
     </header>
     <router-outlet />
-    <p>header</p>
   `,
   styles: ``,
 })
