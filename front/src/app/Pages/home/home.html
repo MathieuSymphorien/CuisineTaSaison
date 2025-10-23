@@ -1,0 +1,15 @@
+<app-header></app-header>
+<div class="home-container">
+  <div class="season-info">
+    <p>Saison {{ season }}</p>
+    <p>{{ month }}</p>
+  </div>
+  <div class="food-list">
+    <app-food-list [foods]="foods"></app-food-list>
+  </div>
+  <div class="recipe-list">
+    <p>seuil de saison 60</p>
+    <p>recette {{month}}</p>
+    <app-recipe-list [recipes]="recipes"></app-recipe-list>
+  </div>
+</div>

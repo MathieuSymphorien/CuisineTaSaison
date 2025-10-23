@@ -1,0 +1,21 @@
+<div class="recipe-card">
+  <img [src]="recipe()?.image" alt="{{ recipe()?.name }}" />
+
+  <div class="content">
+    <h3>{{ recipe()?.name }}</h3>
+    <p>{{ recipe()?.description }}</p>
+
+    <p>
+      <strong>Temps :</strong> {{ recipe()?.time }} min<br />
+      <strong>Personnes :</strong> {{ recipe()?.people }}<br />
+      <strong>Four :</strong> {{ recipe()?.oven ? 'Oui ✅' : 'Non ❌' }}
+    </p>
+
+    <h4>Ingrédients :</h4>
+    <ul>
+      @for (food of recipe()?.foods; track food.id) {
+      <li>{{ food.name }}</li>
+      }
+    </ul>
+  </div>
+</div>

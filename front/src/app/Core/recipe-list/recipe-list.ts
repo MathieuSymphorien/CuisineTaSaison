@@ -1,15 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, input } from "@angular/core";
+import { Recipe } from "../recipe/recipe";
+import { RecipeModel } from "src/app/Models/recipe.model";
 
 @Component({
-  selector: 'app-recipe-list',
-  imports: [],
+  selector: "app-recipe-list",
+  standalone: true,
+  imports: [Recipe],
   template: `
-    <p>
-      recipe-list works!
-    </p>
+    <div class="recipe-list">
+      @for (recipe of recipes(); track recipe.id) {
+      <app-recipe [recipe]="recipe"></app-recipe>
+      }
+    </div>
   `,
-  styles: ``
+  styles: `
+    .recipe-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+  `,
 })
 export class RecipeList {
-
+  recipes = input<RecipeModel[]>();
 }

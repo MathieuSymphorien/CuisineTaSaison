@@ -1,8 +1,8 @@
-package main.java.com.mathieu.cts.services;
+package com.mathieu.cts.services;
 
-import com.tonpackage.dto.FoodDTO;
-import com.tonpackage.entities.Food;
-import com.tonpackage.repositories.FoodRepository;
+import com.mathieu.cts.entities.DTO.FoodDTO;
+import com.mathieu.cts.entities.Food;
+import com.mathieu.cts.repositories.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

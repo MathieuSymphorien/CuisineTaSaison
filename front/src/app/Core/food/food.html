@@ -1,0 +1,9 @@
+<div
+  class="food-card"
+  [style.background-color]="getBackgroundColor(food()?.category)"
+>
+  <img [src]="food()?.image" alt="{{ food()?.name }}" />
+  <div>
+    <h3>{{ food()?.name }}</h3>
+  </div>
+</div>

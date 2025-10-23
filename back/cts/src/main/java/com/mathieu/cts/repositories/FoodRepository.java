@@ -1,6 +1,6 @@
-package main.java.com.mathieu.cts.repositories;
+package com.mathieu.cts.repositories;
 
-import com.tonpackage.entities.Food;
+import com.mathieu.cts.entities.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

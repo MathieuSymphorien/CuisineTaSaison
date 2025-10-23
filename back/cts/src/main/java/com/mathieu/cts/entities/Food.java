@@ -1,4 +1,4 @@
-package main.java.com.mathieu.cts.entities;
+package com.mathieu.cts.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

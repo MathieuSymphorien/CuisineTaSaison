@@ -17,7 +17,7 @@ services:
       - app-network
 
   backend:
-    build: ./back
+    build: ./back/cts
     container_name: backend
     env_file: .env
     environment:

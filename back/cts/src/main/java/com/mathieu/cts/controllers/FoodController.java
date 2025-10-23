@@ -1,7 +1,7 @@
-package main.java.com.mathieu.cts.controllers;
+package com.mathieu.cts.controllers;
 
-import com.tonpackage.dto.FoodDTO;
-import com.tonpackage.services.FoodService;
+import com.mathieu.cts.entities.DTO.FoodDTO;
+import com.mathieu.cts.services.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

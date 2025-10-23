@@ -9,7 +9,12 @@ import {
 import { App } from "./app/app";
 import { provideRouter } from "@angular/router";
 import routeConfig from "./app/routes";
+import { provideHttpClient } from "@angular/common/http";
 
 bootstrapApplication(App, {
-  providers: [provideProtractorTestingSupport(), provideRouter(routeConfig)],
+  providers: [
+    provideProtractorTestingSupport(),
+    provideRouter(routeConfig),
+    provideHttpClient(),
+  ],
 }).catch((err) => console.error(err));
