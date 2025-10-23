@@ -1,4 +1,4 @@
-package main.java.com.mathieu.cts.config;
+package com.mathieu.cts.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

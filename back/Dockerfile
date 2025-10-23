@@ -1,5 +1,5 @@
 # Utilise une image officielle OpenJDK
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:21-jdk-jammy
 
 # Déclare le port d'écoute
 EXPOSE 8080
