@@ -10,4 +10,5 @@ export interface RecipeModel {
   steps: string[];
   foods: FoodModel[]; // relation vers tes aliments
   image: string;
+  seasonRatio?: number;
 }

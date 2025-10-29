@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
 import { Header } from "../../Utils/header/header";
 import { MockDataService } from "src/app/Services/mock-data";
-import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
 import { FoodList } from "src/app/Core/food-list/food-list";
 import { FoodModel } from "src/app/Models/food.model";
 import { RecipeModel } from "src/app/Models/recipe.model";
+import { RecipeCarousel } from "src/app/Core/recipe-carousel/recipe-carousel";
 
 @Component({
   selector: "app-home",
-  imports: [Header, FoodList, RecipeList],
+  imports: [Header, FoodList, RecipeCarousel],
   templateUrl: "./home.html",
   styleUrls: ["./home.css"],
 })

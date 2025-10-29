@@ -11,10 +11,9 @@ import { ApiService } from "src/app/Services/api";
   standalone: true,
   template: `
     <app-header></app-header>
-    <p>food-page works!</p>
     <app-food-list [foods]="foods"></app-food-list>
   `,
-  styles: ``,
+  styleUrls: [`food-page.css`],
 })
 export class FoodPage implements OnInit {
   foods: FoodModel[] = [];
