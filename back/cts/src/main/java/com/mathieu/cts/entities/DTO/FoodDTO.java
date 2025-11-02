@@ -1,19 +1,21 @@
 package com.mathieu.cts.entities.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
-@Getter
-@Setter
+import com.mathieu.cts.entities.FoodCategory;
+import com.mathieu.cts.entities.Months;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class FoodDTO {
-
     private Long id;
-
     private String name;
-
-    private String description;
+    private FoodCategory category;
+    private String image;
+    private List<Months> months;
 }

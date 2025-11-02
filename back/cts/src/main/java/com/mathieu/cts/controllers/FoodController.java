@@ -1,36 +1,61 @@
 package com.mathieu.cts.controllers;
 
+import com.mathieu.cts.entities.FoodCategory;
+import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.entities.DTO.FoodDTO;
 import com.mathieu.cts.services.FoodService;
+
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+
 
 @RestController
 @RequestMapping("/api/foods")
 @RequiredArgsConstructor
 public class FoodController {
 
+    @Inject
     private final FoodService foodService;
 
-    // Récupère tous les foods
     @GetMapping
-    public ResponseEntity<List<FoodDTO>> getAllFoods() {
-        List<FoodDTO> foods = foodService.getAllFoods();
+    public ResponseEntity<List<FoodDTO>> getAllFoods(
+        @RequestParam(required = false) List<Months> months,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) FoodCategory category
+    ) {
+        List<FoodDTO> foods = foodService.getAllFoods(months, name, category);
         return ResponseEntity.ok(foods);
     }
 
-    // Récupère un food par son ID
+
+    @GetMapping("/seasonal")
+    public ResponseEntity<List<FoodDTO>> getSeasonalFruitsAndVegetables() {
+        return ResponseEntity.ok(foodService.getSeasonalFruitsAndVegetables());
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<FoodDTO> getFoodById(@PathVariable Long id) {
         FoodDTO foodDTO = foodService.getFoodById(id);
         return ResponseEntity.ok(foodDTO);
     }
 
-    // Crée un nouveau food
     @PostMapping
     public ResponseEntity<FoodDTO> createFood(@RequestBody FoodDTO foodDTO) {
         FoodDTO createdFood = foodService.createFood(foodDTO);
@@ -44,10 +69,44 @@ public class FoodController {
         return ResponseEntity.ok(updatedFood);
     }
 
-    // Supprime un food par son ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFood(@PathVariable Long id) {
         foodService.deleteFood(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private final Path root = Paths.get("uploads"); // dossier local
+
+    public void FileController() throws IOException {
+        Files.createDirectories(root);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            if (file.isEmpty()) return ResponseEntity.badRequest().body("Fichier vide");
+
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path destination = root.resolve(filename);
+            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            // Ici tu peux sauvegarder le nom du fichier en base avec l’objet associé
+            return ResponseEntity.ok(filename);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erreur : " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/images/{filename:.+}")
+    public ResponseEntity<UrlResource> getImage(@PathVariable String filename) throws IOException {
+        Path file = root.resolve(filename);
+        if (!Files.exists(file)) return ResponseEntity.notFound().build();
+
+        UrlResource resource = new UrlResource(file.toUri());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(resource);
     }
 }
