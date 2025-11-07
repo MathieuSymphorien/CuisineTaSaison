@@ -1,4 +1,5 @@
 import { Component, input, output, signal } from "@angular/core";
+import "src/app/Utils/filter/filter-common.css";
 
 @Component({
   selector: "app-filter-range",

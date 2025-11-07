@@ -1,12 +1,17 @@
 import { Component, input, output, signal } from "@angular/core";
+import "src/app/Utils/filter/filter-common.css";
 
 @Component({
   selector: "app-filter-boolean",
   standalone: true,
-  template: `<label>
-    <input type="checkbox" [checked]="value()" (change)="toggle($event)" />
-    {{ label() }}
-  </label> `,
+  template: `
+    <div class="filter-box">
+      <label>
+        <input type="checkbox" [checked]="value()" (change)="toggle($event)" />
+        {{ label() }}
+      </label>
+    </div>
+  `,
 })
 export class FilterBooleanComponent {
   label = input<string>("Option");

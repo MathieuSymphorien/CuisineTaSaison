@@ -1,4 +1,4 @@
-import { Month } from "./season.model";
+import { Month } from "./month.model";
 
 export type FoodCategory =
   | "fruit"
@@ -14,5 +14,5 @@ export interface FoodModel {
   name: string;
   category: FoodCategory;
   image: string;
-  seasonMonths: Record<Month, boolean>;
+  months: Month[];
 }

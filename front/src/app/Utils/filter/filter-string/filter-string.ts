@@ -1,38 +1,19 @@
 import { Component, input, output, signal } from "@angular/core";
+import "src/app/Utils/filter/filter-common.css";
 
 @Component({
   selector: "app-filter-string",
-  imports: [],
+  standalone: true,
   template: `
-    <label class="filter-label">
-      {{ label() }}
+    <div class="filter-box">
+      <div class="header">{{ label() }}</div>
       <input
         type="text"
-        class="filter-input"
         [value]="value()"
         (input)="onChange($event)"
         placeholder="Saisir un texte..."
       />
-    </label>
-  `,
-  styles: `
-  .filter-label {
-  display: flex;
-  flex-direction: column;
-  font-weight: 500;
-  gap: 0.25rem;
-}
-
-.filter-input {
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  outline: none;
-}
-
-.filter-input:focus {
-  border-color: #007bff;
-}
+    </div>
   `,
 })
 export class FilterStringComponent {

@@ -13,17 +13,30 @@ import { FilterRecipe } from "src/app/Core/filter-recipe/filter-recipe";
     <app-header></app-header>
 
     <div class="recipe-page">
-      <app-filter-recipe (filtersChange)="applyFilters($event)">
-      </app-filter-recipe>
-
-      <app-recipe-list [recipes]="recipes"></app-recipe-list>
+      <div class="filters-container">
+        <app-filter-recipe (filtersChange)="applyFilters($event)">
+        </app-filter-recipe>
+      </div>
+      <div class="recipes-container">
+        <app-recipe-list [recipes]="recipes"></app-recipe-list>
+      </div>
     </div>
   `,
   styles: [
     `
       .recipe-page {
         display: flex;
-        gap: 1rem;
+        padding: 2rem;
+        gap: 2rem;
+      }
+      .filters-container {
+        flex: 1;
+        background-color: blueviolet;
+      }
+
+      .recipes-container {
+        flex: 3;
+        background-color: aqua;
       }
     `,
   ],

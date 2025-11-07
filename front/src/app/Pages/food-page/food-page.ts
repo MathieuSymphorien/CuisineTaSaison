@@ -5,14 +5,23 @@ import { FoodList } from "src/app/Core/food-list/food-list";
 import { MockDataService } from "src/app/Services/mock-data";
 import { ApiService } from "src/app/Services/api";
 import { UploadComponent } from "src/app/Utils/upload-image/upload-image";
+import { FilterFood } from "src/app/Core/filter-food/filter-food";
 
 @Component({
   selector: "app-food-page",
-  imports: [Header, FoodList, UploadComponent],
+  imports: [Header, FoodList, UploadComponent, FilterFood],
   standalone: true,
   template: `
     <app-header></app-header>
-    <app-food-list [foods]="foods"></app-food-list>
+    <div class="food-page">
+      <div class="filters-container">
+        <app-filter-food></app-filter-food>
+      </div>
+      <div class="food-list-container">
+        <app-food-list [foods]="foods"></app-food-list>
+      </div>
+    </div>
+
     <app-upload-image></app-upload-image>
   `,
   styleUrls: [`food-page.css`],
@@ -20,26 +29,26 @@ import { UploadComponent } from "src/app/Utils/upload-image/upload-image";
 export class FoodPage implements OnInit {
   foods: FoodModel[] = [];
 
-  constructor(private apiService: ApiService) {}
+  // constructor(private apiService: ApiService) {}
 
-  ngOnInit(): void {
-    this.loadFoods();
-  }
-
-  loadFoods(): void {
-    this.apiService.getFoods().subscribe({
-      next: (foods) => {
-        this.foods = foods;
-      },
-      error: (err) => {
-        console.error("Erreur lors de la récupération des foods:", err);
-      },
-    });
-  }
-
-  // constructor(private mockData: MockDataService) {}
-
-  // ngOnInit() {
-  //   this.foods = this.mockData.getFoods();
+  // ngOnInit(): void {
+  //   this.loadFoods();
   // }
+
+  // loadFoods(): void {
+  //   this.apiService.getFoods().subscribe({
+  //     next: (foods) => {
+  //       this.foods = foods;
+  //     },
+  //     error: (err) => {
+  //       console.error("Erreur lors de la récupération des foods:", err);
+  //     },
+  //   });
+  // }
+
+  constructor(private mockData: MockDataService) {}
+
+  ngOnInit() {
+    this.foods = this.mockData.getFoods();
+  }
 }

@@ -1,0 +1,15 @@
+.food-page {
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.filters-container {
+  flex: 1;
+  background-color: aqua;
+}
+
+.food-list-container {
+  flex: 3;
+  background-color: blueviolet;
+}

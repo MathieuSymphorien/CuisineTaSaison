@@ -1,0 +1,71 @@
+/* 🎨 Style commun à tous les composants de filtre */
+.filter-box {
+  background: #ffffff;
+  border: 2px solid #e5efe4;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.filter-box:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.filter-box .header {
+  font-weight: 600;
+  color: #2d5a3d;
+  margin-bottom: 0.75rem;
+}
+
+.filter-box label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+  color: #3a5e40;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+}
+
+/* Inputs & controls */
+input[type="checkbox"],
+input[type="range"],
+input[type="number"],
+input[type="text"] {
+  accent-color: #7cb342;
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #cde0cc;
+  outline: none;
+  transition: border 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #7cb342;
+}
+
+input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Checkbox style */
+input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+}
+
+/* Sous-titres ou petites légendes */
+.filter-subtitle {
+  font-size: 0.85rem;
+  color: #6b7c6b;
+}

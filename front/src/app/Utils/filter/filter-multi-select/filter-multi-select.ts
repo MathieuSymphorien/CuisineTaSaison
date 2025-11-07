@@ -1,5 +1,6 @@
 import { Component, input, output, signal, computed } from "@angular/core";
 import { FilterStringComponent } from "../filter-string/filter-string";
+import "src/app/Utils/filter/filter-common.css";
 
 @Component({
   selector: "app-filter-multi-select",
@@ -7,8 +8,8 @@ import { FilterStringComponent } from "../filter-string/filter-string";
   template: `<div class="filter-box">
     <div class="header">
       <span>{{ label() }}</span>
-      <app-filter-string label="Recherche" (valueChange)="search.set($event)">
-      </app-filter-string>
+      <!-- <app-filter-string label="Recherche" (valueChange)="search.set($event)">
+      </app-filter-string> -->
     </div>
 
     <div class="options">
@@ -24,12 +25,6 @@ import { FilterStringComponent } from "../filter-string/filter-string";
       }
     </div>
   </div> `,
-  styles: `
-    .filter-box {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-  `,
   imports: [FilterStringComponent],
 })
 export class FilterMultiSelectComponent {

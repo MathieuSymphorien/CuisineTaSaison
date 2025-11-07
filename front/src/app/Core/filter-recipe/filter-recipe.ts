@@ -3,55 +3,26 @@ import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter
 import { FilterBooleanComponent } from "src/app/Utils/filter/filter-boolean/filter-boolean";
 import { FilterMultiSelectComponent } from "src/app/Utils/filter/filter-multi-select/filter-multi-select";
 import { FilterRangeComponent } from "src/app/Utils/filter/filter-range/filter-range";
-import { FilterSeasonComponent } from "src/app/Utils/filter/filter-season/filter-season";
-import { SEASONS, Season } from "src/app/Models/season.model";
+import { FilterMonthComponent } from "src/app/Utils/filter/filter-month/filter-month";
+import { Month, MONTHS } from "src/app/Models/month.model";
 
 @Component({
   selector: "app-filter-recipe",
-  standalone: true, // ✅ important si tu veux l’importer directement dans une page standalone
+  standalone: true,
   imports: [
     FilterStringComponent,
     FilterBooleanComponent,
     FilterMultiSelectComponent,
     FilterRangeComponent,
-    FilterSeasonComponent,
+    FilterMonthComponent,
   ],
-  template: `
-    <app-filter-string
-      label="Nom de la recette"
-      (valueChange)="onSearchChange($event)"
-    >
-    </app-filter-string>
-
-    <app-filter-boolean
-      label="Cuit au four"
-      (valueChange)="onOvenChange($event)"
-    >
-    </app-filter-boolean>
-
-    <app-filter-multi-select
-      label="Ingrédients"
-      [options]="ingredients()"
-      (valueChange)="onIngredientsChange($event)"
-    >
-    </app-filter-multi-select>
-
-    <app-filter-range
-      label="Temps de préparation"
-      (valueChange)="onTimeChange($event)"
-    >
-    </app-filter-range>
-
-    <app-filter-season label="Saison" (valueChange)="onSeasonsChange($event)">
-    </app-filter-season>
-  `,
-  styles: ``,
+  templateUrl: "./filter-recipe.html",
+  styleUrls: ["./filter-recipe.css"],
 })
 export class FilterRecipe {
-  // ✅ Signaux initialisés correctement
   searchText = signal("");
   ingredients = signal<string[]>(["Tomate", "Radis", "Pêche", "Concombre"]);
-  seasons = signal<Season[]>(Object.keys(SEASONS) as Season[]);
+  months = signal<Month[]>(Object.keys(MONTHS) as Month[]);
 
   filtersChange = output<any>();
   filters = signal({
@@ -59,11 +30,10 @@ export class FilterRecipe {
     time: { min: 0, max: 45 },
     include: [] as string[],
     exclude: [] as string[],
-    seasons: [] as Season[],
+    months: [] as Month[],
     oven: false,
   });
 
-  // ✅ Gestion des événements enfants
   onSearchChange(value: string) {
     this.filters.update((f) => ({ ...f, name: value }));
     this.updateFilters();
@@ -84,12 +54,11 @@ export class FilterRecipe {
     this.updateFilters();
   }
 
-  onSeasonsChange(value: Season[]) {
-    this.filters.update((f) => ({ ...f, seasons: value }));
+  onMonthsChange(value: Month[]) {
+    this.filters.update((f) => ({ ...f, months: value }));
     this.updateFilters();
   }
 
-  // ✅ Émission centralisée
   updateFilters() {
     this.filtersChange.emit(this.filters());
   }
