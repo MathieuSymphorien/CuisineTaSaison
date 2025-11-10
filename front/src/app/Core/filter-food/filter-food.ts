@@ -37,6 +37,7 @@ export class FilterFood {
 
   filters = signal({
     name: "",
+    categories: [] as FoodCategory[],
     months: [] as Month[],
   });
 

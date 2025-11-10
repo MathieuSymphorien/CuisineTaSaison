@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { FoodModel } from "src/app/Models/food.model";
+import { FoodCategory, FoodModel } from "src/app/Models/food.model";
+import { Month } from "../Models/month.model";
 
 @Injectable({
   providedIn: "root",
@@ -12,8 +13,32 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   // Récupère tous les foods
-  getFoods(): Observable<FoodModel[]> {
-    return this.http.get<FoodModel[]>(this.apiUrl);
+  getAllFoods(
+    name?: string,
+    category?: FoodCategory,
+    months?: Month[]
+  ): Observable<FoodModel[]> {
+    let params = new HttpParams();
+
+    if (name) {
+      params = params.set("name", name);
+    }
+
+    if (category) {
+      params = params.set("category", category);
+    }
+
+    if (months && months.length > 0) {
+      months.forEach((m) => {
+        params = params.append("months", m);
+      });
+    }
+
+    return this.http.get<FoodModel[]>(this.apiUrl, { params });
+  }
+
+  getSeasonalFoods(): Observable<FoodModel[]> {
+    return this.http.get<FoodModel[]>(`${this.apiUrl}/seasonal`);
   }
 
   // Récupère un food par ID

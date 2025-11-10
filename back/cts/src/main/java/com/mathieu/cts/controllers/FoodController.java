@@ -36,11 +36,11 @@ public class FoodController {
 
     @GetMapping
     public ResponseEntity<List<FoodDTO>> getAllFoods(
-        @RequestParam(required = false) List<Months> months,
         @RequestParam(required = false) String name,
-        @RequestParam(required = false) FoodCategory category
+        @RequestParam(required = false) FoodCategory category,
+        @RequestParam(required = false) List<Months> months
     ) {
-        List<FoodDTO> foods = foodService.getAllFoods(months, name, category);
+        List<FoodDTO> foods = foodService.getAllFoods(name, category, months);
         return ResponseEntity.ok(foods);
     }
 

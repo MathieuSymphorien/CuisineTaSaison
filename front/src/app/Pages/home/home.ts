@@ -5,6 +5,7 @@ import { FoodList } from "src/app/Core/food-list/food-list";
 import { FoodModel } from "src/app/Models/food.model";
 import { RecipeModel } from "src/app/Models/recipe.model";
 import { RecipeCarousel } from "src/app/Core/recipe-carousel/recipe-carousel";
+import { ApiService } from "src/app/Services/api";
 
 @Component({
   selector: "app-home",
@@ -18,12 +19,31 @@ export class Home {
   season = "season";
   month = "oct";
 
-  constructor(private mockData: MockDataService) {}
+  constructor(
+    private apiService: ApiService,
+    private mockData: MockDataService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loadFoods();
     this.season = this.mockData.getSeason().season;
-    this.month = this.mockData.getMonth().month;
-    this.foods = this.mockData.getFoods();
+    //   this.month = this.mockData.getMonth().month;
     this.recipes = this.mockData.getRecipes();
   }
+
+  loadFoods(): void {
+    this.apiService.getSeasonalFoods().subscribe({
+      next: (foods) => {
+        this.foods = foods;
+      },
+      error: (err) => {
+        console.error("Erreur lors de la récupération des foods:", err);
+      },
+    });
+  }
+
+  // constructor(private mockData: MockDataService) {}
+  // ngOnInit() {
+  //   this.foods = this.mockData.getFoods();
+  // }
 }

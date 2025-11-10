@@ -27,7 +27,7 @@ public class FoodService {
     @Inject
     private final ModelMapper modelMapper;
 
-    public List<FoodDTO> getAllFoods(List<Months> months, String name, FoodCategory category) {
+    public List<FoodDTO> getAllFoods(String name, FoodCategory category,List<Months> months) {
     Specification<Food> spec = (root, query, criteriaBuilder) -> {
         List<Predicate> predicates = new ArrayList<>();
 
