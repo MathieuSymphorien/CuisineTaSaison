@@ -6,8 +6,17 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
 import { ApplicationConfig } from "@angular/core";
+import { AuthInterceptor } from "./Services/auth.interceptor";
 
 export const appConfig: ApplicationConfig = {
-  providers: [],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
 };

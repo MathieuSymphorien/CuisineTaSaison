@@ -4,6 +4,8 @@ import { RecipePage } from "./Pages/recipe-page/recipe-page";
 import { LoginPage } from "./Pages/login-page/login-page";
 import { ProposalPage } from "./Pages/proposal-page/proposal-page";
 import { FoodPage } from "./Pages/food-page/food-page";
+import { AdminGuard } from "./Services/admin.guard";
+import { AdminPage } from "./Pages/admin-page/admin-page";
 
 const routeConfig: Routes = [
   {
@@ -25,6 +27,12 @@ const routeConfig: Routes = [
     path: "connexion",
     component: LoginPage,
     title: "Connexion",
+  },
+  {
+    path: "admin",
+    component: AdminPage,
+    title: "Administration",
+    canActivate: [AdminGuard],
   },
   {
     path: "proposition",

@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
+import { AuthService } from "src/app/Services/auth.service";
 
 @Component({
   selector: "app-login",
@@ -9,7 +11,14 @@ import { FormsModule } from "@angular/forms";
 })
 export class Login {
   password: string = "";
+  error: string | null = null;
+
+  constructor(private authService: AuthService, private router: Router) {}
+
   login() {
-    console.log("Login attempt with password:", this.password);
+    this.authService.login(this.password).subscribe({
+      next: () => this.router.navigate(["/admin"]),
+      error: () => (this.error = "Mot de passe incorrect 🍋"),
+    });
   }
 }
