@@ -23,9 +23,10 @@ public class SecurityConfig {
         this.jwtService = jwtService;
     }
 
+    // désactive la création de l'utilisateur par défaut
     @Bean
     public org.springframework.security.core.userdetails.UserDetailsService userDetailsService() {
-        return username -> null; // désactive la création de l'utilisateur par défaut
+        return username -> null; 
     }
 
 
@@ -35,11 +36,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()  // D'abord les routes publiques
+                .requestMatchers("/api/auth/**").permitAll() 
                 .requestMatchers("/api/foods/**").permitAll()
+                .requestMatchers("/api/recipes/**").permitAll()
                 .requestMatchers("/error").permitAll()
-                .requestMatchers("/api/admin/**").authenticated()  // Ensuite les routes protégées
-                .anyRequest().denyAll()  // Enfin, bloquer tout le reste
+                .requestMatchers("/api/admin/**").authenticated()  
+                .anyRequest().denyAll() 
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -48,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:4200"); // ton front Angular
+        config.addAllowedOrigin("http://localhost:4200"); //front Angular
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);

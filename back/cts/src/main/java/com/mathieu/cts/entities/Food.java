@@ -33,12 +33,15 @@ public class Food {
     private FoodCategory category;
 
     @Column
-    private String image;
+    private String image;   // FEATURE IMAGE POUR PLUS TARD
 
     @ElementCollection
     @CollectionTable(name = "entite_months", joinColumns = @JoinColumn(name = "entite_id"))
     @Column(name = "month", nullable = false)
     @Enumerated(EnumType.STRING)
     private List<Months> months = new ArrayList<>();
+
+    @Column(nullable = false)
+    private Boolean approved = false;
 
 }

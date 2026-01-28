@@ -1,6 +1,6 @@
 package com.mathieu.cts.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import lombok.Data;
 
@@ -45,8 +45,11 @@ public class Recipe {
     private List<Food> foods;
 
     @Column
-    private String image;
+    private String image;   // FEATURE IMAGE POUR PLUS TARD
 
     @Column
     private Double seasonRatio;
+
+    @Column(nullable = false)
+    private Boolean approved = false;
 }

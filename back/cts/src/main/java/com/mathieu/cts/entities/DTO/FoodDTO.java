@@ -16,6 +16,7 @@ public class FoodDTO {
     private Long id;
     private String name;
     private FoodCategory category;
-    private String image;
+    private String image;   // FEATURE IMAGE POUR PLUS TARD
     private List<Months> months;
+    private Boolean approved;
 }

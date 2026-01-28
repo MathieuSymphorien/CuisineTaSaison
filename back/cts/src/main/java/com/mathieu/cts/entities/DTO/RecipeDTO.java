@@ -14,27 +14,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeDTO {
-   
        private Long id;
-   
        private String name;
-   
        private String description;
-   
-       private Integer time; // en minutes
-   
+       private Integer time;
        private Boolean oven;
-   
        private Integer people;
-   
        private List<String> steps;
-   
-   
-    private List<Food> foods;
-   
-        private String image;
-   
+       private List<Food> foods;
+       private String image;   // FEATURE IMAGE POUR PLUS TARD
        private Double seasonRatio;
-   
-   
+       private Boolean approved;
 }

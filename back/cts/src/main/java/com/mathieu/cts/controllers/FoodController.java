@@ -5,7 +5,6 @@ import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.entities.DTO.FoodDTO;
 import com.mathieu.cts.services.FoodService;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.io.UrlResource;
@@ -23,15 +22,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
-
 @RestController
 @RequestMapping("/api/foods")
 @RequiredArgsConstructor
 public class FoodController {
 
-    @Inject
     private final FoodService foodService;
 
     @GetMapping
@@ -62,7 +57,6 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFood);
     }
 
-    // Met à jour un food existant
     @PutMapping("/{id}")
     public ResponseEntity<FoodDTO> updateFood(@PathVariable Long id, @RequestBody FoodDTO foodDTO) {
         FoodDTO updatedFood = foodService.updateFood(id, foodDTO);
@@ -75,22 +69,28 @@ public class FoodController {
         return ResponseEntity.noContent().build();
     }
 
-    private final Path root = Paths.get("uploads"); // dossier local
 
-    public void FileController() throws IOException {
-        Files.createDirectories(root);
-    }
+
+    // FEATURE IMAGE POUR PLUS TARD
+    
+    private final Path root = Paths.get("uploads");
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            if (file.isEmpty()) return ResponseEntity.badRequest().body("Fichier vide");
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("Fichier vide");
+            }
+
+            // Créer le dossier uploads s'il n'existe pas
+            if (!Files.exists(root)) {
+                Files.createDirectories(root);
+            }
 
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             Path destination = root.resolve(filename);
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            // Ici tu peux sauvegarder le nom du fichier en base avec l’objet associé
             return ResponseEntity.ok(filename);
 
         } catch (Exception e) {

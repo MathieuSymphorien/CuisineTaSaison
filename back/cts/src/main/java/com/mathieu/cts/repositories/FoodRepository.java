@@ -14,8 +14,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
 
-    @Query("SELECT f FROM Food f WHERE :currentMonth MEMBER OF f.months AND f.category IN ('FRUIT', 'LEGUME')")
+    @Query("SELECT f FROM Food f WHERE :currentMonth MEMBER OF f.months AND f.category IN ('FRUIT', 'LEGUME') AND f.approved = true")
     List<Food> findSeasonalFruitsAndVegetables(@Param("currentMonth") Months currentMonth);
 
     Collection<Food> findAll(Specification<Food> spec);
+
+    List<Food> findByApprovedTrue();
+
+    List<Food> findByApprovedFalse();
 }
