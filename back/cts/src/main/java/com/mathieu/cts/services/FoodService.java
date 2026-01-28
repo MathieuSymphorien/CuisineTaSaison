@@ -4,6 +4,7 @@ import com.mathieu.cts.entities.DTO.FoodDTO;
 import com.mathieu.cts.entities.Food;
 import com.mathieu.cts.entities.FoodCategory;
 import com.mathieu.cts.entities.Months;
+import com.mathieu.cts.exceptions.FoodNotFoundException;
 import com.mathieu.cts.repositories.FoodRepository;
 
 import jakarta.persistence.criteria.Join;
@@ -65,7 +66,7 @@ public class FoodService {
 
     public FoodDTO getFoodById(Long id) {
         Food food = foodRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Food not found with id: " + id));
+            .orElseThrow(() -> new FoodNotFoundException(id));
         return modelMapper.map(food, FoodDTO.class);
     }
 
@@ -77,7 +78,7 @@ public class FoodService {
 
     public FoodDTO updateFood(Long id, FoodDTO foodDTO) {
         Food existingFood = foodRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Food not found with id: " + id));
+            .orElseThrow(() -> new FoodNotFoundException(id));
 
         existingFood.setName(foodDTO.getName());
 
@@ -99,7 +100,7 @@ public class FoodService {
 
     public FoodDTO approveFood(Long id) {
         Food food = foodRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Food not found with id: " + id));
+            .orElseThrow(() -> new FoodNotFoundException(id));
         food.setApproved(true);
         Food savedFood = foodRepository.save(food);
         return modelMapper.map(savedFood, FoodDTO.class);
@@ -107,7 +108,7 @@ public class FoodService {
 
     public void rejectFood(Long id) {
         if (!foodRepository.existsById(id)) {
-            throw new RuntimeException("Food not found with id: " + id);
+            throw new FoodNotFoundException(id);
         }
         foodRepository.deleteById(id);
     }

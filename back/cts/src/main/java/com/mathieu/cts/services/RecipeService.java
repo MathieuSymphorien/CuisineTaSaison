@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.mathieu.cts.entities.Recipe;
 import com.mathieu.cts.entities.DTO.RecipeDTO;
+import com.mathieu.cts.exceptions.RecipeNotFoundException;
 import com.mathieu.cts.repositories.RecipeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class RecipeService {
     
     public RecipeDTO getRecipeById(Long id) {
         Recipe recipe = recipeRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Recipe not found with id: " + id));
+            .orElseThrow(() -> new RecipeNotFoundException(id));
         return modelMapper.map(recipe, RecipeDTO.class);
     }
     
@@ -38,7 +39,7 @@ public class RecipeService {
     
     public RecipeDTO updateRecipe(Long id, RecipeDTO recipeDTO) {
         Recipe existingRecipe = recipeRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Recipe not found with id: " + id));
+            .orElseThrow(() -> new RecipeNotFoundException(id));
 
         existingRecipe.setName(recipeDTO.getName());
         existingRecipe.setDescription(recipeDTO.getDescription());
@@ -56,7 +57,7 @@ public class RecipeService {
     
     public void deleteRecipe(Long id) {
         if (!recipeRepository.existsById(id)) {
-            throw new RuntimeException("Recipe not found with id: " + id);
+            throw new RecipeNotFoundException(id);
         }
         recipeRepository.deleteById(id);
     }
@@ -71,7 +72,7 @@ public class RecipeService {
 
     public RecipeDTO approveRecipe(Long id) {
         Recipe recipe = recipeRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Recipe not found with id: " + id));
+            .orElseThrow(() -> new RecipeNotFoundException(id));
         recipe.setApproved(true);
         Recipe savedRecipe = recipeRepository.save(recipe);
         return modelMapper.map(savedRecipe, RecipeDTO.class);
@@ -79,7 +80,7 @@ public class RecipeService {
 
     public void rejectRecipe(Long id) {
         if (!recipeRepository.existsById(id)) {
-            throw new RuntimeException("Recipe not found with id: " + id);
+            throw new RecipeNotFoundException(id);
         }
         recipeRepository.deleteById(id);
     }
