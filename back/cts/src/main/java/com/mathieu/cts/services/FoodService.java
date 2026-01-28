@@ -1,6 +1,8 @@
 package com.mathieu.cts.services;
 
-import com.mathieu.cts.entities.DTO.FoodDTO;
+import com.mathieu.cts.entities.DTO.food.FoodCreateDTO;
+import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
+import com.mathieu.cts.entities.DTO.food.FoodUpdateDTO;
 import com.mathieu.cts.entities.Food;
 import com.mathieu.cts.entities.FoodCategory;
 import com.mathieu.cts.entities.Months;
@@ -25,7 +27,7 @@ public class FoodService {
     private final FoodRepository foodRepository;
     private final ModelMapper modelMapper;
 
-    public List<FoodDTO> getAllFoods(String name, FoodCategory category, List<Months> months) {
+    public List<FoodResponseDTO> getAllFoods(String name, FoodCategory category, List<Months> months) {
         Specification<Food> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -51,59 +53,75 @@ public class FoodService {
         };
 
         return foodRepository.findAll(spec).stream()
-            .map(food -> modelMapper.map(food, FoodDTO.class))
+            .map(this::toResponseDTO)
             .collect(Collectors.toList());
     }
 
-    //Récupère les foods de saison
-    public List<FoodDTO> getSeasonalFruitsAndVegetables() {
+    public List<FoodResponseDTO> getSeasonalFruitsAndVegetables() {
         Months currentMonth = Months.values()[java.time.LocalDate.now().getMonthValue() - 1];
         return foodRepository.findSeasonalFruitsAndVegetables(currentMonth)
             .stream()
-            .map(food -> modelMapper.map(food, FoodDTO.class))
+            .map(this::toResponseDTO)
             .collect(Collectors.toList());
-}
+    }
 
-    public FoodDTO getFoodById(Long id) {
+    public FoodResponseDTO getFoodById(Long id) {
         Food food = foodRepository.findById(id)
             .orElseThrow(() -> new FoodNotFoundException(id));
-        return modelMapper.map(food, FoodDTO.class);
+        return toResponseDTO(food);
     }
 
-    public FoodDTO createFood(FoodDTO foodDTO) {
-        Food food = modelMapper.map(foodDTO, Food.class);
+    public FoodResponseDTO createFood(FoodCreateDTO createDTO) {
+        Food food = new Food();
+        food.setName(createDTO.getName());
+        food.setCategory(createDTO.getCategory());
+        food.setMonths(createDTO.getMonths());
+        food.setApproved(false);
+
         Food savedFood = foodRepository.save(food);
-        return modelMapper.map(savedFood, FoodDTO.class);
+        return toResponseDTO(savedFood);
     }
 
-    public FoodDTO updateFood(Long id, FoodDTO foodDTO) {
+    public FoodResponseDTO updateFood(Long id, FoodUpdateDTO updateDTO) {
         Food existingFood = foodRepository.findById(id)
             .orElseThrow(() -> new FoodNotFoundException(id));
 
-        existingFood.setName(foodDTO.getName());
+        // Mise à jour partielle : seuls les champs non-null sont mis à jour
+        if (updateDTO.getName() != null) {
+            existingFood.setName(updateDTO.getName());
+        }
+        if (updateDTO.getCategory() != null) {
+            existingFood.setCategory(updateDTO.getCategory());
+        }
+        if (updateDTO.getMonths() != null) {
+            existingFood.setMonths(updateDTO.getMonths());
+        }
 
         Food updatedFood = foodRepository.save(existingFood);
-        return modelMapper.map(updatedFood, FoodDTO.class);
+        return toResponseDTO(updatedFood);
     }
 
     public void deleteFood(Long id) {
+        if (!foodRepository.existsById(id)) {
+            throw new FoodNotFoundException(id);
+        }
         foodRepository.deleteById(id);
     }
 
     // ===== Méthodes Admin =====
 
-    public List<FoodDTO> getPendingFoods() {
+    public List<FoodResponseDTO> getPendingFoods() {
         return foodRepository.findByApprovedFalse().stream()
-            .map(food -> modelMapper.map(food, FoodDTO.class))
+            .map(this::toResponseDTO)
             .collect(Collectors.toList());
     }
 
-    public FoodDTO approveFood(Long id) {
+    public FoodResponseDTO approveFood(Long id) {
         Food food = foodRepository.findById(id)
             .orElseThrow(() -> new FoodNotFoundException(id));
         food.setApproved(true);
         Food savedFood = foodRepository.save(food);
-        return modelMapper.map(savedFood, FoodDTO.class);
+        return toResponseDTO(savedFood);
     }
 
     public void rejectFood(Long id) {
@@ -111,5 +129,11 @@ public class FoodService {
             throw new FoodNotFoundException(id);
         }
         foodRepository.deleteById(id);
+    }
+
+    // ===== Méthode utilitaire =====
+
+    private FoodResponseDTO toResponseDTO(Food food) {
+        return modelMapper.map(food, FoodResponseDTO.class);
     }
 }

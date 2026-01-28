@@ -2,7 +2,9 @@ package com.mathieu.cts.controllers;
 
 import com.mathieu.cts.entities.FoodCategory;
 import com.mathieu.cts.entities.Months;
-import com.mathieu.cts.entities.DTO.FoodDTO;
+import com.mathieu.cts.entities.DTO.food.FoodCreateDTO;
+import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
+import com.mathieu.cts.entities.DTO.food.FoodUpdateDTO;
 import com.mathieu.cts.services.FoodService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,36 +34,35 @@ public class FoodController {
     private final FoodService foodService;
 
     @GetMapping
-    public ResponseEntity<List<FoodDTO>> getAllFoods(
+    public ResponseEntity<List<FoodResponseDTO>> getAllFoods(
         @RequestParam(required = false) String name,
         @RequestParam(required = false) FoodCategory category,
         @RequestParam(required = false) List<Months> months
     ) {
-        List<FoodDTO> foods = foodService.getAllFoods(name, category, months);
+        List<FoodResponseDTO> foods = foodService.getAllFoods(name, category, months);
         return ResponseEntity.ok(foods);
     }
 
-
     @GetMapping("/seasonal")
-    public ResponseEntity<List<FoodDTO>> getSeasonalFruitsAndVegetables() {
+    public ResponseEntity<List<FoodResponseDTO>> getSeasonalFruitsAndVegetables() {
         return ResponseEntity.ok(foodService.getSeasonalFruitsAndVegetables());
     }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<FoodDTO> getFoodById(@PathVariable Long id) {
-        FoodDTO foodDTO = foodService.getFoodById(id);
-        return ResponseEntity.ok(foodDTO);
+    public ResponseEntity<FoodResponseDTO> getFoodById(@PathVariable Long id) {
+        FoodResponseDTO food = foodService.getFoodById(id);
+        return ResponseEntity.ok(food);
     }
 
     @PostMapping
-    public ResponseEntity<FoodDTO> createFood(@Valid @RequestBody FoodDTO foodDTO) {
-        FoodDTO createdFood = foodService.createFood(foodDTO);
+    public ResponseEntity<FoodResponseDTO> createFood(@Valid @RequestBody FoodCreateDTO createDTO) {
+        FoodResponseDTO createdFood = foodService.createFood(createDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFood);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FoodDTO> updateFood(@PathVariable Long id, @Valid @RequestBody FoodDTO foodDTO) {
-        FoodDTO updatedFood = foodService.updateFood(id, foodDTO);
+    public ResponseEntity<FoodResponseDTO> updateFood(@PathVariable Long id, @Valid @RequestBody FoodUpdateDTO updateDTO) {
+        FoodResponseDTO updatedFood = foodService.updateFood(id, updateDTO);
         return ResponseEntity.ok(updatedFood);
     }
 
@@ -71,10 +72,8 @@ public class FoodController {
         return ResponseEntity.noContent().build();
     }
 
-
-
     // FEATURE IMAGE POUR PLUS TARD
-    
+
     private final Path root = Paths.get("uploads");
 
     @PostMapping("/upload")
@@ -84,7 +83,6 @@ public class FoodController {
                 return ResponseEntity.badRequest().body("Fichier vide");
             }
 
-            // Créer le dossier uploads s'il n'existe pas
             if (!Files.exists(root)) {
                 Files.createDirectories(root);
             }
@@ -103,7 +101,9 @@ public class FoodController {
     @GetMapping("/images/{filename:.+}")
     public ResponseEntity<UrlResource> getImage(@PathVariable String filename) throws IOException {
         Path file = root.resolve(filename);
-        if (!Files.exists(file)) return ResponseEntity.notFound().build();
+        if (!Files.exists(file)) {
+            return ResponseEntity.notFound().build();
+        }
 
         UrlResource resource = new UrlResource(file.toUri());
 

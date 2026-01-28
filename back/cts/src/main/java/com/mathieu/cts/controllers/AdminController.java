@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mathieu.cts.entities.DTO.FoodDTO;
-import com.mathieu.cts.entities.DTO.RecipeDTO;
+import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeResponseDTO;
 import com.mathieu.cts.services.FoodService;
 import com.mathieu.cts.services.RecipeService;
 
@@ -33,12 +33,12 @@ public class AdminController {
     // ===== Foods en attente =====
 
     @GetMapping("/foods/pending")
-    public ResponseEntity<List<FoodDTO>> getPendingFoods() {
+    public ResponseEntity<List<FoodResponseDTO>> getPendingFoods() {
         return ResponseEntity.ok(foodService.getPendingFoods());
     }
 
     @PutMapping("/foods/{id}/approve")
-    public ResponseEntity<FoodDTO> approveFood(@PathVariable Long id) {
+    public ResponseEntity<FoodResponseDTO> approveFood(@PathVariable Long id) {
         return ResponseEntity.ok(foodService.approveFood(id));
     }
 
@@ -51,12 +51,12 @@ public class AdminController {
     // ===== Recipes en attente =====
 
     @GetMapping("/recipes/pending")
-    public ResponseEntity<List<RecipeDTO>> getPendingRecipes() {
+    public ResponseEntity<List<RecipeResponseDTO>> getPendingRecipes() {
         return ResponseEntity.ok(recipeService.getPendingRecipes());
     }
 
     @PutMapping("/recipes/{id}/approve")
-    public ResponseEntity<RecipeDTO> approveRecipe(@PathVariable Long id) {
+    public ResponseEntity<RecipeResponseDTO> approveRecipe(@PathVariable Long id) {
         return ResponseEntity.ok(recipeService.approveRecipe(id));
     }
 

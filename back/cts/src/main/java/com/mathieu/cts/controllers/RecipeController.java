@@ -1,6 +1,8 @@
 package com.mathieu.cts.controllers;
 
-import com.mathieu.cts.entities.DTO.RecipeDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeCreateDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeResponseDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeUpdateDTO;
 import com.mathieu.cts.services.RecipeService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,32 +27,32 @@ import java.util.UUID;
 @RequestMapping("/api/recipes")
 @RequiredArgsConstructor
 public class RecipeController {
-    
+
     private final RecipeService recipeService;
-    
+
     private final Path root = Paths.get("uploads");
 
     @GetMapping
-    public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
-        List<RecipeDTO> recipes = recipeService.getAllRecipes();
+    public ResponseEntity<List<RecipeResponseDTO>> getAllRecipes() {
+        List<RecipeResponseDTO> recipes = recipeService.getAllRecipes();
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) {
-        RecipeDTO recipeDTO = recipeService.getRecipeById(id);
-        return ResponseEntity.ok(recipeDTO);
+    public ResponseEntity<RecipeResponseDTO> getRecipeById(@PathVariable Long id) {
+        RecipeResponseDTO recipe = recipeService.getRecipeById(id);
+        return ResponseEntity.ok(recipe);
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
-        RecipeDTO createdRecipe = recipeService.createRecipe(recipeDTO);
+    public ResponseEntity<RecipeResponseDTO> createRecipe(@Valid @RequestBody RecipeCreateDTO createDTO) {
+        RecipeResponseDTO createdRecipe = recipeService.createRecipe(createDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeDTO recipeDTO) {
-        RecipeDTO updatedRecipe = recipeService.updateRecipe(id, recipeDTO);
+    public ResponseEntity<RecipeResponseDTO> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeUpdateDTO updateDTO) {
+        RecipeResponseDTO updatedRecipe = recipeService.updateRecipe(id, updateDTO);
         return ResponseEntity.ok(updatedRecipe);
     }
 
@@ -69,7 +71,6 @@ public class RecipeController {
                 return ResponseEntity.badRequest().body("Fichier vide");
             }
 
-            // Créer le dossier uploads s'il n'existe pas
             if (!Files.exists(root)) {
                 Files.createDirectories(root);
             }
