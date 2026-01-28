@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,13 +43,13 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDTO) {
+    public ResponseEntity<RecipeDTO> createRecipe(@Valid @RequestBody RecipeDTO recipeDTO) {
         RecipeDTO createdRecipe = recipeService.createRecipe(recipeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
+    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long id, @Valid @RequestBody RecipeDTO recipeDTO) {
         RecipeDTO updatedRecipe = recipeService.updateRecipe(id, recipeDTO);
         return ResponseEntity.ok(updatedRecipe);
     }
