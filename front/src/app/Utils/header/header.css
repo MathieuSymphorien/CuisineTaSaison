@@ -1,48 +1,61 @@
 /* Style général du header */
 .header {
-  display: flex; /* Affiche les éléments enfants en ligne (par défaut) */
-  flex-direction: column; /* Empile les enfants verticalement */
-  align-items: center; /* Centre les enfants horizontalement */
-  background-color: #fafaf5; /* Fond du header */
-  padding: 1rem 0; /* Espacement intérieur (haut/bas) */
-  border-bottom: 1px solid #ddd; /* Ligne de séparation discrète */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-bg-secondary);
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Conteneur du logo */
 .logo-container {
-  text-align: center; /* Centre le contenu */
-  margin-bottom: 1rem; /* Espace entre le logo et les liens */
+  text-align: center;
+  margin-bottom: var(--spacing-md);
 }
 
 /* Style du logo */
 .logo {
-  height: 60px; /* Taille du logo (ajuste selon tes besoins) */
-  width: auto; /* Garde les proportions */
+  height: 60px;
+  width: auto;
+  transition: transform var(--transition-fast);
+}
+
+.logo:hover {
+  transform: scale(1.05);
 }
 
 /* Conteneur des liens de navigation */
 .nav-links {
-  display: flex; /* Affiche les liens en ligne */
-  gap: 1.5rem; /* Espace entre chaque lien */
-  justify-content: center; /* Centre les liens */
+  display: flex;
+  gap: var(--spacing-xl);
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Style de chaque lien */
 .nav-link {
-  text-decoration: none; /* Enlève le soulignement par défaut */
-  color: #2e2e2e; /* Couleur du texte */
-  font-weight: 500; /* Épaisseur de la police */
-  transition: color 0.3s; /* Animation douce pour le survol */
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 15px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+  position: relative;
 }
 
 /* Style au survol du lien */
 .nav-link:hover {
-  color: #e06e1b; /* Couleur plus foncée au survol */
-  text-decoration: none; /* Pas de soulignement */
+  color: var(--color-primary);
+  background-color: var(--color-bg-hover);
+  text-decoration: none;
 }
 
 /* Style du lien actif (page courante) */
 .nav-link.router-link-active {
-  font-weight: 600; /* Plus gras pour le lien actif */
-  color: #e06e1b; /* Même couleur, mais tu peux le changer */
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: rgba(124, 179, 66, 0.1);
 }

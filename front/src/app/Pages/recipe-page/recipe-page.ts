@@ -28,15 +28,35 @@ import { FilterRecipe } from "src/app/Core/filter-recipe/filter-recipe";
         display: flex;
         padding: 2rem;
         gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        min-height: calc(100vh - 200px);
       }
       .filters-container {
-        flex: 1;
-        background-color: blueviolet;
+        flex: 0 0 320px;
+        background-color: var(--color-bg-secondary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: var(--spacing-lg);
+        height: fit-content;
+        position: sticky;
+        top: var(--spacing-lg);
       }
 
       .recipes-container {
-        flex: 3;
-        background-color: aqua;
+        flex: 1;
+        min-width: 0;
+      }
+
+      @media (max-width: 968px) {
+        .recipe-page {
+          flex-direction: column;
+        }
+        
+        .filters-container {
+          position: static;
+          flex: 1;
+        }
       }
     `,
   ],

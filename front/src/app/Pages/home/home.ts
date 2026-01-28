@@ -21,11 +21,12 @@ export class Home {
 
   constructor(
     private apiService: ApiService,
-    private mockData: MockDataService
+    private mockData: MockDataService,
   ) {}
 
   ngOnInit(): void {
     this.loadFoods();
+    console.log("Foods loaded:", this.foods);
     this.season = this.mockData.getSeason().season;
     //   this.month = this.mockData.getMonth().month;
     this.recipes = this.mockData.getRecipes();

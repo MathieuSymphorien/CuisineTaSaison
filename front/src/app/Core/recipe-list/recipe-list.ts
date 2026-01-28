@@ -18,10 +18,10 @@ import { RecipeModel } from "src/app/Models/recipe.model";
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: var(--spacing-lg);
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: var(--spacing-md);
     }
   `,
 })

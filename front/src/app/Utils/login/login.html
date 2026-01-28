@@ -8,7 +8,11 @@
         placeholder="Il y a tant de bonnes choses..."
         [(ngModel)]="password"
         class="fruit-input"
+        (keyup.enter)="login()"
       />
+      @if(error) {
+      <div class="error-message">{{ error }}</div>
+      }
       <button (click)="login()" class="login-button">Déguster</button>
     </div>
   </div>

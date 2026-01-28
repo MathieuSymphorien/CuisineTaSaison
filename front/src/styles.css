@@ -4,30 +4,143 @@
 * {
   margin: 0;
   padding: 0;
-}
-
-body {
-  background-color: #fafaf5;
-  font-family: "Poppins", sans-serif;
-  color: #2e2e2e;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-  --primary-color: #605dc8;
-  --secondary-color: #8b89e6;
-  --accent-color: #e8e7fa;
-  --shadow-color: #e8e8e8;
+  /* Couleurs principales - Thème naturel et sobre */
+  --color-primary: #7cb342; /* Vert pomme */
+  --color-primary-dark: #6ba03b; /* Vert plus foncé */
+  --color-primary-light: #aed581; /* Vert clair */
+
+  --color-secondary: #2d5a3d; /* Vert foncé pour textes */
+  --color-text: #2e2e2e; /* Texte principal */
+  --color-text-light: #6b7c6b; /* Texte secondaire */
+  --color-text-muted: #9caf9c; /* Texte discret */
+
+  /* Couleurs de fond */
+  --color-bg-primary: #f9f7f3; /* Fond crème */
+  --color-bg-secondary: #ffffff; /* Fond blanc */
+  --color-bg-hover: #f5f5f0; /* Fond au survol */
+
+  /* Bordures */
+  --color-border: #d1e7dd; /* Bordure verte claire */
+  --color-border-focus: #7cb342; /* Bordure au focus */
+  --color-border-light: #e5efe4; /* Bordure très claire */
+
+  /* Ombres */
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  /* Espacements */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.4s ease;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  font-family: "Poppins", sans-serif;
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Styles de base pour les boutons */
+button {
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
 button.primary {
-  padding: 10px;
-  border: solid 1px var(--primary-color);
-  background: var(--primary-color);
+  padding: 14px 24px;
+  border: none;
+  background: var(--color-primary);
   color: white;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color var(--transition-normal);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+button.primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+button.primary:active {
+  transform: scale(0.98);
+}
+
+/* Styles pour les inputs */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+textarea,
+select {
+  font-family: "Poppins", sans-serif;
+  padding: 14px 18px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  transition: border-color var(--transition-normal);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Styles pour les cartes */
+.card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+  transition: transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}

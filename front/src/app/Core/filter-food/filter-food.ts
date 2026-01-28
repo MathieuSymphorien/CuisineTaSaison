@@ -12,22 +12,36 @@ import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter
     FilterMonthComponent,
     FilterMultiSelectComponent,
   ],
+  styleUrls: ["./filter-food.css"],
   template: `
-    <app-filter-string
-      label="Nom de la recette"
-      (valueChange)="onSearchChange($event)"
-    ></app-filter-string>
-    <app-filter-month
-      label="Mois"
-      (valueChange)="onMonthsChange($event)"
-    ></app-filter-month>
-    <app-filter-multi-select
-      label="Catégories"
-      [options]="foodCategory()"
-      (valueChange)="onCategoryChange($event)"
-    ></app-filter-multi-select>
+    <div class="filters-container">
+      <h2 class="filters-title">🥕 Filtres des aliments</h2>
+
+      <div class="filters-grid">
+        <div class="filter-card">
+          <app-filter-string
+            label="Nom de l'aliment"
+            (valueChange)="onSearchChange($event)"
+          ></app-filter-string>
+        </div>
+
+        <div class="filter-card wide">
+          <app-filter-month
+            label="Mois de disponibilité"
+            (valueChange)="onMonthsChange($event)"
+          ></app-filter-month>
+        </div>
+
+        <div class="filter-card">
+          <app-filter-multi-select
+            label="Catégories"
+            [options]="foodCategory()"
+            (valueChange)="onCategoryChange($event)"
+          ></app-filter-multi-select>
+        </div>
+      </div>
+    </div>
   `,
-  styles: ``,
 })
 export class FilterFood {
   filtersChange = output<any>();

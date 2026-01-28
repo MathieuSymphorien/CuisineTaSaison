@@ -8,4 +8,5 @@ import { RecipeModel } from "src/app/Models/recipe.model";
 })
 export class Recipe {
   recipe = input<RecipeModel>();
+   compact = input(false);
 }

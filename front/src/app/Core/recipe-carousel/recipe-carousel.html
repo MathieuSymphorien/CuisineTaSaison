@@ -4,7 +4,7 @@
   <div class="carousel" #carouselRef>
     @for (recipe of recipes(); track recipe.id) {
     <div class="carousel-item" (click)="selectRecipe(recipe)">
-      <app-recipe [recipe]="recipe" />
+      <app-recipe [recipe]="recipe" [compact]="true" />
     </div>
     }
   </div>

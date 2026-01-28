@@ -1,0 +1,73 @@
+.seasonality-card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.seasonality-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.seasonality-header h2 {
+  color: var(--color-secondary);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: 24px;
+}
+
+.seasonality-header p {
+  color: var(--color-text-light);
+  margin: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.seasonality-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.seasonality-table th,
+.seasonality-table td {
+  border: 1px solid var(--color-border-light);
+  padding: var(--spacing-sm);
+  text-align: center;
+  font-size: 14px;
+}
+
+.seasonality-table thead th {
+  background: rgba(124, 179, 66, 0.1);
+  color: var(--color-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.seasonality-table .month-cell {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-secondary);
+  background: var(--color-bg-primary);
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.seasonality-table .cell.active {
+  background: rgba(124, 179, 66, 0.12);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.seasonality-table .cell {
+  background: var(--color-bg-secondary);
+}
+
+
+
+

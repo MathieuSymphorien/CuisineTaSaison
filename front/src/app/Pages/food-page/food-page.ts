@@ -6,10 +6,11 @@ import { MockDataService } from "src/app/Services/mock-data";
 import { ApiService } from "src/app/Services/api";
 import { UploadComponent } from "src/app/Utils/upload-image/upload-image";
 import { FilterFood } from "src/app/Core/filter-food/filter-food";
+import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-table";
 
 @Component({
   selector: "app-food-page",
-  imports: [Header, FoodList, UploadComponent, FilterFood],
+  imports: [Header, FoodList, UploadComponent, FilterFood, SeasonalityTable],
   standalone: true,
   template: `
     <app-header></app-header>
@@ -24,6 +25,7 @@ import { FilterFood } from "src/app/Core/filter-food/filter-food";
       </div>
     </div>
 
+    <app-seasonality-table [foods]="foods"></app-seasonality-table>
     <app-upload-image></app-upload-image>
   `,
   styleUrls: [`food-page.css`],

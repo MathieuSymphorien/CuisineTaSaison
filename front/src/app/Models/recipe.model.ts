@@ -8,7 +8,8 @@ export interface RecipeModel {
   oven: boolean;
   people: number;
   steps: string[];
-  foods: FoodModel[]; // relation vers tes aliments
-  image: string;
+  foods: FoodModel[];
+  image: string; // FEATURE IMAGE POUR PLUS TARD
   seasonRatio?: number;
+  approved: boolean;
 }

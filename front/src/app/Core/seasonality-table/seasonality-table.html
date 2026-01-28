@@ -1,0 +1,35 @@
+<div class="seasonality-card">
+  <div class="seasonality-header">
+    <h2>Calendrier des aliments</h2>
+    <p>Visualisez en un coup d'œil la saisonnalité de chaque aliment</p>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="seasonality-table">
+      <thead>
+        <tr>
+          <th>Mois</th>
+          @for (food of foods(); track food.id) {
+          <th>{{ food.name }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (month of months; track month) {
+        <tr>
+          <td class="month-cell">{{ formatMonth(month) }}</td>
+          @for (food of foods(); track food.id) {
+          <td class="cell" [class.active]="hasMonth(food, month)">
+            @if (hasMonth(food, month)) { ✕ }
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+

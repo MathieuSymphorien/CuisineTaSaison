@@ -1,11 +1,12 @@
-<div class="recipe-card">
+<div class="recipe-card" [class.compact]="compact()">
   <img [src]="recipe()?.image" alt="{{ recipe()?.name }}" />
 
   <div class="content">
     <h3>{{ recipe()?.name }}</h3>
-    <p>{{ recipe()?.description }}</p>
+    <p class="description">{{ recipe()?.description }}</p>
 
-    <p>
+    @if (!compact()) {
+    <p class="meta">
       <strong>Temps :</strong> {{ recipe()?.time }} min<br />
       <strong>Personnes :</strong> {{ recipe()?.people }}<br />
       <strong>Four :</strong> {{ recipe()?.oven ? 'Oui ✅' : 'Non ❌' }}
@@ -17,5 +18,6 @@
       <li>{{ food.name }}</li>
       }
     </ul>
+    }
   </div>
 </div>

@@ -16,7 +16,7 @@ export class ApiService {
   getAllFoods(
     name?: string,
     category?: FoodCategory,
-    months?: Month[]
+    months?: Month[],
   ): Observable<FoodModel[]> {
     let params = new HttpParams();
 
@@ -41,22 +41,18 @@ export class ApiService {
     return this.http.get<FoodModel[]>(`${this.apiUrl}/seasonal`);
   }
 
-  // Récupère un food par ID
   getFoodById(id: number): Observable<FoodModel> {
     return this.http.get<FoodModel>(`${this.apiUrl}/${id}`);
   }
 
-  // Crée un nouveau food
   createFood(food: Omit<FoodModel, "id">): Observable<FoodModel> {
     return this.http.post<FoodModel>(this.apiUrl, food);
   }
 
-  // Met à jour un food
   updateFood(id: number, food: Partial<FoodModel>): Observable<FoodModel> {
     return this.http.put<FoodModel>(`${this.apiUrl}/${id}`, food);
   }
 
-  // Supprime un food
   deleteFood(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

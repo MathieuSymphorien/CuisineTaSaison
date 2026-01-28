@@ -24,7 +24,8 @@
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   border: 1px solid var(--color-border-light);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .filter-card:hover {
@@ -37,15 +38,6 @@
   grid-column: span 2;
 }
 
-label {
-  color: var(--color-secondary);
-  font-weight: 500;
-  font-size: 14px;
-}
 
-input[type="checkbox"],
-input[type="text"],
-input[type="number"],
-input[type="range"] {
-  accent-color: var(--color-primary);
-}
+
+

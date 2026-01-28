@@ -15,17 +15,15 @@ import { FoodModel } from "src/app/Models/food.model";
   `,
   styles: `
     .food-list {
-  display: flex;
-  flex-wrap: wrap;
-  // justify-content: center;
-  gap: 15px;
-  align-items: flex-start;
-  max-width: 800px;
-  margin: 0 auto;  /* centre le container */
-  padding: 0 16px;  /* marges côté sur mobile */
-  
-}
-
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--spacing-lg);
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--spacing-md);
+    }
   `,
 })
 export class FoodList {
