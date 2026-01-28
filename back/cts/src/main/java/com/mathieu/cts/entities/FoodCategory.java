@@ -7,5 +7,6 @@ public enum FoodCategory {
     POISSON,
     CEREALE,
     EPICE,
-    LACTE
+    LACTE,
+    AUTRE
 }
