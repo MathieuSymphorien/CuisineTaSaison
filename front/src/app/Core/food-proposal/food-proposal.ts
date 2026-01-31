@@ -1,58 +1,64 @@
 import { Month } from "./../../Models/month.model";
-import { Component, output } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
+import { FoodApiService } from "src/app/Services/food-api.service";
 import { FoodCategory } from "src/app/Models/food.model";
+import { FilterMonthComponent } from "src/app/Utils/filter/filter-month/filter-month";
+import { FilterMultiSelectComponent } from "src/app/Utils/filter/filter-multi-select/filter-multi-select";
+import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter-string";
 
 @Component({
   selector: "app-food-proposal",
-  imports: [],
+  imports: [
+    FilterMonthComponent,
+    FilterMultiSelectComponent,
+    FilterStringComponent,
+  ],
   template: `
     <div class="proposal-form">
-      <div class="form-group">
-        <label for="name">Nom de l'ingrédient</label>
-        <input 
-          id="name" 
-          type="text" 
-          placeholder="Ex: Pomme, Carotte..."
-          (input)="name.emit($event.target.value)" 
-        />
+      <div class="filter-card">
+        <app-filter-string
+          label="Nom de l'aliment"
+          [value]="name()"
+          (valueChange)="onSearchChange($event)"
+        ></app-filter-string>
       </div>
-      
-      <div class="form-group">
-        <label for="category">Catégorie</label>
-        <select id="category">
-          <option value="">Sélectionnez une catégorie</option>
-          <option value="fruit">Fruit</option>
-          <option value="legume">Légume</option>
-          <option value="viande">Viande</option>
-          <option value="poisson">Poisson</option>
-          <option value="cereale">Céréale</option>
-          <option value="epice">Épice</option>
-          <option value="lacte">Produit laitier</option>
-        </select>
+
+      <div class="filter-card">
+        <app-filter-multi-select
+          label="Catégories"
+          [options]="foodCategories"
+          [value]="selectedCategories()"
+          (valueChange)="onCategoryChange($event)"
+        ></app-filter-multi-select>
       </div>
-      
-      <div class="form-group">
-        <label for="months">Mois de disponibilité</label>
-        <select id="months" multiple>
-          <option value="january">Janvier</option>
-          <option value="february">Février</option>
-          <option value="march">Mars</option>
-          <option value="april">Avril</option>
-          <option value="may">Mai</option>
-          <option value="june">Juin</option>
-          <option value="july">Juillet</option>
-          <option value="august">Août</option>
-          <option value="september">Septembre</option>
-          <option value="october">Octobre</option>
-          <option value="november">Novembre</option>
-          <option value="december">Décembre</option>
-        </select>
-        <p class="form-hint">Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs mois</p>
+
+      <div>
+        <app-filter-month
+          label="Mois de disponibilité"
+          [value]="months()"
+          (valueChange)="onMonthsChange($event)"
+        ></app-filter-month>
       </div>
-      
-      <button class="submit-button" (click)="submitProposal()">
-        Proposer cet ingrédient 🍎
+
+      <button
+        class="submit-button"
+        [disabled]="isSubmitting()"
+        (click)="submitProposal()"
+      >
+        @if (isSubmitting()) {
+          Envoi en cours...
+        } @else {
+          Proposer cet ingrédient
+        }
       </button>
+
+      @if (errorMessage()) {
+        <div class="message error">{{ errorMessage() }}</div>
+      }
+
+      @if (successMessage()) {
+        <div class="message success">{{ successMessage() }}</div>
+      }
     </div>
   `,
   styles: `
@@ -61,49 +67,26 @@ import { FoodCategory } from "src/app/Models/food.model";
       flex-direction: column;
       gap: var(--spacing-lg);
     }
-    
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-    }
-    
-    .form-group label {
-      color: var(--color-secondary);
-      font-weight: 600;
-      font-size: 15px;
-    }
-    
-    .form-group input,
-    .form-group select {
-      padding: 14px 18px;
-      border: 2px solid var(--color-border);
+
+    .message {
+      padding: 12px 16px;
       border-radius: var(--radius-md);
-      font-size: 16px;
-      transition: border-color var(--transition-normal);
-      background-color: var(--color-bg-secondary);
-      color: var(--color-text);
-      font-family: "Poppins", sans-serif;
+      font-size: 14px;
+      font-weight: 500;
     }
-    
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--color-border-focus);
+
+    .message.error {
+      background-color: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
     }
-    
-    .form-group select[multiple] {
-      min-height: 150px;
-      padding: var(--spacing-sm);
+
+    .message.success {
+      background-color: #dcfce7;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
     }
-    
-    .form-hint {
-      font-size: 13px;
-      color: var(--color-text-light);
-      margin-top: var(--spacing-xs);
-      font-style: italic;
-    }
-    
+
     .submit-button {
       width: 100%;
       padding: 16px;
@@ -114,26 +97,105 @@ import { FoodCategory } from "src/app/Models/food.model";
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color var(--transition-normal), transform var(--transition-fast);
+      transition:
+        background-color var(--transition-normal),
+        transform var(--transition-fast);
       margin-top: var(--spacing-md);
     }
-    
-    .submit-button:hover {
+
+    .submit-button:hover:not(:disabled) {
       background-color: var(--color-primary-dark);
       transform: translateY(-2px);
     }
-    
-    .submit-button:active {
+
+    .submit-button:active:not(:disabled) {
       transform: scale(0.98);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
   `,
 })
 export class FoodProposal {
-  name = output<string>();
-  category = output<FoodCategory>();
-  months = output<Month[]>();
+  private readonly foodApiService = inject(FoodApiService);
+
+  readonly foodCategories: FoodCategory[] = [
+    "LEGUME",
+    "FRUIT",
+    "CEREALE",
+    "VIANDE",
+    "POISSON",
+    "LACTE",
+    "EPICE",
+    "AUTRE",
+  ];
+
+  name = signal("");
+  category = signal<FoodCategory | null>(null);
+  months = signal<Month[]>([]);
+
+  // Pour le binding avec le multi-select (qui attend un string[])
+  selectedCategories = signal<string[]>([]);
+
+  isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
+
+  onCategoryChange(event: string[]) {
+    this.selectedCategories.set(event);
+    this.category.set(event.length > 0 ? (event[0] as FoodCategory) : null);
+  }
+
+  onMonthsChange(event: Month[]) {
+    this.months.set(event);
+  }
+
+  onSearchChange(event: string) {
+    this.name.set(event);
+  }
 
   submitProposal() {
-    // Logique pour soumettre la proposition d'ingrédient
+    // Reset des messages
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+
+    // Validation
+    if (!this.name() || !this.category()) {
+      this.errorMessage.set("Veuillez remplir le nom et la catégorie");
+      return;
+    }
+
+    if (this.months().length === 0) {
+      this.errorMessage.set("Veuillez sélectionner au moins un mois");
+      return;
+    }
+
+    this.isSubmitting.set(true);
+
+    this.foodApiService
+      .createFood({
+        name: this.name(),
+        category: this.category()!,
+        months: this.months(),
+        image: "",
+        approved: false,
+      })
+      .subscribe({
+        next: () => {
+          this.successMessage.set("Proposition soumise avec succès !");
+          this.isSubmitting.set(false);
+          // Reset du formulaire
+          this.name.set("");
+          this.category.set(null);
+          this.selectedCategories.set([]);
+          this.months.set([]);
+        },
+        error: () => {
+          this.errorMessage.set("Erreur lors de la soumission");
+          this.isSubmitting.set(false);
+        },
+      });
   }
 }

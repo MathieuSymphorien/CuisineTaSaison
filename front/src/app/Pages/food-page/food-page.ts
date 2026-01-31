@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { Header } from "../../Utils/header/header";
 import { FoodList } from "src/app/Core/food-list/food-list";
 import { MockDataService } from "src/app/Services/mock-data";
-import { ApiService } from "src/app/Services/api";
+import { FoodApiService } from "src/app/Services/food-api.service";
 import { UploadComponent } from "src/app/Utils/upload-image/upload-image";
 import { FilterFood } from "src/app/Core/filter-food/filter-food";
 import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-table";
@@ -26,14 +26,14 @@ import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-tab
     </div>
 
     <app-seasonality-table [foods]="foods"></app-seasonality-table>
-    <app-upload-image></app-upload-image>
+    <!-- <app-upload-image></app-upload-image> -->
   `,
   styleUrls: [`food-page.css`],
 })
 export class FoodPage implements OnInit {
   foods: FoodModel[] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(private FoodApiService: FoodApiService) {}
 
   ngOnInit(): void {
     this.loadFoods();
@@ -41,9 +41,9 @@ export class FoodPage implements OnInit {
 
   loadFoods(filters?: any): void {
     const name = filters?.name ?? null;
-    const category = filters?.categories?.[0] ?? null; // si tu n’en veux qu’une
+    const category = filters?.categories?.[0] ?? null;
     const months = filters?.months ?? [];
-    this.apiService.getAllFoods(name, category, months).subscribe({
+    this.FoodApiService.getAllFoods(name, category, months).subscribe({
       next: (foods) => {
         this.foods = foods;
       },

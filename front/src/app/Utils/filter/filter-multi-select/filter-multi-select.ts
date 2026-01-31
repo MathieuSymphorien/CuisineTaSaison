@@ -1,4 +1,4 @@
-import { Component, input, output, signal, computed } from "@angular/core";
+import { Component, effect, input, output, signal, computed } from "@angular/core";
 import { FilterStringComponent } from "../filter-string/filter-string";
 import "src/app/Utils/filter/filter-common.css";
 
@@ -8,8 +8,6 @@ import "src/app/Utils/filter/filter-common.css";
   template: `<div class="filter-box">
     <div class="header">
       <span>{{ label() }}</span>
-      <!-- <app-filter-string label="Recherche" (valueChange)="search.set($event)">
-      </app-filter-string> -->
     </div>
 
     <div class="options">
@@ -17,7 +15,7 @@ import "src/app/Utils/filter/filter-common.css";
       <label>
         <input
           type="checkbox"
-          [checked]="selected().has(opt)"
+          [checked]="internalSelected().has(opt)"
           (change)="toggleOption(opt)"
         />
         {{ opt }}
@@ -30,9 +28,16 @@ import "src/app/Utils/filter/filter-common.css";
 export class FilterMultiSelectComponent {
   label = input<string>("Ingrédients");
   options = input<string[]>([]);
-  selected = signal<Set<string>>(new Set());
+  value = input<string[]>([]);
+  internalSelected = signal<Set<string>>(new Set());
   search = signal("");
   valueChange = output<string[]>();
+
+  constructor() {
+    effect(() => {
+      this.internalSelected.set(new Set(this.value()));
+    });
+  }
 
   filteredOptions = computed(() =>
     this.options().filter((opt) =>
@@ -41,9 +46,9 @@ export class FilterMultiSelectComponent {
   );
 
   toggleOption(option: string) {
-    const set = new Set(this.selected());
+    const set = new Set(this.internalSelected());
     set.has(option) ? set.delete(option) : set.add(option);
-    this.selected.set(set);
-    this.valueChange.emit(Array.from(this.selected()));
+    this.internalSelected.set(set);
+    this.valueChange.emit(Array.from(this.internalSelected()));
   }
 }

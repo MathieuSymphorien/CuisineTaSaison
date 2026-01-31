@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from "@angular/core";
+import { Component, effect, input, output, signal } from "@angular/core";
 import { Month, MONTHS } from "src/app/Models/month.model";
 import "src/app/Utils/filter/filter-common.css";
 
@@ -12,7 +12,7 @@ import "src/app/Utils/filter/filter-common.css";
       <label>
         <input
           type="checkbox"
-          [checked]="selected().has(opt)"
+          [checked]="internalSelected().has(opt)"
           (change)="toggleMonth(opt)"
         />
         {{ opt }}
@@ -23,14 +23,21 @@ import "src/app/Utils/filter/filter-common.css";
 })
 export class FilterMonthComponent {
   label = input<string>("Mois");
+  value = input<Month[]>([]);
   months: Month[] = MONTHS;
-  selected = signal<Set<Month>>(new Set());
+  internalSelected = signal<Set<Month>>(new Set());
   valueChange = output<Month[]>();
 
+  constructor() {
+    effect(() => {
+      this.internalSelected.set(new Set(this.value()));
+    });
+  }
+
   toggleMonth(month: Month) {
-    const s = new Set(this.selected());
+    const s = new Set(this.internalSelected());
     s.has(month) ? s.delete(month) : s.add(month);
-    this.selected.set(s);
+    this.internalSelected.set(s);
     this.valueChange.emit(Array.from(s));
   }
 }

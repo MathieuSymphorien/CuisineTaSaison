@@ -7,7 +7,7 @@ import { Month } from "../Models/month.model";
 @Injectable({
   providedIn: "root",
 })
-export class ApiService {
+export class FoodApiService {
   private apiUrl = "/api/foods"; // Proxy vers le backend (configuré dans nginx.conf)
 
   constructor(private http: HttpClient) {}

@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from "@angular/core";
+import { Component, effect, input, output, signal } from "@angular/core";
 import "src/app/Utils/filter/filter-common.css";
 
 @Component({
@@ -9,7 +9,7 @@ import "src/app/Utils/filter/filter-common.css";
       <div class="header">{{ label() }}</div>
       <input
         type="text"
-        [value]="value()"
+        [value]="internalValue()"
         (input)="onChange($event)"
         placeholder="Saisir un texte..."
       />
@@ -18,12 +18,20 @@ import "src/app/Utils/filter/filter-common.css";
 })
 export class FilterStringComponent {
   label = input<string>("Filtre texte");
+  value = input<string>("");
   valueChange = output<string>();
-  value = signal("");
+
+  internalValue = signal("");
+
+  constructor() {
+    effect(() => {
+      this.internalValue.set(this.value());
+    });
+  }
 
   onChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.value.set(target.value);
-    this.valueChange.emit(this.value());
+    this.internalValue.set(target.value);
+    this.valueChange.emit(this.internalValue());
   }
 }

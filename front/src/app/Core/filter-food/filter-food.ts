@@ -46,7 +46,7 @@ import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter
 export class FilterFood {
   filtersChange = output<any>();
   foodCategory = signal<string[]>(
-    "Légume,Fruit,Céréale,Viande,Poisson,Produit laitier,Epice".split(",")
+    "LEGUME,FRUIT,CEREALE,VIANDE,POISSON,LACTE,EPICE,AUTRE".split(","),
   );
 
   filters = signal({

@@ -5,7 +5,7 @@ import { FoodList } from "src/app/Core/food-list/food-list";
 import { FoodModel } from "src/app/Models/food.model";
 import { RecipeModel } from "src/app/Models/recipe.model";
 import { RecipeCarousel } from "src/app/Core/recipe-carousel/recipe-carousel";
-import { ApiService } from "src/app/Services/api";
+import { FoodApiService } from "src/app/Services/food-api.service";
 
 @Component({
   selector: "app-home",
@@ -20,7 +20,7 @@ export class Home {
   month = "oct";
 
   constructor(
-    private apiService: ApiService,
+    private FoodApiService: FoodApiService,
     private mockData: MockDataService,
   ) {}
 
@@ -33,7 +33,7 @@ export class Home {
   }
 
   loadFoods(): void {
-    this.apiService.getSeasonalFoods().subscribe({
+    this.FoodApiService.getSeasonalFoods().subscribe({
       next: (foods) => {
         this.foods = foods;
       },

@@ -6,7 +6,7 @@ import { RecipeModel } from "../Models/recipe.model";
 @Injectable({
   providedIn: "root",
 })
-export class RecipeApiService {
+export class RecipeFoodApiService {
   private apiUrl = "/api/recipes"; // Proxy vers le backend (configuré dans nginx.conf)
 
   constructor(private http: HttpClient) {}
@@ -27,7 +27,10 @@ export class RecipeApiService {
   }
 
   // Met à jour une recette
-  updateRecipe(id: number, recipe: Partial<RecipeModel>): Observable<RecipeModel> {
+  updateRecipe(
+    id: number,
+    recipe: Partial<RecipeModel>,
+  ): Observable<RecipeModel> {
     return this.http.put<RecipeModel>(`${this.apiUrl}/${id}`, recipe);
   }
 
@@ -43,4 +46,3 @@ export class RecipeApiService {
     return this.http.post<string>(`${this.apiUrl}/upload`, formData);
   }
 }
-
