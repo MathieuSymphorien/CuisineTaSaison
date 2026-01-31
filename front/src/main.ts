@@ -9,12 +9,18 @@ import {
 import { App } from "./app/app";
 import { provideRouter } from "@angular/router";
 import routeConfig from "./app/routes";
-import { provideHttpClient } from "@angular/common/http";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
+import { AuthInterceptor } from "./app/Services/auth.interceptor";
 
 bootstrapApplication(App, {
   providers: [
     provideProtractorTestingSupport(),
     provideRouter(routeConfig),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
 }).catch((err) => console.error(err));

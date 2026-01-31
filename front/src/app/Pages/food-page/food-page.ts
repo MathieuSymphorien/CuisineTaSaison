@@ -1,5 +1,5 @@
 import { FoodModel } from "src/app/Models/food.model";
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { Header } from "../../Utils/header/header";
 import { FoodList } from "src/app/Core/food-list/food-list";
 import { MockDataService } from "src/app/Services/mock-data";
@@ -33,7 +33,7 @@ import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-tab
 export class FoodPage implements OnInit {
   foods: FoodModel[] = [];
 
-  constructor(private FoodApiService: FoodApiService) {}
+  private readonly foodApiService = inject(FoodApiService);
 
   ngOnInit(): void {
     this.loadFoods();
@@ -43,7 +43,7 @@ export class FoodPage implements OnInit {
     const name = filters?.name ?? null;
     const category = filters?.categories?.[0] ?? null;
     const months = filters?.months ?? [];
-    this.FoodApiService.getAllFoods(name, category, months).subscribe({
+    this.foodApiService.getAllFoods(name, category, months).subscribe({
       next: (foods) => {
         this.foods = foods;
       },

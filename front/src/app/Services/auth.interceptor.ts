@@ -17,15 +17,19 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("admin_token");
     let authReq = req;
+
+    // console.log("[Interceptor] URL:", req.url);
+    // console.log("[Interceptor] Token présent:", !!token);
 
     if (token) {
       authReq = req.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
       });
+      // console.log("[Interceptor] Header ajouté:", `Bearer ${token.substring(0, 20)}...`);
     }
 
     return next.handle(authReq).pipe(
@@ -34,7 +38,7 @@ export class AuthInterceptor implements HttpInterceptor {
           this.router.navigate([""]);
         }
         return throwError(() => err);
-      })
+      }),
     );
   }
 }
