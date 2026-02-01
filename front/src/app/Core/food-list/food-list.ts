@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core";
+import { Component, input, output } from "@angular/core";
 import { Food } from "../food/food";
 import { FoodModel } from "src/app/Models/food.model";
 
@@ -9,7 +9,7 @@ import { FoodModel } from "src/app/Models/food.model";
   template: `
     <div class="food-list">
       @for (food of foods(); track food.id) {
-      <app-food [food]="food"></app-food>
+      <app-food [food]="food" (foodChanged)="onFoodChanged($event)"></app-food>
       }
     </div>
   `,
@@ -28,4 +28,9 @@ import { FoodModel } from "src/app/Models/food.model";
 })
 export class FoodList {
   foods = input<FoodModel[]>();
+  foodChanged = output<number>();
+
+  onFoodChanged(foodId: number) {
+    this.foodChanged.emit(foodId);
+  }
 }

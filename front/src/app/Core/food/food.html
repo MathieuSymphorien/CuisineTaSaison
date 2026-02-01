@@ -2,8 +2,12 @@
   class="food-card"
   [style.background-color]="getBackgroundColor(food()?.category)"
 >
-  <img [src]="food()?.image" alt="{{ food()?.name }}" />
+  <!-- <img [src]="food()?.image" alt="{{ food()?.name }}" /> -->
   <div>
     <h3>{{ food()?.name }}</h3>
   </div>
+  @if (isAdmin()) {
+  <button (click)="acceptFood(food())">Accepter</button>
+  <button (click)="deleteFood(food())">Refuser</button>
+  }
 </div>

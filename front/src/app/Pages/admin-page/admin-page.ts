@@ -2,17 +2,21 @@ import { Component, inject } from "@angular/core";
 import { FoodModel } from "src/app/Models/food.model";
 import { AdminService } from "src/app/Services/admin.service";
 import { Header } from "src/app/Utils/header/header";
+import { FoodList } from "src/app/Core/food-list/food-list";
 
 @Component({
   selector: "app-admin-page",
-  imports: [Header],
+  imports: [Header, FoodList],
   template: `
     <app-header></app-header>
     <div class="admin-container">
       <div class="admin-card">
         <h1>Panneau d'administration</h1>
-        <p>Gérez les produits et recettes proposés par les utilisateurs</p>
       </div>
+      <app-food-list
+        [foods]="foods"
+        (foodChanged)="onFoodChanged($event)"
+      ></app-food-list>
     </div>
   `,
   styles: `
@@ -56,7 +60,6 @@ export class AdminPage {
     this.adminService.getpendingFoods().subscribe({
       next: (foods) => {
         this.foods = foods;
-        console.log("Foods en attente:", foods);
       },
       error: (err) => {
         console.error(
@@ -65,5 +68,10 @@ export class AdminPage {
         );
       },
     });
+  }
+
+  onFoodChanged(foodId: number) {
+    // Retire le food de la liste locale
+    this.foods = this.foods.filter((food) => food.id !== foodId);
   }
 }

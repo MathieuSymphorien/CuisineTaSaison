@@ -9,6 +9,9 @@
     <a routerLink="/recette" class="nav-link">Recette</a>
     <a routerLink="/proposition" class="nav-link">Proposition</a>
     <a routerLink="/connexion" class="nav-link">Login</a>
+    @if (isAdmin()) {
+      <a routerLink="/admin" class="nav-link">Admin</a>
+    }
   </nav>
 </header>
 <router-outlet />

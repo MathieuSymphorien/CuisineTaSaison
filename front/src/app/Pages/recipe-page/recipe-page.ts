@@ -52,7 +52,7 @@ import { FilterRecipe } from "src/app/Core/filter-recipe/filter-recipe";
         .recipe-page {
           flex-direction: column;
         }
-        
+
         .filters-container {
           position: static;
           flex: 1;
@@ -72,6 +72,6 @@ export class RecipePage {
 
   applyFilters(filters: any) {
     console.log("Filtres reçus :", filters);
-    // ➜ Tu pourras ici appliquer ton vrai filtrage de recettes
+    //appliquer vrai filtrage de recettes
   }
 }
