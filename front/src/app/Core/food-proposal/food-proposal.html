@@ -1,0 +1,40 @@
+<div class="proposal-form">
+  <div class="filter-card">
+    <app-filter-string
+      label="Nom de l'aliment"
+      [value]="name()"
+      (valueChange)="onSearchChange($event)"
+    ></app-filter-string>
+  </div>
+
+  <div class="filter-card">
+    <app-filter-multi-select
+      label="Catégories"
+      [options]="foodCategories"
+      [value]="selectedCategories()"
+      (valueChange)="onCategoryChange($event)"
+    ></app-filter-multi-select>
+  </div>
+
+  <div>
+    <app-filter-month
+      label="Mois de disponibilité"
+      [value]="months()"
+      (valueChange)="onMonthsChange($event)"
+    ></app-filter-month>
+  </div>
+
+  <button
+    class="submit-button"
+    [disabled]="isSubmitting()"
+    (click)="submitProposal()"
+  >
+    @if (isSubmitting()) { Envoi en cours... } @else { Proposer cet ingrédient }
+  </button>
+
+  @if (errorMessage()) {
+  <div class="message error">{{ errorMessage() }}</div>
+  } @if (successMessage()) {
+  <div class="message success">{{ successMessage() }}</div>
+  }
+</div>
