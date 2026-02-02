@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { RecipeModel } from "../Models/recipe.model";
+import { CreateRecipeDto, RecipeModel } from "../Models/recipe.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class RecipeFoodApiService {
+export class RecipeApiService {
   private apiUrl = "/api/recipes"; // Proxy vers le backend (configuré dans nginx.conf)
 
   constructor(private http: HttpClient) {}
@@ -22,7 +22,7 @@ export class RecipeFoodApiService {
   }
 
   // Crée une nouvelle recette
-  createRecipe(recipe: Omit<RecipeModel, "id">): Observable<RecipeModel> {
+  createRecipe(recipe: CreateRecipeDto): Observable<RecipeModel> {
     return this.http.post<RecipeModel>(this.apiUrl, recipe);
   }
 

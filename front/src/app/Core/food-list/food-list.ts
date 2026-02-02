@@ -9,7 +9,10 @@ import { FoodModel } from "src/app/Models/food.model";
   template: `
     <div class="food-list">
       @for (food of foods(); track food.id) {
-      <app-food [food]="food" (foodChanged)="onFoodChanged($event)"></app-food>
+        <app-food
+          [food]="food"
+          (foodChanged)="onFoodChanged($event)"
+        ></app-food>
       }
     </div>
   `,

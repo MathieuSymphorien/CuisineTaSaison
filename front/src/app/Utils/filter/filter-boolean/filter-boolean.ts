@@ -1,4 +1,4 @@
-import { Component, input, output, signal } from "@angular/core";
+import { Component, effect, input, output, signal } from "@angular/core";
 import "src/app/Utils/filter/filter-common.css";
 
 @Component({
@@ -7,7 +7,11 @@ import "src/app/Utils/filter/filter-common.css";
   template: `
     <div class="filter-box">
       <label>
-        <input type="checkbox" [checked]="value()" (change)="toggle($event)" />
+        <input
+          type="checkbox"
+          [checked]="internalValue()"
+          (change)="toggle($event)"
+        />
         {{ label() }}
       </label>
     </div>
@@ -15,12 +19,20 @@ import "src/app/Utils/filter/filter-common.css";
 })
 export class FilterBooleanComponent {
   label = input<string>("Option");
-  value = signal(false);
+  value = input<boolean>(false);
   valueChange = output<boolean>();
+
+  internalValue = signal(false);
+
+  constructor() {
+    effect(() => {
+      this.internalValue.set(this.value());
+    });
+  }
 
   toggle(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
-    this.value.set(checked);
+    this.internalValue.set(checked);
     this.valueChange.emit(checked);
   }
 }

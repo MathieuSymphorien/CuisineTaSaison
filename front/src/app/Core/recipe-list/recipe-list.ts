@@ -1,4 +1,4 @@
-import { Component, input } from "@angular/core";
+import { Component, input, output } from "@angular/core";
 import { Recipe } from "../recipe/recipe";
 import { RecipeModel } from "src/app/Models/recipe.model";
 
@@ -9,7 +9,10 @@ import { RecipeModel } from "src/app/Models/recipe.model";
   template: `
     <div class="recipe-list">
       @for (recipe of recipes(); track recipe.id) {
-      <app-recipe [recipe]="recipe"></app-recipe>
+        <app-recipe
+          [recipe]="recipe"
+          (recipeChanged)="onRecipeChanged($event)"
+        ></app-recipe>
       }
     </div>
   `,
@@ -27,4 +30,9 @@ import { RecipeModel } from "src/app/Models/recipe.model";
 })
 export class RecipeList {
   recipes = input<RecipeModel[]>();
+  recipesChanged = output<number>();
+
+  onRecipeChanged(recipeId: number) {
+    this.recipesChanged.emit(recipeId);
+  }
 }

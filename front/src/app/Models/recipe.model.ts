@@ -13,3 +13,16 @@ export interface RecipeModel {
   seasonRatio?: number;
   approved: boolean;
 }
+
+export interface CreateRecipeDto {
+  name: string;
+  description: string;
+  time: number;
+  oven: boolean;
+  people: number;
+  steps: string[];
+  foodIds: number[];
+  image: string;
+  seasonRatio?: number;
+  approved: boolean;
+}

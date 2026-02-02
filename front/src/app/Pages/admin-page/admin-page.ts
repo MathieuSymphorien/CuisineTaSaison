@@ -3,20 +3,33 @@ import { FoodModel } from "src/app/Models/food.model";
 import { AdminService } from "src/app/Services/admin.service";
 import { Header } from "src/app/Utils/header/header";
 import { FoodList } from "src/app/Core/food-list/food-list";
+import { Recipe } from "src/app/Core/recipe/recipe";
+import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
+import { RecipeModel } from "src/app/Models/recipe.model";
 
 @Component({
   selector: "app-admin-page",
-  imports: [Header, FoodList],
+  imports: [Header, FoodList, Recipe, RecipeList],
   template: `
     <app-header></app-header>
     <div class="admin-container">
       <div class="admin-card">
         <h1>Panneau d'administration</h1>
       </div>
-      <app-food-list
-        [foods]="foods"
-        (foodChanged)="onFoodChanged($event)"
-      ></app-food-list>
+      <div>
+        <h1>Aliments</h1>
+        <app-food-list
+          [foods]="foods"
+          (foodChanged)="onFoodChanged($event)"
+        ></app-food-list>
+      </div>
+      <div>
+        <h1>Recettes</h1>
+        <app-recipe-list
+          [recipes]="recipes"
+          (recipesChanged)="onRecipesChanged($event)"
+        ></app-recipe-list>
+      </div>
     </div>
   `,
   styles: `
@@ -49,11 +62,13 @@ import { FoodList } from "src/app/Core/food-list/food-list";
 })
 export class AdminPage {
   foods: FoodModel[] = [];
+  recipes: RecipeModel[] = [];
 
   private readonly adminService = inject(AdminService);
 
   ngOnInit(): void {
     this.loadFoods();
+    this.loadRecipes();
   }
 
   loadFoods(): void {
@@ -70,8 +85,27 @@ export class AdminPage {
     });
   }
 
+  loadRecipes(): void {
+    this.adminService.getPendingRecipes().subscribe({
+      next: (recipes) => {
+        this.recipes = recipes;
+      },
+      error: (err) => {
+        console.error(
+          "Erreur lors de la récupération des recettes en attente:",
+          err,
+        );
+      },
+    });
+  }
+
   onFoodChanged(foodId: number) {
     // Retire le food de la liste locale
     this.foods = this.foods.filter((food) => food.id !== foodId);
+  }
+
+  onRecipesChanged(recipeId: number) {
+    // Retire la recette de la liste locale
+    this.recipes = this.recipes.filter((recipe) => recipe.id !== recipeId);
   }
 }
