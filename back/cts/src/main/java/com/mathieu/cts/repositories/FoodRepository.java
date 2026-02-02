@@ -22,4 +22,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     List<Food> findByApprovedTrue();
 
     List<Food> findByApprovedFalse();
+
+    boolean existsByNameIgnoreCase(String name);
 }

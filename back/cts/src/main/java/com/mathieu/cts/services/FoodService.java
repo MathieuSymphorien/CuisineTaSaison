@@ -6,6 +6,7 @@ import com.mathieu.cts.entities.DTO.food.FoodUpdateDTO;
 import com.mathieu.cts.entities.Food;
 import com.mathieu.cts.entities.FoodCategory;
 import com.mathieu.cts.entities.Months;
+import com.mathieu.cts.exceptions.FoodAlreadyExistsException;
 import com.mathieu.cts.exceptions.FoodNotFoundException;
 import com.mathieu.cts.repositories.FoodRepository;
 
@@ -72,6 +73,11 @@ public class FoodService {
     }
 
     public FoodResponseDTO createFood(FoodCreateDTO createDTO) {
+        // Vérifier si un aliment avec ce nom existe déjà
+        if (foodRepository.existsByNameIgnoreCase(createDTO.getName())) {
+            throw new FoodAlreadyExistsException(createDTO.getName());
+        }
+
         Food food = new Food();
         food.setName(createDTO.getName());
         food.setCategory(createDTO.getCategory());
