@@ -1,9 +1,19 @@
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { Header } from "../../Utils/header/header";
-import { MockDataService } from "src/app/Services/mock-data";
 import { RecipeModel } from "src/app/Models/recipe.model";
 import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
 import { FilterRecipe } from "src/app/Core/filter-recipe/filter-recipe";
+import { RecipeApiService } from "src/app/Services/recipe-api.service";
+import { Month } from "src/app/Models/month.model";
+
+interface RecipeFilters {
+  name: string;
+  time: { min: number; max: number };
+  include: string[];
+  exclude: string[];
+  months: Month[];
+  oven: boolean;
+}
 
 @Component({
   selector: "app-recipe-page",
@@ -61,17 +71,35 @@ import { FilterRecipe } from "src/app/Core/filter-recipe/filter-recipe";
     `,
   ],
 })
-export class RecipePage {
+export class RecipePage implements OnInit {
+  private readonly recipeApiService = inject(RecipeApiService);
+
   recipes: RecipeModel[] = [];
 
-  constructor(private mockData: MockDataService) {}
-
   ngOnInit() {
-    this.recipes = this.mockData.getRecipes();
+    this.loadRecipes();
   }
 
-  applyFilters(filters: any) {
-    console.log("Filtres reçus :", filters);
-    //appliquer vrai filtrage de recettes
+  loadRecipes(filters?: RecipeFilters): void {
+    const name = filters?.name || undefined;
+    const timeMin = filters?.time?.min || undefined;
+    const timeMax = filters?.time?.max || undefined;
+    const oven = filters?.oven || undefined;
+    const months = filters?.months?.length ? filters.months : undefined;
+
+    this.recipeApiService
+      .getAllRecipes(name, timeMin, timeMax, oven, months)
+      .subscribe({
+        next: (recipes) => {
+          this.recipes = recipes;
+        },
+        error: (err) => {
+          console.error("Erreur lors de la récupération des recettes:", err);
+        },
+      });
+  }
+
+  applyFilters(filters: RecipeFilters) {
+    this.loadRecipes(filters);
   }
 }

@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CreateRecipeDto, RecipeModel } from "../Models/recipe.model";
+import { Month } from "../Models/month.model";
 
 @Injectable({
   providedIn: "root",
@@ -11,9 +12,35 @@ export class RecipeApiService {
 
   constructor(private http: HttpClient) {}
 
-  // Récupère toutes les recettes
-  getAllRecipes(): Observable<RecipeModel[]> {
-    return this.http.get<RecipeModel[]>(this.apiUrl);
+  // Récupère toutes les recettes avec filtres optionnels
+  getAllRecipes(
+    name?: string,
+    timeMin?: number,
+    timeMax?: number,
+    oven?: boolean,
+    months?: Month[],
+  ): Observable<RecipeModel[]> {
+    let params = new HttpParams();
+
+    if (name) {
+      params = params.set("name", name);
+    }
+    if (timeMin !== undefined && timeMin > 0) {
+      params = params.set("timeMin", timeMin.toString());
+    }
+    if (timeMax !== undefined && timeMax > 0) {
+      params = params.set("timeMax", timeMax.toString());
+    }
+    if (oven !== undefined && oven) {
+      params = params.set("oven", "true");
+    }
+    if (months && months.length > 0) {
+      months.forEach((m) => {
+        params = params.append("months", m);
+      });
+    }
+
+    return this.http.get<RecipeModel[]>(this.apiUrl, { params });
   }
 
   // Récupère une recette par ID

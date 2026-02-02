@@ -1,5 +1,6 @@
 package com.mathieu.cts.controllers;
 
+import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.entities.DTO.recipe.RecipeCreateDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeUpdateDTO;
@@ -33,8 +34,14 @@ public class RecipeController {
     private final Path root = Paths.get("uploads");
 
     @GetMapping
-    public ResponseEntity<List<RecipeResponseDTO>> getAllRecipes() {
-        List<RecipeResponseDTO> recipes = recipeService.getAllRecipes();
+    public ResponseEntity<List<RecipeResponseDTO>> getAllRecipes(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) Integer timeMin,
+        @RequestParam(required = false) Integer timeMax,
+        @RequestParam(required = false) Boolean oven,
+        @RequestParam(required = false) List<Months> months
+    ) {
+        List<RecipeResponseDTO> recipes = recipeService.getAllRecipes(name, timeMin, timeMax, oven, months);
         return ResponseEntity.ok(recipes);
     }
 

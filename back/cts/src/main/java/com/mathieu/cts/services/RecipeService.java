@@ -1,12 +1,15 @@
 package com.mathieu.cts.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.mathieu.cts.entities.Food;
+import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.entities.Recipe;
 import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeCreateDTO;
@@ -17,6 +20,8 @@ import com.mathieu.cts.exceptions.RecipeNotFoundException;
 import com.mathieu.cts.repositories.FoodRepository;
 import com.mathieu.cts.repositories.RecipeRepository;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,8 +32,48 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final FoodRepository foodRepository;
 
-    public List<RecipeResponseDTO> getAllRecipes() {
-        return recipeRepository.findByApprovedTrue().stream()
+    public List<RecipeResponseDTO> getAllRecipes(String name, Integer timeMin, Integer timeMax, Boolean oven, List<Months> months) {
+        Specification<Recipe> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Seulement les recettes approuvées
+            predicates.add(criteriaBuilder.equal(root.get("approved"), true));
+
+            // Filtre par nom
+            if (name != null && !name.isEmpty()) {
+                predicates.add(criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("name")),
+                    "%" + name.toLowerCase() + "%"
+                ));
+            }
+
+            // Filtre par temps min
+            if (timeMin != null && timeMin > 0) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("time"), timeMin));
+            }
+
+            // Filtre par temps max
+            if (timeMax != null && timeMax > 0) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("time"), timeMax));
+            }
+
+            // Filtre par four
+            if (oven != null && oven) {
+                predicates.add(criteriaBuilder.equal(root.get("oven"), true));
+            }
+
+            // Filtre par mois (recettes contenant des aliments de saison)
+            if (months != null && !months.isEmpty()) {
+                Join<Recipe, Food> foodsJoin = root.join("foods");
+                Join<Food, Months> monthsJoin = foodsJoin.join("months");
+                predicates.add(monthsJoin.in(months));
+                query.distinct(true);
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return recipeRepository.findAll(spec).stream()
             .map(this::toResponseDTO)
             .toList();
     }
