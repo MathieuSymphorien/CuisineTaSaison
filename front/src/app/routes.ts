@@ -1,11 +1,11 @@
 import { Routes } from "@angular/router";
-import { Home } from "./Pages/home/home";
-import { RecipePage } from "./Pages/recipe-page/recipe-page";
-import { LoginPage } from "./Pages/login-page/login-page";
-import { ProposalPage } from "./Pages/proposal-page/proposal-page";
-import { FoodPage } from "./Pages/food-page/food-page";
-import { AdminGuard } from "./Services/admin.guard";
-import { AdminPage } from "./Pages/admin-page/admin-page";
+import { Home } from "./pages/home/home";
+import { RecipePage } from "./pages/recipe-page/recipe-page";
+import { LoginPage } from "./pages/login-page/login-page";
+import { ProposalPage } from "./pages/proposal-page/proposal-page";
+import { FoodPage } from "./pages/food-page/food-page";
+import { AdminGuard } from "./core/guards/admin.guard";
+import { AdminPage } from "./pages/admin-page/admin-page";
 
 const routeConfig: Routes = [
   {

@@ -1,12 +1,11 @@
 import { Component, inject } from "@angular/core";
-import { Header } from "../../Utils/header/header";
-import { MockDataService } from "src/app/Services/mock-data";
-import { FoodList } from "src/app/Core/food-list/food-list";
-import { FoodModel } from "src/app/Models/food.model";
-import { RecipeModel } from "src/app/Models/recipe.model";
-import { RecipeCarousel } from "src/app/Core/recipe-carousel/recipe-carousel";
-import { FoodApiService } from "src/app/Services/food-api.service";
-import { RecipeApiService } from "src/app/Services/recipe-api.service";
+import { Header } from "../../shared/components/header/header";
+import { FoodList } from "src/app/features/foods/components/food-list/food-list";
+import { FoodModel } from "src/app/shared/models/food.model";
+import { RecipeModel } from "src/app/shared/models/recipe.model";
+import { RecipeCarousel } from "src/app/features/recipes/components/recipe-carousel/recipe-carousel";
+import { FoodApiService } from "src/app/features/foods/services/food-api.service";
+import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.service";
 
 @Component({
   selector: "app-home",

@@ -14,7 +14,7 @@ import {
   withInterceptorsFromDi,
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
-import { AuthInterceptor } from "./app/Services/auth.interceptor";
+import { AuthInterceptor } from "./app/core/interceptors/auth.interceptor";
 
 bootstrapApplication(App, {
   providers: [

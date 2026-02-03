@@ -1,9 +1,12 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { Header } from "../../Utils/header/header";
-import { RecipeModel } from "src/app/Models/recipe.model";
-import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
-import { FilterRecipe, RecipeFilterValues } from "src/app/Core/filter-recipe/filter-recipe";
-import { RecipeApiService } from "src/app/Services/recipe-api.service";
+import { Header } from "../../shared/components/header/header";
+import { RecipeModel } from "src/app/shared/models/recipe.model";
+import { RecipeList } from "src/app/features/recipes/components/recipe-list/recipe-list";
+import {
+  FilterRecipe,
+  RecipeFilterValues,
+} from "src/app/features/recipes/components/filter-recipe/filter-recipe";
+import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.service";
 
 @Component({
   selector: "app-recipe-page",
@@ -78,8 +81,12 @@ export class RecipePage implements OnInit {
         timeMax: filters?.time?.max || undefined,
         oven: filters?.oven || undefined,
         months: filters?.months?.length ? filters.months : undefined,
-        includeFoodIds: filters?.includeFoodIds?.length ? filters.includeFoodIds : undefined,
-        excludeFoodIds: filters?.excludeFoodIds?.length ? filters.excludeFoodIds : undefined,
+        includeFoodIds: filters?.includeFoodIds?.length
+          ? filters.includeFoodIds
+          : undefined,
+        excludeFoodIds: filters?.excludeFoodIds?.length
+          ? filters.excludeFoodIds
+          : undefined,
       })
       .subscribe({
         next: (recipes) => {

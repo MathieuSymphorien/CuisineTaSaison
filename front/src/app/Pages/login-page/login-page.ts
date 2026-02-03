@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Header } from "../../Utils/header/header";
-import { Login } from "src/app/Utils/login/login";
+import { Header } from "../../shared/components/header/header";
+import { Login } from "src/app/features/auth/components/login/login";
 
 @Component({
   selector: "app-login-page",

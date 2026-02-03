@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { FoodModel } from "src/app/Models/food.model";
-import { AdminService } from "src/app/Services/admin.service";
-import { Header } from "src/app/Utils/header/header";
-import { FoodList } from "src/app/Core/food-list/food-list";
-import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
-import { RecipeModel } from "src/app/Models/recipe.model";
+import { FoodModel } from "src/app/shared/models/food.model";
+import { AdminService } from "src/app/features/auth/services/admin.service";
+import { Header } from "src/app/shared/components/header/header";
+import { FoodList } from "src/app/features/foods/components/food-list/food-list";
+import { RecipeList } from "src/app/features/recipes/components/recipe-list/recipe-list";
+import { RecipeModel } from "src/app/shared/models/recipe.model";
 
 @Component({
   selector: "app-admin-page",

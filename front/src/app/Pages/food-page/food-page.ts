@@ -1,10 +1,13 @@
-import { FoodModel } from "src/app/Models/food.model";
+import { FoodModel } from "src/app/shared/models/food.model";
 import { Component, inject, OnInit } from "@angular/core";
-import { Header } from "../../Utils/header/header";
-import { FoodList } from "src/app/Core/food-list/food-list";
-import { FoodApiService } from "src/app/Services/food-api.service";
-import { FilterFood, FoodFilterValues } from "src/app/Core/filter-food/filter-food";
-import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-table";
+import { Header } from "../../shared/components/header/header";
+import { FoodList } from "src/app/features/foods/components/food-list/food-list";
+import { FoodApiService } from "src/app/features/foods/services/food-api.service";
+import {
+  FilterFood,
+  FoodFilterValues,
+} from "src/app/features/foods/components/filter-food/filter-food";
+import { SeasonalityTable } from "src/app/features/foods/components/seasonality-table/seasonality-table";
 
 @Component({
   selector: "app-food-page",
