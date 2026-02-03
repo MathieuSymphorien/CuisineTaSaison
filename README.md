@@ -120,3 +120,6 @@ docker-compose up --build
 | `ADMIN_PASSWORD`    | Mot de passe de connexion admin |
 
 ---
+
+**Contact :**
+mathieusdev@gmail.com
