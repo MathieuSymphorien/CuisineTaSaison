@@ -39,9 +39,11 @@ public class RecipeController {
         @RequestParam(required = false) Integer timeMin,
         @RequestParam(required = false) Integer timeMax,
         @RequestParam(required = false) Boolean oven,
-        @RequestParam(required = false) List<Months> months
+        @RequestParam(required = false) List<Months> months,
+        @RequestParam(required = false) List<Long> includeFoodIds,
+        @RequestParam(required = false) List<Long> excludeFoodIds
     ) {
-        List<RecipeResponseDTO> recipes = recipeService.getAllRecipes(name, timeMin, timeMax, oven, months);
+        List<RecipeResponseDTO> recipes = recipeService.getAllRecipes(name, timeMin, timeMax, oven, months, includeFoodIds, excludeFoodIds);
         return ResponseEntity.ok(recipes);
     }
 

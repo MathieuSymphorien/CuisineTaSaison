@@ -11,6 +11,8 @@ export interface RecipeFilters {
   timeMax?: number;
   oven?: boolean;
   months?: Month[];
+  includeFoodIds?: number[];
+  excludeFoodIds?: number[];
 }
 
 @Injectable({
@@ -30,6 +32,8 @@ export class RecipeApiService extends BaseApiService<RecipeModel, CreateRecipeDt
       timeMax: filters.timeMax,
       oven: filters.oven,
       months: filters.months,
+      includeFoodIds: filters.includeFoodIds,
+      excludeFoodIds: filters.excludeFoodIds,
     });
     return this.getAll(params);
   }

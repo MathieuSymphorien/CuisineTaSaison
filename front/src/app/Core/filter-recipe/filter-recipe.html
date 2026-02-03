@@ -19,16 +19,16 @@
     <div class="filter-card">
       <app-filter-multi-select
         label="Ingrédients à inclure"
-        [options]="ingredients()"
-        (valueChange)="onIngredientsChange($event)"
+        [options]="ingredientNames()"
+        (valueChange)="onIncludeIngredientsChange($event)"
       ></app-filter-multi-select>
     </div>
 
     <div class="filter-card">
       <app-filter-multi-select
         label="Ingrédients à exclure"
-        [options]="ingredients()"
-        (valueChange)="onIngredientsChange($event)"
+        [options]="ingredientNames()"
+        (valueChange)="onExcludeIngredientsChange($event)"
       ></app-filter-multi-select>
     </div>
 

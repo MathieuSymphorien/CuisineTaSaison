@@ -1,16 +1,18 @@
-import { Component, output, signal } from "@angular/core";
+import { Component, inject, OnInit, output, signal } from "@angular/core";
 import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter-string";
 import { FilterBooleanComponent } from "src/app/Utils/filter/filter-boolean/filter-boolean";
 import { FilterMultiSelectComponent } from "src/app/Utils/filter/filter-multi-select/filter-multi-select";
 import { FilterRangeComponent } from "src/app/Utils/filter/filter-range/filter-range";
 import { FilterMonthComponent } from "src/app/Utils/filter/filter-month/filter-month";
 import { Month, MONTHS } from "src/app/Models/month.model";
+import { FoodApiService } from "src/app/Services/food-api.service";
+import { FoodModel } from "src/app/Models/food.model";
 
 export interface RecipeFilterValues {
   name: string;
   time: { min: number; max: number };
-  include: string[];
-  exclude: string[];
+  includeFoodIds: number[];
+  excludeFoodIds: number[];
   months: Month[];
   oven: boolean;
 }
@@ -28,20 +30,42 @@ export interface RecipeFilterValues {
   templateUrl: "./filter-recipe.html",
   styleUrls: ["./filter-recipe.css"],
 })
-export class FilterRecipe {
+export class FilterRecipe implements OnInit {
+  private readonly foodApiService = inject(FoodApiService);
+
   searchText = signal("");
-  ingredients = signal<string[]>(["Tomate", "Radis", "Pêche", "Concombre"]);
+  foods = signal<FoodModel[]>([]);
+  ingredientNames = signal<string[]>([]);
   months = signal<Month[]>(Object.keys(MONTHS) as Month[]);
 
   filtersChange = output<RecipeFilterValues>();
   filters = signal<RecipeFilterValues>({
     name: "",
     time: { min: 0, max: 45 },
-    include: [],
-    exclude: [],
+    includeFoodIds: [],
+    excludeFoodIds: [],
     months: [],
     oven: false,
   });
+
+  ngOnInit(): void {
+    this.loadFoods();
+  }
+
+  private loadFoods(): void {
+    this.foodApiService.getAllFoods().subscribe({
+      next: (foods) => {
+        this.foods.set(foods);
+        this.ingredientNames.set(foods.map((f) => f.name));
+      },
+    });
+  }
+
+  private getFoodIdsByNames(names: string[]): number[] {
+    return this.foods()
+      .filter((f) => names.includes(f.name))
+      .map((f) => f.id);
+  }
 
   onSearchChange(value: string): void {
     this.filters.update((f) => ({ ...f, name: value }));
@@ -53,8 +77,15 @@ export class FilterRecipe {
     this.updateFilters();
   }
 
-  onIngredientsChange(value: string[]): void {
-    this.filters.update((f) => ({ ...f, include: value }));
+  onIncludeIngredientsChange(value: string[]): void {
+    const foodIds = this.getFoodIdsByNames(value);
+    this.filters.update((f) => ({ ...f, includeFoodIds: foodIds }));
+    this.updateFilters();
+  }
+
+  onExcludeIngredientsChange(value: string[]): void {
+    const foodIds = this.getFoodIdsByNames(value);
+    this.filters.update((f) => ({ ...f, excludeFoodIds: foodIds }));
     this.updateFilters();
   }
 

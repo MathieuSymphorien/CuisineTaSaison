@@ -78,6 +78,8 @@ export class RecipePage implements OnInit {
         timeMax: filters?.time?.max || undefined,
         oven: filters?.oven || undefined,
         months: filters?.months?.length ? filters.months : undefined,
+        includeFoodIds: filters?.includeFoodIds?.length ? filters.includeFoodIds : undefined,
+        excludeFoodIds: filters?.excludeFoodIds?.length ? filters.excludeFoodIds : undefined,
       })
       .subscribe({
         next: (recipes) => {

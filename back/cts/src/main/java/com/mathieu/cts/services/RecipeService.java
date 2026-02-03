@@ -22,6 +22,8 @@ import com.mathieu.cts.repositories.RecipeRepository;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,7 +34,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final FoodRepository foodRepository;
 
-    public List<RecipeResponseDTO> getAllRecipes(String name, Integer timeMin, Integer timeMax, Boolean oven, List<Months> months) {
+    public List<RecipeResponseDTO> getAllRecipes(String name, Integer timeMin, Integer timeMax, Boolean oven, List<Months> months, List<Long> includeFoodIds, List<Long> excludeFoodIds) {
         Specification<Recipe> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -68,6 +70,23 @@ public class RecipeService {
                 Join<Food, Months> monthsJoin = foodsJoin.join("months");
                 predicates.add(monthsJoin.in(months));
                 query.distinct(true);
+            }
+
+            // Filtre par ingrédients à inclure (recettes contenant ces aliments)
+            if (includeFoodIds != null && !includeFoodIds.isEmpty()) {
+                Join<Recipe, Food> includeFoodsJoin = root.join("foods");
+                predicates.add(includeFoodsJoin.get("id").in(includeFoodIds));
+                query.distinct(true);
+            }
+
+            // Filtre par ingrédients à exclure (recettes ne contenant PAS ces aliments)
+            if (excludeFoodIds != null && !excludeFoodIds.isEmpty()) {
+                Subquery<Long> subquery = query.subquery(Long.class);
+                Root<Recipe> subqueryRoot = subquery.from(Recipe.class);
+                Join<Recipe, Food> subqueryFoodJoin = subqueryRoot.join("foods");
+                subquery.select(subqueryRoot.get("id"))
+                    .where(subqueryFoodJoin.get("id").in(excludeFoodIds));
+                predicates.add(criteriaBuilder.not(root.get("id").in(subquery)));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
