@@ -5,6 +5,12 @@ import { FilterMonthComponent } from "src/app/Utils/filter/filter-month/filter-m
 import { FilterMultiSelectComponent } from "src/app/Utils/filter/filter-multi-select/filter-multi-select";
 import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter-string";
 
+export interface FoodFilterValues {
+  name: string;
+  categories: FoodCategory[];
+  months: Month[];
+}
+
 @Component({
   selector: "app-filter-food",
   imports: [
@@ -15,7 +21,7 @@ import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter
   styleUrls: ["./filter-food.css"],
   template: `
     <div class="filters-container">
-      <h2 class="filters-title">🥕 Filtres des aliments</h2>
+      <h2 class="filters-title">Filtres des aliments</h2>
 
       <div class="filters-grid">
         <div class="filter-card">
@@ -44,32 +50,33 @@ import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter
   `,
 })
 export class FilterFood {
-  filtersChange = output<any>();
+  filtersChange = output<FoodFilterValues>();
   foodCategory = signal<string[]>(
     "LEGUME,FRUIT,CEREALE,VIANDE,POISSON,LACTE,EPICE,AUTRE".split(","),
   );
 
-  filters = signal({
+  filters = signal<FoodFilterValues>({
     name: "",
-    categories: [] as FoodCategory[],
-    months: [] as Month[],
+    categories: [],
+    months: [],
   });
 
-  onSearchChange(value: string) {
+  onSearchChange(value: string): void {
     this.filters.update((f) => ({ ...f, name: value }));
     this.updateFilters();
   }
-  onMonthsChange(value: Month[]) {
+
+  onMonthsChange(value: Month[]): void {
     this.filters.update((f) => ({ ...f, months: value }));
     this.updateFilters();
   }
 
-  onCategoryChange(value: string[]) {
+  onCategoryChange(value: string[]): void {
     this.filters.update((f) => ({ ...f, categories: value as FoodCategory[] }));
     this.updateFilters();
   }
 
-  updateFilters() {
+  private updateFilters(): void {
     this.filtersChange.emit(this.filters());
   }
 }

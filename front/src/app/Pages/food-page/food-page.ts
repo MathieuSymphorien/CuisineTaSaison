@@ -2,15 +2,13 @@ import { FoodModel } from "src/app/Models/food.model";
 import { Component, inject, OnInit } from "@angular/core";
 import { Header } from "../../Utils/header/header";
 import { FoodList } from "src/app/Core/food-list/food-list";
-import { MockDataService } from "src/app/Services/mock-data";
 import { FoodApiService } from "src/app/Services/food-api.service";
-import { UploadComponent } from "src/app/Utils/upload-image/upload-image";
-import { FilterFood } from "src/app/Core/filter-food/filter-food";
+import { FilterFood, FoodFilterValues } from "src/app/Core/filter-food/filter-food";
 import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-table";
 
 @Component({
   selector: "app-food-page",
-  imports: [Header, FoodList, UploadComponent, FilterFood, SeasonalityTable],
+  imports: [Header, FoodList, FilterFood, SeasonalityTable],
   standalone: true,
   template: `
     <app-header></app-header>
@@ -26,7 +24,6 @@ import { SeasonalityTable } from "src/app/Core/seasonality-table/seasonality-tab
     </div>
 
     <app-seasonality-table [foods]="foods"></app-seasonality-table>
-    <!-- <app-upload-image></app-upload-image> -->
   `,
   styleUrls: [`food-page.css`],
 })
@@ -39,26 +36,21 @@ export class FoodPage implements OnInit {
     this.loadFoods();
   }
 
-  loadFoods(filters?: any): void {
-    const name = filters?.name ?? null;
-    const category = filters?.categories?.[0] ?? null;
-    const months = filters?.months ?? [];
-    this.foodApiService.getAllFoods(name, category, months).subscribe({
-      next: (foods) => {
-        this.foods = foods;
-      },
-      error: (err) => {
-        console.error("Erreur lors de la récupération des foods:", err);
-      },
-    });
+  loadFoods(filters?: FoodFilterValues): void {
+    this.foodApiService
+      .getAllFoods({
+        name: filters?.name || undefined,
+        category: filters?.categories?.[0] || undefined,
+        months: filters?.months?.length ? filters.months : undefined,
+      })
+      .subscribe({
+        next: (foods) => {
+          this.foods = foods;
+        },
+      });
   }
 
-  onFilterChange(filters: any): void {
+  onFilterChange(filters: FoodFilterValues): void {
     this.loadFoods(filters);
   }
-
-  // constructor(private mockData: MockDataService) {}
-  // ngOnInit() {
-  //   this.foods = this.mockData.getFoods();
-  // }
 }
