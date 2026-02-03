@@ -2,18 +2,8 @@ import { Component, inject, OnInit } from "@angular/core";
 import { Header } from "../../Utils/header/header";
 import { RecipeModel } from "src/app/Models/recipe.model";
 import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
-import { FilterRecipe } from "src/app/Core/filter-recipe/filter-recipe";
+import { FilterRecipe, RecipeFilterValues } from "src/app/Core/filter-recipe/filter-recipe";
 import { RecipeApiService } from "src/app/Services/recipe-api.service";
-import { Month } from "src/app/Models/month.model";
-
-interface RecipeFilters {
-  name: string;
-  time: { min: number; max: number };
-  include: string[];
-  exclude: string[];
-  months: Month[];
-  oven: boolean;
-}
 
 @Component({
   selector: "app-recipe-page",
@@ -76,30 +66,27 @@ export class RecipePage implements OnInit {
 
   recipes: RecipeModel[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadRecipes();
   }
 
-  loadRecipes(filters?: RecipeFilters): void {
-    const name = filters?.name || undefined;
-    const timeMin = filters?.time?.min || undefined;
-    const timeMax = filters?.time?.max || undefined;
-    const oven = filters?.oven || undefined;
-    const months = filters?.months?.length ? filters.months : undefined;
-
+  loadRecipes(filters?: RecipeFilterValues): void {
     this.recipeApiService
-      .getAllRecipes(name, timeMin, timeMax, oven, months)
+      .getAllRecipes({
+        name: filters?.name || undefined,
+        timeMin: filters?.time?.min || undefined,
+        timeMax: filters?.time?.max || undefined,
+        oven: filters?.oven || undefined,
+        months: filters?.months?.length ? filters.months : undefined,
+      })
       .subscribe({
         next: (recipes) => {
           this.recipes = recipes;
         },
-        error: (err) => {
-          console.error("Erreur lors de la récupération des recettes:", err);
-        },
       });
   }
 
-  applyFilters(filters: RecipeFilters) {
+  applyFilters(filters: RecipeFilterValues): void {
     this.loadRecipes(filters);
   }
 }

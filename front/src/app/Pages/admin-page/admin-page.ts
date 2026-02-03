@@ -1,15 +1,14 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { FoodModel } from "src/app/Models/food.model";
 import { AdminService } from "src/app/Services/admin.service";
 import { Header } from "src/app/Utils/header/header";
 import { FoodList } from "src/app/Core/food-list/food-list";
-import { Recipe } from "src/app/Core/recipe/recipe";
 import { RecipeList } from "src/app/Core/recipe-list/recipe-list";
 import { RecipeModel } from "src/app/Models/recipe.model";
 
 @Component({
   selector: "app-admin-page",
-  imports: [Header, FoodList, Recipe, RecipeList],
+  imports: [Header, FoodList, RecipeList],
   template: `
     <app-header></app-header>
     <div class="admin-container">
@@ -27,7 +26,7 @@ import { RecipeModel } from "src/app/Models/recipe.model";
         <h1>Recettes</h1>
         <app-recipe-list
           [recipes]="recipes"
-          (recipesChanged)="onRecipesChanged($event)"
+          (recipesChanged)="onRecipeChanged($event)"
         ></app-recipe-list>
       </div>
     </div>
@@ -60,7 +59,7 @@ import { RecipeModel } from "src/app/Models/recipe.model";
     }
   `,
 })
-export class AdminPage {
+export class AdminPage implements OnInit {
   foods: FoodModel[] = [];
   recipes: RecipeModel[] = [];
 
@@ -72,40 +71,26 @@ export class AdminPage {
   }
 
   loadFoods(): void {
-    this.adminService.getpendingFoods().subscribe({
-      next: (foods) => {
+    this.adminService.getPendingFoods().subscribe({
+      next: (foods: FoodModel[]) => {
         this.foods = foods;
-      },
-      error: (err) => {
-        console.error(
-          "Erreur lors de la récupération des foods en attente:",
-          err,
-        );
       },
     });
   }
 
   loadRecipes(): void {
     this.adminService.getPendingRecipes().subscribe({
-      next: (recipes) => {
+      next: (recipes: RecipeModel[]) => {
         this.recipes = recipes;
-      },
-      error: (err) => {
-        console.error(
-          "Erreur lors de la récupération des recettes en attente:",
-          err,
-        );
       },
     });
   }
 
-  onFoodChanged(foodId: number) {
-    // Retire le food de la liste locale
+  onFoodChanged(foodId: number): void {
     this.foods = this.foods.filter((food) => food.id !== foodId);
   }
 
-  onRecipesChanged(recipeId: number) {
-    // Retire la recette de la liste locale
+  onRecipeChanged(recipeId: number): void {
     this.recipes = this.recipes.filter((recipe) => recipe.id !== recipeId);
   }
 }

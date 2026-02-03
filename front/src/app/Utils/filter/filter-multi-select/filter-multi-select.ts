@@ -1,5 +1,4 @@
 import { Component, effect, input, output, signal, computed } from "@angular/core";
-import { FilterStringComponent } from "../filter-string/filter-string";
 import "src/app/Utils/filter/filter-common.css";
 
 @Component({
@@ -23,7 +22,6 @@ import "src/app/Utils/filter/filter-common.css";
       }
     </div>
   </div> `,
-  imports: [FilterStringComponent],
 })
 export class FilterMultiSelectComponent {
   label = input<string>("Ingrédients");
