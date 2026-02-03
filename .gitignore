@@ -27,4 +27,6 @@ front/npm-debug.log*
 front/yarn-debug.log*
 front/yarn-error.log*
 
-.vscode/*
+.vscode/
+.env
+.claude/
