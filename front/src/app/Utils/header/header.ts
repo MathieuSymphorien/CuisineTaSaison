@@ -11,7 +11,5 @@ import { AuthService } from "src/app/Services/auth.service";
 export class Header {
   private readonly authService = inject(AuthService);
 
-  isAdmin(): boolean {
-    return this.authService.isAdmin();
-  }
+  readonly isAdmin = this.authService.isAdmin;
 }
