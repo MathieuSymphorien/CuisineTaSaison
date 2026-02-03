@@ -1,43 +1,72 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable, tap, catchError, throwError } from "rxjs";
 import { FoodModel } from "../Models/food.model";
 import { RecipeModel } from "../Models/recipe.model";
+import { NotificationService } from "./notification.service";
+
+export type EntityType = "food" | "recipe";
 
 @Injectable({ providedIn: "root" })
 export class AdminService {
   private readonly apiUrl = "/api/admin";
+  private readonly http = inject(HttpClient);
+  private readonly notificationService = inject(NotificationService);
 
-  constructor(private http: HttpClient) {}
-
-  //food
-
-  getpendingFoods(): Observable<FoodModel[]> {
+  // Food methods
+  getPendingFoods(): Observable<FoodModel[]> {
     return this.http.get<FoodModel[]>(`${this.apiUrl}/foods/pending`);
   }
 
   approveFood(id: number): Observable<FoodModel> {
-    return this.http.put<FoodModel>(`${this.apiUrl}/foods/${id}/approve`, {});
+    return this.approve<FoodModel>("food", id);
   }
 
   rejectFood(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/foods/${id}/reject`);
+    return this.reject("food", id);
   }
 
-  //recipe
-
+  // Recipe methods
   getPendingRecipes(): Observable<RecipeModel[]> {
     return this.http.get<RecipeModel[]>(`${this.apiUrl}/recipes/pending`);
   }
 
   approveRecipe(id: number): Observable<RecipeModel> {
-    return this.http.put<RecipeModel>(
-      `${this.apiUrl}/recipes/${id}/approve`,
-      {},
-    );
+    return this.approve<RecipeModel>("recipe", id);
   }
 
   rejectRecipe(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/recipes/${id}/reject`);
+    return this.reject("recipe", id);
+  }
+
+  // Méthodes génériques centralisées
+  private approve<T>(entityType: EntityType, id: number): Observable<T> {
+    const endpoint = entityType === "food" ? "foods" : "recipes";
+    const entityLabel = entityType === "food" ? "L'aliment" : "La recette";
+
+    return this.http
+      .put<T>(`${this.apiUrl}/${endpoint}/${id}/approve`, {})
+      .pipe(
+        tap(() => this.notificationService.success(`${entityLabel} a été approuvé(e)`)),
+        catchError((error) => {
+          this.notificationService.error(`Erreur lors de l'approbation`);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  private reject(entityType: EntityType, id: number): Observable<void> {
+    const endpoint = entityType === "food" ? "foods" : "recipes";
+    const entityLabel = entityType === "food" ? "L'aliment" : "La recette";
+
+    return this.http
+      .delete<void>(`${this.apiUrl}/${endpoint}/${id}/reject`)
+      .pipe(
+        tap(() => this.notificationService.success(`${entityLabel} a été refusé(e)`)),
+        catchError((error) => {
+          this.notificationService.error(`Erreur lors du refus`);
+          return throwError(() => error);
+        })
+      );
   }
 }
