@@ -1,59 +1,40 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { FoodCategory, FoodModel } from "src/app/Models/food.model";
+import { FoodCategory, FoodModel, CreateFoodDto } from "src/app/Models/food.model";
 import { Month } from "../Models/month.model";
+import { BaseApiService } from "./base-api.service";
+
+export interface FoodFilters {
+  name?: string;
+  category?: FoodCategory;
+  months?: Month[];
+}
 
 @Injectable({
   providedIn: "root",
 })
-export class FoodApiService {
-  private apiUrl = "/api/foods"; // Proxy vers le backend (configuré dans nginx.conf)
+export class FoodApiService extends BaseApiService<FoodModel, CreateFoodDto> {
+  protected readonly apiUrl = "/api/foods";
 
-  constructor(private http: HttpClient) {}
+  constructor(http: HttpClient) {
+    super(http);
+  }
 
-  // Récupère tous les foods
-  getAllFoods(
-    name?: string,
-    category?: FoodCategory,
-    months?: Month[],
-  ): Observable<FoodModel[]> {
-    let params = new HttpParams();
-
-    if (name) {
-      params = params.set("name", name);
-    }
-
-    if (category) {
-      params = params.set("category", category);
-    }
-
-    if (months && months.length > 0) {
-      months.forEach((m) => {
-        params = params.append("months", m);
-      });
-    }
-
-    return this.http.get<FoodModel[]>(this.apiUrl, { params });
+  getAllFoods(filters: FoodFilters = {}): Observable<FoodModel[]> {
+    const params = this.buildParams({
+      name: filters.name,
+      category: filters.category,
+      months: filters.months,
+    });
+    return this.getAll(params);
   }
 
   getSeasonalFoods(): Observable<FoodModel[]> {
     return this.http.get<FoodModel[]>(`${this.apiUrl}/seasonal`);
   }
 
-  getFoodById(id: number): Observable<FoodModel> {
-    return this.http.get<FoodModel>(`${this.apiUrl}/${id}`);
-  }
-
-  createFood(food: Omit<FoodModel, "id">): Observable<FoodModel> {
-    return this.http.post<FoodModel>(this.apiUrl, food);
-  }
-
-  updateFood(id: number, food: Partial<FoodModel>): Observable<FoodModel> {
-    return this.http.put<FoodModel>(`${this.apiUrl}/${id}`, food);
-  }
-
-  deleteFood(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  createFood(food: CreateFoodDto): Observable<FoodModel> {
+    return this.create(food);
   }
 }

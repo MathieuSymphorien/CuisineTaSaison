@@ -1,72 +1,43 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { CreateRecipeDto, RecipeModel } from "../Models/recipe.model";
 import { Month } from "../Models/month.model";
+import { BaseApiService } from "./base-api.service";
+
+export interface RecipeFilters {
+  name?: string;
+  timeMin?: number;
+  timeMax?: number;
+  oven?: boolean;
+  months?: Month[];
+}
 
 @Injectable({
   providedIn: "root",
 })
-export class RecipeApiService {
-  private apiUrl = "/api/recipes"; // Proxy vers le backend (configuré dans nginx.conf)
+export class RecipeApiService extends BaseApiService<RecipeModel, CreateRecipeDto> {
+  protected readonly apiUrl = "/api/recipes";
 
-  constructor(private http: HttpClient) {}
-
-  // Récupère toutes les recettes avec filtres optionnels
-  getAllRecipes(
-    name?: string,
-    timeMin?: number,
-    timeMax?: number,
-    oven?: boolean,
-    months?: Month[],
-  ): Observable<RecipeModel[]> {
-    let params = new HttpParams();
-
-    if (name) {
-      params = params.set("name", name);
-    }
-    if (timeMin !== undefined && timeMin > 0) {
-      params = params.set("timeMin", timeMin.toString());
-    }
-    if (timeMax !== undefined && timeMax > 0) {
-      params = params.set("timeMax", timeMax.toString());
-    }
-    if (oven !== undefined && oven) {
-      params = params.set("oven", "true");
-    }
-    if (months && months.length > 0) {
-      months.forEach((m) => {
-        params = params.append("months", m);
-      });
-    }
-
-    return this.http.get<RecipeModel[]>(this.apiUrl, { params });
+  constructor(http: HttpClient) {
+    super(http);
   }
 
-  // Récupère une recette par ID
-  getRecipeById(id: number): Observable<RecipeModel> {
-    return this.http.get<RecipeModel>(`${this.apiUrl}/${id}`);
+  getAllRecipes(filters: RecipeFilters = {}): Observable<RecipeModel[]> {
+    const params = this.buildParams({
+      name: filters.name,
+      timeMin: filters.timeMin,
+      timeMax: filters.timeMax,
+      oven: filters.oven,
+      months: filters.months,
+    });
+    return this.getAll(params);
   }
 
-  // Crée une nouvelle recette
   createRecipe(recipe: CreateRecipeDto): Observable<RecipeModel> {
-    return this.http.post<RecipeModel>(this.apiUrl, recipe);
+    return this.create(recipe);
   }
 
-  // Met à jour une recette
-  updateRecipe(
-    id: number,
-    recipe: Partial<RecipeModel>,
-  ): Observable<RecipeModel> {
-    return this.http.put<RecipeModel>(`${this.apiUrl}/${id}`, recipe);
-  }
-
-  // Supprime une recette
-  deleteRecipe(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  // Upload une image pour une recette
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append("file", file);

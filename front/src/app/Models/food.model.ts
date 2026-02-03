@@ -14,7 +14,23 @@ export interface FoodModel {
   id: number;
   name: string;
   category: FoodCategory;
-  image: string; // FEATURE IMAGE POUR PLUS TARD
+  image: string;
   months: Month[];
   approved: boolean;
+}
+
+export interface CreateFoodDto {
+  name: string;
+  category: FoodCategory;
+  image: string;
+  months: Month[];
+  approved: boolean;
+}
+
+export interface UpdateFoodDto {
+  name?: string;
+  category?: FoodCategory;
+  image?: string;
+  months?: Month[];
+  approved?: boolean;
 }
