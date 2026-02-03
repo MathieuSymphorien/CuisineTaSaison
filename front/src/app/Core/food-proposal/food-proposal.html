@@ -8,12 +8,12 @@
   </div>
 
   <div class="filter-card">
-    <app-filter-multi-select
-      label="Catégories"
+    <app-filter-select
+      label="Catégorie"
       [options]="foodCategories"
-      [value]="selectedCategories()"
+      [value]="category()"
       (valueChange)="onCategoryChange($event)"
-    ></app-filter-multi-select>
+    ></app-filter-select>
   </div>
 
   <div>

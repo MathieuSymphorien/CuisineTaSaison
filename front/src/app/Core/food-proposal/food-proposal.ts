@@ -3,14 +3,14 @@ import { Component, inject, signal } from "@angular/core";
 import { FoodApiService } from "src/app/Services/food-api.service";
 import { FoodCategory } from "src/app/Models/food.model";
 import { FilterMonthComponent } from "src/app/Utils/filter/filter-month/filter-month";
-import { FilterMultiSelectComponent } from "src/app/Utils/filter/filter-multi-select/filter-multi-select";
+import { FilterSelectComponent } from "src/app/Utils/filter/filter-select/filter-select";
 import { FilterStringComponent } from "src/app/Utils/filter/filter-string/filter-string";
 
 @Component({
   selector: "app-food-proposal",
   imports: [
     FilterMonthComponent,
-    FilterMultiSelectComponent,
+    FilterSelectComponent,
     FilterStringComponent,
   ],
   templateUrl: "./food-proposal.html",
@@ -34,16 +34,12 @@ export class FoodProposal {
   category = signal<FoodCategory | null>(null);
   months = signal<Month[]>([]);
 
-  // Pour le binding avec le multi-select (qui attend un string[])
-  selectedCategories = signal<string[]>([]);
-
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
 
-  onCategoryChange(event: string[]) {
-    this.selectedCategories.set(event);
-    this.category.set(event.length > 0 ? (event[0] as FoodCategory) : null);
+  onCategoryChange(event: string | null) {
+    this.category.set(event as FoodCategory | null);
   }
 
   onMonthsChange(event: Month[]) {
@@ -87,7 +83,6 @@ export class FoodProposal {
           // Reset du formulaire
           this.name.set("");
           this.category.set(null);
-          this.selectedCategories.set([]);
           this.months.set([]);
         },
         error: () => {
