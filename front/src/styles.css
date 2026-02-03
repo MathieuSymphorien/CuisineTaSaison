@@ -144,3 +144,15 @@ body {
   margin: 0;
   font-family: "Poppins", sans-serif;
 }
+
+/* MatDialog transparent panel */
+.transparent-dialog .mat-mdc-dialog-container {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.transparent-dialog .mat-mdc-dialog-surface {
+  background: transparent;
+  box-shadow: none;
+}

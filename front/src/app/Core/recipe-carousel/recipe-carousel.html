@@ -3,7 +3,7 @@
 
   <div class="carousel" #carouselRef>
     @for (recipe of recipes(); track recipe.id) {
-    <div class="carousel-item" (click)="selectRecipe(recipe)">
+    <div class="carousel-item">
       <app-recipe [recipe]="recipe" [compact]="true" />
     </div>
     }
@@ -11,14 +11,3 @@
 
   <button class="arrow right" (click)="scrollRight()">&#10095;</button>
 </div>
-
-<!-- ✅ Modal (affiché seulement quand selectedRecipe existe) -->
-@if (selectedRecipe) {
-<div class="modal-overlay" (click)="closeModal($event)">
-  <div class="modal-content">
-    <h2>{{ selectedRecipe.name }}</h2>
-    <p>{{ selectedRecipe.description }}</p>
-    <button class="close-btn" (click)="closeModal()">Fermer</button>
-  </div>
-</div>
-}

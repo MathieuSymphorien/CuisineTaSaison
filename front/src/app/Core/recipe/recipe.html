@@ -1,4 +1,4 @@
-<div class="recipe-card" [class.compact]="compact()">
+<div class="recipe-card" [class.compact]="compact()" (click)="openDetail()">
   <!-- <img [src]="recipe()?.image" alt="{{ recipe()?.name }}" /> -->
 
   <div class="content">
@@ -19,8 +19,8 @@
       }
     </ul>
     } @if (isAdmin()) {
-    <button (click)="approveRecipe(recipe())">Accepter</button>
-    <button (click)="rejectRecipe(recipe())">Refuser</button>
+    <button (click)="approveRecipe(recipe()); $event.stopPropagation()">Accepter</button>
+    <button (click)="rejectRecipe(recipe()); $event.stopPropagation()">Refuser</button>
     }
   </div>
 </div>

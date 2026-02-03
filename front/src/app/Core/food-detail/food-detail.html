@@ -1,0 +1,94 @@
+<div class="modal-overlay" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()">✕</button>
+
+    @if (!isEditing()) {
+    <!-- Mode lecture -->
+    <div
+      class="food-header"
+      [style.background-color]="getBackgroundColor(food()?.category || 'AUTRE')"
+    >
+      <h2>{{ food()?.name }}</h2>
+      <span class="category-badge">{{
+        getCategoryLabel(food()?.category || "AUTRE")
+      }}</span>
+    </div>
+
+    <div class="section">
+      <h3>Disponibilité saisonnière</h3>
+      <div class="months-grid">
+        @for (month of allMonths; track month) {
+        <div
+          class="month-item"
+          [class.available]="food()?.months?.includes(month)"
+        >
+          {{ month.substring(0, 3) }}
+        </div>
+        }
+      </div>
+    </div>
+
+    @if (isAdmin()) {
+    <div class="admin-actions">
+      <button class="btn btn-primary" (click)="toggleEdit()">Modifier</button>
+    </div>
+    }
+    } @else {
+    <!-- Mode édition -->
+    <div class="edit-form">
+      <h2>Modifier l'aliment</h2>
+
+      <div class="form-group">
+        <label>Nom</label>
+        <input
+          type="text"
+          [ngModel]="name()"
+          (ngModelChange)="name.set($event)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Catégorie</label>
+        <select [ngModel]="category()" (ngModelChange)="category.set($event)">
+          @for (cat of foodCategories; track cat) {
+          <option [value]="cat">{{ getCategoryLabel(cat) }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Mois de disponibilité</label>
+        <div class="months-grid editable">
+          @for (month of allMonths; track month) {
+          <button
+            type="button"
+            class="month-btn"
+            [class.selected]="isMonthSelected(month)"
+            (click)="toggleMonth(month)"
+          >
+            {{ month.substring(0, 3) }}
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="edit-actions">
+        <button
+          class="btn btn-secondary"
+          (click)="toggleEdit()"
+          [disabled]="isSaving()"
+        >
+          Annuler
+        </button>
+        <button
+          class="btn btn-primary"
+          (click)="save()"
+          [disabled]="isSaving()"
+        >
+          @if (isSaving()) { Enregistrement... } @else { Enregistrer }
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>

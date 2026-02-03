@@ -17,20 +17,8 @@ import { Recipe } from "../recipe/recipe";
 })
 export class RecipeCarousel implements AfterViewInit {
   recipes = input<RecipeModel[]>();
-  selectedRecipe: RecipeModel | null = null;
 
   @ViewChild("carouselRef") carousel!: ElementRef<HTMLDivElement>;
-
-  //  Sélection d'une recette (ouvre le modal)
-  selectRecipe(recipe: RecipeModel) {
-    this.selectedRecipe = recipe;
-  }
-
-  // Fermeture du modal
-  closeModal(event?: MouseEvent) {
-    if (event && event.target !== event.currentTarget) return; // évite la fermeture si on clique à l’intérieur
-    this.selectedRecipe = null;
-  }
 
   ngAfterViewInit() {
     // Défilement automatique

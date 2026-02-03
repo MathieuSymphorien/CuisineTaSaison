@@ -1,7 +1,9 @@
 import { Component, inject, input, output } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { FoodModel } from "src/app/Models/food.model";
 import { AdminService } from "src/app/Services/admin.service";
 import { AuthService } from "src/app/Services/auth.service";
+import { FoodDetail } from "../food-detail/food-detail";
 
 @Component({
   selector: "app-food",
@@ -12,11 +14,28 @@ import { AuthService } from "src/app/Services/auth.service";
 export class Food {
   private readonly adminService = inject(AdminService);
   private readonly authService = inject(AuthService);
+  private readonly dialog = inject(MatDialog);
 
   food = input<FoodModel>();
   foodChanged = output<number>();
 
   readonly isAdmin = this.authService.isAdmin;
+
+  openDetail() {
+    const food = this.food();
+    if (!food) return;
+
+    const dialogRef = this.dialog.open(FoodDetail, {
+      data: { food },
+      panelClass: "transparent-dialog",
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.foodChanged.emit(result.id);
+      }
+    });
+  }
 
   rejectFood(food: FoodModel | undefined): void {
     if (!food?.id) return;
