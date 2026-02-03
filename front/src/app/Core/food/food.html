@@ -7,7 +7,7 @@
     <h3>{{ food()?.name }}</h3>
   </div>
   @if (isAdmin()) {
-  <button (click)="acceptFood(food())">Accepter</button>
-  <button (click)="deleteFood(food())">Refuser</button>
+    <button (click)="approveFood(food())">Accepter</button>
+    <button (click)="rejectFood(food())">Refuser</button>
   }
 </div>

@@ -101,14 +101,6 @@ export class RecipeProposal implements OnInit {
     }
 
     this.isSubmitting.set(true);
-    console.log(this.name());
-    console.log(this.description());
-    console.log(this.time());
-    console.log(this.oven());
-    console.log(this.people());
-    console.log(steps);
-    console.log(this.selectedFoodIds());
-    console.log(this.seasonRatio());
 
     this.recipeApiService
       .createRecipe({

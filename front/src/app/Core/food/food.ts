@@ -16,29 +16,19 @@ export class Food {
   food = input<FoodModel>();
   foodChanged = output<number>();
 
-  deleteFood(food: FoodModel | undefined) {
+  readonly isAdmin = this.authService.isAdmin;
+
+  rejectFood(food: FoodModel | undefined): void {
     if (!food?.id) return;
-    console.log("Refuser l'aliment avec ID:", food.id);
     this.adminService.rejectFood(food.id).subscribe({
-      next: () => {
-        this.foodChanged.emit(food.id);
-      },
-      error: (err) => {
-        console.error("Erreur lors de la suppression de l'aliment:", err);
-      },
+      next: () => this.foodChanged.emit(food.id),
     });
   }
 
-  acceptFood(food: FoodModel | undefined) {
+  approveFood(food: FoodModel | undefined): void {
     if (!food?.id) return;
-
     this.adminService.approveFood(food.id).subscribe({
-      next: () => {
-        this.foodChanged.emit(food.id);
-      },
-      error: (err) => {
-        console.error("Erreur lors de l'approbation de l'aliment:", err);
-      },
+      next: () => this.foodChanged.emit(food.id),
     });
   }
 
@@ -61,9 +51,5 @@ export class Food {
       default:
         return "#AAAAAA";
     }
-  }
-
-  isAdmin(): boolean {
-    return this.authService.isAdmin();
   }
 }

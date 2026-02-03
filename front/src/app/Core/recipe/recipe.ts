@@ -2,6 +2,7 @@ import { Component, inject, input, output } from "@angular/core";
 import { RecipeModel } from "src/app/Models/recipe.model";
 import { AdminService } from "src/app/Services/admin.service";
 import { AuthService } from "src/app/Services/auth.service";
+
 @Component({
   selector: "app-recipe",
   imports: [],
@@ -16,33 +17,19 @@ export class Recipe {
   recipeChanged = output<number>();
   compact = input(false);
 
-  deleteRecipe(recipe: RecipeModel | undefined) {
+  readonly isAdmin = this.authService.isAdmin;
+
+  rejectRecipe(recipe: RecipeModel | undefined): void {
     if (!recipe?.id) return;
-    console.log("Refuser la recette avec ID:", recipe.id);
     this.adminService.rejectRecipe(recipe.id).subscribe({
-      next: () => {
-        this.recipeChanged.emit(recipe.id);
-      },
-      error: (err) => {
-        console.error("Erreur lors de la suppression de la recette:", err);
-      },
+      next: () => this.recipeChanged.emit(recipe.id),
     });
   }
 
-  acceptRecipe(recipe: RecipeModel | undefined) {
+  approveRecipe(recipe: RecipeModel | undefined): void {
     if (!recipe?.id) return;
-
     this.adminService.approveRecipe(recipe.id).subscribe({
-      next: () => {
-        this.recipeChanged.emit(recipe.id);
-      },
-      error: (err) => {
-        console.error("Erreur lors de l'approbation de la recette:", err);
-      },
+      next: () => this.recipeChanged.emit(recipe.id),
     });
-  }
-
-  isAdmin(): boolean {
-    return this.authService.isAdmin();
   }
 }

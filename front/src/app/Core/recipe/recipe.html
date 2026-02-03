@@ -18,9 +18,9 @@
       <li>{{ food.name }}</li>
       }
     </ul>
-    } @if (isAdmin()){
-    <button (click)="acceptRecipe(recipe())">Accepter</button>
-    <button (click)="deleteRecipe(recipe())">Refuser</button>
+    } @if (isAdmin()) {
+    <button (click)="approveRecipe(recipe())">Accepter</button>
+    <button (click)="rejectRecipe(recipe())">Refuser</button>
     }
   </div>
 </div>
