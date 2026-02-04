@@ -2,13 +2,14 @@ import { Component, inject, OnInit } from "@angular/core";
 import { FoodModel } from "src/app/shared/models/food.model";
 import { AdminService } from "src/app/features/auth/services/admin.service";
 import { Header } from "src/app/shared/components/header/header";
+import { Footer } from "src/app/shared/components/footer/footer";
 import { FoodList } from "src/app/features/foods/components/food-list/food-list";
 import { RecipeList } from "src/app/features/recipes/components/recipe-list/recipe-list";
 import { RecipeModel } from "src/app/shared/models/recipe.model";
 
 @Component({
   selector: "app-admin-page",
-  imports: [Header, FoodList, RecipeList],
+  imports: [Header, Footer, FoodList, RecipeList],
   template: `
     <app-header></app-header>
     <div class="admin-container">
@@ -30,6 +31,7 @@ import { RecipeModel } from "src/app/shared/models/recipe.model";
         ></app-recipe-list>
       </div>
     </div>
+    <app-footer></app-footer>
   `,
   styles: `
     .admin-container {

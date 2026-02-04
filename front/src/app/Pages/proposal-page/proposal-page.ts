@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { Header } from "../../shared/components/header/header";
+import { Footer } from "../../shared/components/footer/footer";
 import { FoodProposal } from "src/app/features/foods/components/food-proposal/food-proposal";
 import { RecipeProposal } from "src/app/features/recipes/components/recipe-proposal/recipe-proposal";
 import { MatTabsModule } from "@angular/material/tabs";
 
 @Component({
   selector: "app-proposal-page",
-  imports: [Header, FoodProposal, RecipeProposal, MatTabsModule],
+  imports: [Header, Footer, FoodProposal, RecipeProposal, MatTabsModule],
   template: `
     <app-header></app-header>
     <div class="proposal-container">
@@ -27,6 +28,7 @@ import { MatTabsModule } from "@angular/material/tabs";
         </mat-tab>
       </mat-tab-group>
     </div>
+    <app-footer></app-footer>
   `,
   styles: `
     .proposal-container {

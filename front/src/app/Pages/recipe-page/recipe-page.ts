@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { Header } from "../../shared/components/header/header";
+import { Footer } from "../../shared/components/footer/footer";
 import { RecipeModel } from "src/app/shared/models/recipe.model";
 import { RecipeList } from "src/app/features/recipes/components/recipe-list/recipe-list";
 import {
@@ -11,7 +12,7 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
 @Component({
   selector: "app-recipe-page",
   standalone: true,
-  imports: [Header, RecipeList, FilterRecipe],
+  imports: [Header, Footer, RecipeList, FilterRecipe],
   template: `
     <app-header></app-header>
 
@@ -24,6 +25,7 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
         <app-recipe-list [recipes]="recipes"></app-recipe-list>
       </div>
     </div>
+    <app-footer></app-footer>
   `,
   styles: [
     `

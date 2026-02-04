@@ -1,6 +1,7 @@
 import { FoodModel } from "src/app/shared/models/food.model";
 import { Component, inject, OnInit } from "@angular/core";
 import { Header } from "../../shared/components/header/header";
+import { Footer } from "../../shared/components/footer/footer";
 import { FoodList } from "src/app/features/foods/components/food-list/food-list";
 import { FoodApiService } from "src/app/features/foods/services/food-api.service";
 import {
@@ -11,7 +12,7 @@ import { SeasonalityTable } from "src/app/features/foods/components/seasonality-
 
 @Component({
   selector: "app-food-page",
-  imports: [Header, FoodList, FilterFood, SeasonalityTable],
+  imports: [Header, Footer, FoodList, FilterFood, SeasonalityTable],
   standalone: true,
   template: `
     <app-header></app-header>
@@ -27,6 +28,7 @@ import { SeasonalityTable } from "src/app/features/foods/components/seasonality-
     </div>
 
     <app-seasonality-table [foods]="foods"></app-seasonality-table>
+    <app-footer></app-footer>
   `,
   styleUrls: [`food-page.css`],
 })

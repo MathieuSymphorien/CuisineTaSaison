@@ -1,5 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { Header } from "../../shared/components/header/header";
+import { Footer } from "../../shared/components/footer/footer";
 import { FoodList } from "src/app/features/foods/components/food-list/food-list";
 import { FoodModel } from "src/app/shared/models/food.model";
 import { RecipeModel } from "src/app/shared/models/recipe.model";
@@ -9,7 +10,7 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
 
 @Component({
   selector: "app-home",
-  imports: [Header, FoodList, RecipeCarousel],
+  imports: [Header, Footer, FoodList, RecipeCarousel],
   templateUrl: "./home.html",
   styleUrls: ["./home.css"],
 })
