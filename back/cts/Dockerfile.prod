@@ -1,0 +1,31 @@
+# Stage 1: Build avec Maven
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+
+# Copie les fichiers de configuration Maven en premier (cache des dépendances)
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copie le code source et build
+COPY src ./src
+RUN mvn package -DskipTests -B
+
+# Stage 2: Runtime
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+
+# Crée un utilisateur non-root pour la sécurité
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Copie le JAR depuis le stage de build
+COPY --from=build /app/target/*.jar app.jar
+
+# Crée le dossier uploads et donne les permissions
+RUN mkdir -p /app/uploads && chown -R appuser:appgroup /app
+
+USER appuser
+
+EXPOSE 8080
+
+# Configuration JVM optimisée pour les conteneurs
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
