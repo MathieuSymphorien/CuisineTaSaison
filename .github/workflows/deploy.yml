@@ -21,9 +21,38 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 49155
           script: |
+            set -e
+
             cd /opt/cuisinetasaison
+
+            # Sauvegarder le commit actuel pour rollback si besoin
+            PREVIOUS_COMMIT=$(git rev-parse HEAD)
+
+            echo "📥 Pulling latest code..."
             git pull origin main
-            docker compose -f docker-compose.prod.yml build --no-cache
+
+            echo "🔨 Building containers..."
+            if ! docker compose -f docker-compose.prod.yml build --no-cache; then
+              echo "❌ Build failed, rolling back..."
+              git checkout $PREVIOUS_COMMIT
+              exit 1
+            fi
+
+            echo "🚀 Starting containers..."
             docker compose -f docker-compose.prod.yml up -d
+
+            echo "⏳ Waiting for health check..."
+            sleep 10
+
+            # Vérifier que les conteneurs tournent
+            if ! docker compose -f docker-compose.prod.yml ps | grep -q "Up"; then
+              echo "❌ Containers not running, rolling back..."
+              git checkout $PREVIOUS_COMMIT
+              docker compose -f docker-compose.prod.yml up -d
+              exit 1
+            fi
+
+            echo "🧹 Cleaning up..."
             docker image prune -f
-            echo "Deployment completed successfully!"
+
+            echo "✅ Deployment completed!"
