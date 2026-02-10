@@ -1,31 +1,28 @@
-# Stage 1: Build avec Maven
-FROM maven:3.9-eclipse-temurin-21 AS build
+# Étape 1 : Build de l'application Spring
+FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /app
 
-# Copie les fichiers de configuration Maven en premier (cache des dépendances)
+# Copie les fichiers Maven
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+COPY mvnw .
+COPY .mvn .mvn
 
-# Copie le code source et build
+# Télécharge les dépendances (cache Docker)
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+
+# Copie le code source
 COPY src ./src
-RUN mvn package -DskipTests -B
 
-# Stage 2: Runtime
+# Compile l'application (sans les tests pour aller plus vite)
+RUN ./mvnw package -DskipTests
+
+# Étape 2 : Image finale légère
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
-# Crée un utilisateur non-root pour la sécurité
-RUN groupadd -r appgroup && useradd -r -g appgroup appuser
-
-# Copie le JAR depuis le stage de build
+# Copie le JAR depuis l'étape de build
 COPY --from=build /app/target/*.jar app.jar
-
-# Crée le dossier uploads et donne les permissions
-RUN mkdir -p /app/uploads && chown -R appuser:appgroup /app
-
-USER appuser
 
 EXPOSE 8080
 
-# Configuration JVM optimisée pour les conteneurs
-ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
