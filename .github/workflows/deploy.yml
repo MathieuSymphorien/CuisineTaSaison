@@ -23,7 +23,7 @@ jobs:
           script: |
             set -e
 
-            cd /opt/cuisinetasaison/CuisineTaSaison
+            cd /opt/CuisineTaSaison
 
             # Sauvegarder le commit actuel pour rollback si besoin
             PREVIOUS_COMMIT=$(git rev-parse HEAD)
