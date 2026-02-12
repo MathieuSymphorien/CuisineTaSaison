@@ -1,7 +1,8 @@
 # Cuisine Ta Saison
 
 Application web pour découvrir les fruits et légumes de saison et des recettes associées.
-Application en cours de développement.
+
+Application en cours de développement mais déployée : cuisinetasaison.fr
 
 ### À propos
 
@@ -111,15 +112,22 @@ docker-compose up --build
 
 **Variables d'environnement :**
 
-| Variable            | Description                     |
-| ------------------- | ------------------------------- |
-| `POSTGRES_DB`       | Nom de la base de données       |
-| `POSTGRES_USER`     | Nom d'utilisateur de la base    |
-| `POSTGRES_PASSWORD` | Mot de passe de la base         |
-| `JWT_SECRET`        | Clé secrète pour les tokens JWT |
-| `ADMIN_PASSWORD`    | Mot de passe de connexion admin |
+| Variable               | Description                     |
+| ---------------------- | ------------------------------- |
+| `POSTGRES_DB`          | Nom de la base de données       |
+| `POSTGRES_USER`        | Nom d'utilisateur de la base    |
+| `POSTGRES_PASSWORD`    | Mot de passe de la base         |
+| `JWT_SECRET`           | Clé secrète pour les tokens JWT |
+| `ADMIN_PASSWORD`       | Mot de passe de connexion admin |
+| `CORS_ALLOWED_ORIGINS` |                                 |
 
 ---
+
+**Test Unitaire :**
+mvn test
+npm test
+
+**Environement de Prod :**
 
 **Contact :**
 mathieusdev@gmail.com
