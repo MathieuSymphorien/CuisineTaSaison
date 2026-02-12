@@ -2,7 +2,7 @@
 
 Application web pour découvrir les fruits et légumes de saison et des recettes associées.
 
-Application en cours de développement mais déployée : cuisinetasaison.fr
+Application en cours de développement mais déployée : https://cuisinetasaison.fr
 
 ### À propos
 
