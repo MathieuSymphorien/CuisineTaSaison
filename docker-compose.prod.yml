@@ -19,7 +19,7 @@ services:
     container_name: cts-backend
     env_file: .env
     environment:
-      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATABASE_URL: ${DATABASE_URL}
       POSTGRES_USERNAME: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
