@@ -9,6 +9,7 @@
 import {
   provideHttpClient,
   withInterceptorsFromDi,
+  withXsrfConfiguration,
   HTTP_INTERCEPTORS,
 } from "@angular/common/http";
 import { ApplicationConfig } from "@angular/core";
@@ -17,7 +18,13 @@ import { AuthInterceptor } from "./Services/auth.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withXsrfConfiguration({
+        cookieName: "XSRF-TOKEN",
+        headerName: "X-XSRF-TOKEN",
+      }),
+    ),
     provideAnimationsAsync(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
