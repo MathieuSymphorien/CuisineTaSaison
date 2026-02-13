@@ -9,28 +9,34 @@ import { MatTabsModule } from "@angular/material/tabs";
   selector: "app-proposal-page",
   imports: [Header, Footer, FoodProposal, RecipeProposal, MatTabsModule],
   template: `
-    <app-header></app-header>
-    <div class="proposal-container">
-      <div class="proposal-header">
-        <h1>Proposer un produit ou une recette</h1>
-        <p>Partagez vos découvertes de saison avec la communauté 🌱</p>
+    <div class="proposal-general">
+      <app-header></app-header>
+      <div class="proposal-container">
+        <div class="proposal-header">
+          <h1>Proposer un produit ou une recette</h1>
+          <p>Partagez vos découvertes de saison avec la communauté 🌱</p>
+        </div>
+        <mat-tab-group class="proposal-tabs">
+          <mat-tab label="Propositions d'ingrédients">
+            <div class="tab-content">
+              <app-food-proposal></app-food-proposal>
+            </div>
+          </mat-tab>
+          <mat-tab label="Propositions de recettes">
+            <div class="tab-content">
+              <app-recipe-proposal></app-recipe-proposal>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
       </div>
-      <mat-tab-group class="proposal-tabs">
-        <mat-tab label="Propositions d'ingrédients">
-          <div class="tab-content">
-            <app-food-proposal></app-food-proposal>
-          </div>
-        </mat-tab>
-        <mat-tab label="Propositions de recettes">
-          <div class="tab-content">
-            <app-recipe-proposal></app-recipe-proposal>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
     </div>
     <app-footer></app-footer>
   `,
   styles: `
+    .proposal-general {
+      display: flex;
+    }
+
     .proposal-container {
       max-width: 900px;
       margin: 0 auto;

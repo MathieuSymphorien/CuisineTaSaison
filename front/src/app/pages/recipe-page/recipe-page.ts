@@ -14,21 +14,26 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
   standalone: true,
   imports: [Header, Footer, RecipeList, FilterRecipe],
   template: `
-    <app-header></app-header>
+    <div class="recipe-general">
+      <app-header></app-header>
 
-    <div class="recipe-page">
-      <div class="filters-container">
-        <app-filter-recipe (filtersChange)="applyFilters($event)">
-        </app-filter-recipe>
-      </div>
-      <div class="recipes-container">
-        <app-recipe-list [recipes]="recipes"></app-recipe-list>
+      <div class="recipe-page">
+        <div class="filters-container">
+          <app-filter-recipe (filtersChange)="applyFilters($event)">
+          </app-filter-recipe>
+        </div>
+        <div class="recipes-container">
+          <app-recipe-list [recipes]="recipes"></app-recipe-list>
+        </div>
       </div>
     </div>
     <app-footer></app-footer>
   `,
   styles: [
     `
+      .recipe-general {
+        display: flex;
+      }
       .recipe-page {
         display: flex;
         padding: 2rem;

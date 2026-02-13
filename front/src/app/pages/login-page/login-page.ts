@@ -6,7 +6,25 @@ import { Login } from "src/app/features/auth/components/login/login";
 @Component({
   selector: "app-login-page",
   imports: [Header, Footer, Login],
-  template: ` <app-header></app-header> <app-login></app-login> <app-footer></app-footer> `,
-  styles: ``,
+  template: `
+    <div class="login-general">
+      <div>
+        <app-header></app-header>
+      </div>
+      <div class="login-container">
+        <app-login></app-login>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  `,
+  styles: `
+    .login-general {
+      display: flex;
+    }
+
+    .login-container {
+      flex-grow: 1;
+    }
+  `,
 })
 export class LoginPage {}

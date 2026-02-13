@@ -15,19 +15,21 @@ import { SeasonalityTable } from "src/app/features/foods/components/seasonality-
   imports: [Header, Footer, FoodList, FilterFood, SeasonalityTable],
   standalone: true,
   template: `
-    <app-header></app-header>
-    <div class="food-page">
-      <div class="filters-container">
-        <app-filter-food
-          (filtersChange)="onFilterChange($event)"
-        ></app-filter-food>
-      </div>
-      <div class="food-list-container">
-        <app-food-list [foods]="foods"></app-food-list>
+    <div class="food-page-general">
+      <app-header></app-header>
+      <div class="food-page">
+        <div class="filters-container">
+          <app-filter-food
+            (filtersChange)="onFilterChange($event)"
+          ></app-filter-food>
+        </div>
+        <div class="food-list-container">
+          <app-food-list [foods]="foods"></app-food-list>
+        </div>
       </div>
     </div>
-
     <app-seasonality-table [foods]="foods"></app-seasonality-table>
+
     <app-footer></app-footer>
   `,
   styleUrls: [`food-page.css`],

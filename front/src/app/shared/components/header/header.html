@@ -1,17 +1,50 @@
-<header class="header">
-  <div class="logo-container">
-    <a routerLink="/">
-      <img src="/assets/logo.svg" alt="logo" aria-hidden="true" class="logo" />
-    </a>
-  </div>
-  <nav class="nav-links">
-    <a routerLink="/aliment" class="nav-link">Aliment</a>
-    <a routerLink="/recette" class="nav-link">Recette</a>
-    <a routerLink="/proposition" class="nav-link">Proposition</a>
-    <a routerLink="/connexion" class="nav-link">Login</a>
-    @if (isAdmin()) {
-      <a routerLink="/admin" class="nav-link">Admin</a>
-    }
-  </nav>
-</header>
-<router-outlet />
+<mat-sidenav-container class="sidenav-container">
+    <!-- Sidebar -->
+    <mat-sidenav mode="side" [opened]="sidenavOpened">
+        <!-- Logo -->
+        <div class="logo-container">
+            <a routerLink="/">
+                <img src="/assets/logo.svg" alt="logo" class="logo" />
+            </a>
+        </div>
+
+        <!-- Navigation avec Material List -->
+        <mat-nav-list>
+            <a mat-list-item routerLink="/aliment" routerLinkActive="active">
+                <mat-icon matListItemIcon>restaurant</mat-icon>
+                <span matListItemTitle>Aliment</span>
+            </a>
+
+            <a mat-list-item routerLink="/recette" routerLinkActive="active">
+                <mat-icon matListItemIcon>menu_book</mat-icon>
+                <span matListItemTitle>Recette</span>
+            </a>
+
+            <a
+                mat-list-item
+                routerLink="/proposition"
+                routerLinkActive="active"
+            >
+                <mat-icon matListItemIcon>lightbulb</mat-icon>
+                <span matListItemTitle>Proposition</span>
+            </a>
+
+            <a mat-list-item routerLink="/connexion" routerLinkActive="active">
+                <mat-icon matListItemIcon>login</mat-icon>
+                <span matListItemTitle>Login</span>
+            </a>
+
+            @if (isAdmin()) {
+            <a mat-list-item routerLink="/admin" routerLinkActive="active">
+                <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+                <span matListItemTitle>Admin</span>
+            </a>
+            }
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Contenu principal -->
+    <!--<mat-sidenav-content>
+        <router-outlet />
+    </mat-sidenav-content>-->
+</mat-sidenav-container>

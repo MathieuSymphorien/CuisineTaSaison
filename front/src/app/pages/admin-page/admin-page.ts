@@ -11,29 +11,34 @@ import { RecipeModel } from "src/app/shared/models/recipe.model";
   selector: "app-admin-page",
   imports: [Header, Footer, FoodList, RecipeList],
   template: `
-    <app-header></app-header>
-    <div class="admin-container">
-      <div class="admin-card">
-        <h1>Panneau d'administration</h1>
-      </div>
-      <div>
-        <h1>Aliments</h1>
-        <app-food-list
-          [foods]="foods"
-          (foodChanged)="onFoodChanged($event)"
-        ></app-food-list>
-      </div>
-      <div>
-        <h1>Recettes</h1>
-        <app-recipe-list
-          [recipes]="recipes"
-          (recipesChanged)="onRecipeChanged($event)"
-        ></app-recipe-list>
+    <div class="admin-page">
+      <app-header></app-header>
+      <div class="admin-container">
+        <div class="admin-card">
+          <h1>Panneau d'administration</h1>
+        </div>
+        <div>
+          <h1>Aliments</h1>
+          <app-food-list
+            [foods]="foods"
+            (foodChanged)="onFoodChanged($event)"
+          ></app-food-list>
+        </div>
+        <div>
+          <h1>Recettes</h1>
+          <app-recipe-list
+            [recipes]="recipes"
+            (recipesChanged)="onRecipeChanged($event)"
+          ></app-recipe-list>
+        </div>
       </div>
     </div>
     <app-footer></app-footer>
   `,
   styles: `
+    .admin-page {
+      display: flex;
+    }
     .admin-container {
       max-width: 1200px;
       margin: 0 auto;
