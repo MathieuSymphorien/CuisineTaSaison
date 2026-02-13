@@ -35,7 +35,6 @@ export class Home {
     this.foodApiService.getSeasonalFoods().subscribe({
       next: (foods) => {
         this.foods = foods;
-        console.log(foods);
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des foods:", err);
@@ -47,7 +46,7 @@ export class Home {
     this.recipeApiService.getAllRecipes().subscribe({
       next: (recipes) => {
         this.recipes = recipes;
-        console.log(recipes);
+        // console.log(recipes);
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des recettes:", err);

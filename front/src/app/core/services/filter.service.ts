@@ -9,6 +9,6 @@ export class FilterService<T> {
 
   updateFilters(filters: T): void {
     this.filtersSubject.next(filters);
-    console.log("Filtres mis à jour :", filters); // Simulation de l'envoi au back
+    // console.log("Filtres mis à jour :", filters); // Simulation de l'envoi au back
   }
 }
