@@ -30,7 +30,9 @@ export class RecipeProposal implements OnInit {
 
   name = signal("");
   description = signal("");
-  time = signal(0);
+  preparationTime = signal(0);
+  bakeTime = signal(0);
+  restTime = signal(0);
   oven = signal(false);
   people = signal(0);
   stepsText = signal("");
@@ -72,7 +74,9 @@ export class RecipeProposal implements OnInit {
   private resetForm() {
     this.name.set("");
     this.description.set("");
-    this.time.set(0);
+    this.preparationTime.set(0);
+    this.bakeTime.set(0);
+    this.restTime.set(0);
     this.oven.set(false);
     this.people.set(0);
     this.stepsText.set("");
@@ -91,7 +95,9 @@ export class RecipeProposal implements OnInit {
     if (
       !this.name() ||
       !this.description() ||
-      this.time() <= 0 ||
+      this.preparationTime() <= 0 ||
+      this.bakeTime() <= 0 ||
+      this.restTime() < 0 ||
       this.people() <= 0 ||
       steps.length === 0 ||
       this.selectedFoodIds().length === 0
@@ -106,7 +112,9 @@ export class RecipeProposal implements OnInit {
       .createRecipe({
         name: this.name(),
         description: this.description(),
-        time: this.time(),
+        preparationTime: this.preparationTime(),
+        bakeTime: this.bakeTime(),
+        restTime: this.restTime(),
         oven: this.oven(),
         people: this.people(),
         steps: steps,

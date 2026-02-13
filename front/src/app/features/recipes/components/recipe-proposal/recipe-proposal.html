@@ -21,13 +21,26 @@
 
     <div class="form-row">
         <app-filter-number
-            label="Temps de préparation (minutes)"
-            [value]="time()"
+            label="Temps de préparation (minutes)*"
+            [value]="preparationTime()"
             [min]="1"
             placeholder="30"
-            (valueChange)="time.set($event)"
+            (valueChange)="preparationTime.set($event)"
         ></app-filter-number>
-
+        <app-filter-number
+            label="Temps de cuisson (minutes)*"
+            [value]="bakeTime()"
+            [min]="1"
+            placeholder="30"
+            (valueChange)="bakeTime.set($event)"
+        ></app-filter-number>
+        <app-filter-number
+            label="Temps de repos (minutes)"
+            [value]="restTime()"
+            [min]="0"
+            placeholder="15"
+            (valueChange)="restTime.set($event)"
+        ></app-filter-number>
         <app-filter-number
             label="Nombre de personnes"
             [value]="people()"

@@ -40,7 +40,9 @@ export class MockDataService {
         id: 1,
         name: "Salade de pommes de terre",
         description: "Une salade estivale fraîche et savoureuse",
-        time: 45,
+        preparationTime: 45,
+        bakeTime: 0,
+        restTime: 0,
         oven: false,
         people: 4,
         steps: [

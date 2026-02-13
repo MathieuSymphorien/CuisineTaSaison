@@ -4,7 +4,9 @@ export interface RecipeModel {
   id: number;
   name: string;
   description: string;
-  time: number; // minutes
+  preparationTime: number; // minutes
+  bakeTime: number; // minutes
+  restTime: number; // minutes
   oven: boolean;
   people: number;
   steps: string[];
@@ -17,7 +19,9 @@ export interface RecipeModel {
 export interface CreateRecipeDto {
   name: string;
   description: string;
-  time: number;
+  preparationTime: number;
+  bakeTime: number;
+  restTime: number;
   oven: boolean;
   people: number;
   steps: string[];

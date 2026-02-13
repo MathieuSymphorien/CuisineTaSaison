@@ -1,9 +1,7 @@
 package com.mathieu.cts.entities.DTO.recipe;
 
-import java.util.List;
-
 import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
-
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,9 @@ public class RecipeResponseDTO {
     private Long id;
     private String name;
     private String description;
-    private Integer time;
+    private Integer preparationTime;
+    private Integer bakeTime;
+    private Integer restTime;
     private Boolean oven;
     private Integer people;
     private List<String> steps;

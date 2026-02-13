@@ -1,26 +1,33 @@
 <div class="recipe-card" [class.compact]="compact()" (click)="openDetail()">
-  <!-- <img [src]="recipe()?.image" alt="{{ recipe()?.name }}" /> -->
+    <!-- <img [src]="recipe()?.image" alt="{{ recipe()?.name }}" /> -->
 
-  <div class="content">
-    <h3>{{ recipe()?.name }}</h3>
-    <p class="description">{{ recipe()?.description }}</p>
+    <div class="content">
+        <h3>{{ recipe()?.name }}</h3>
+        <p class="description">{{ recipe()?.description }}</p>
 
-    @if (!compact()) {
-    <p class="meta">
-      <strong>Temps :</strong> {{ recipe()?.time }} min<br />
-      <strong>Personnes :</strong> {{ recipe()?.people }}<br />
-      <strong>Four :</strong> {{ recipe()?.oven ? 'Oui ✅' : 'Non ❌' }}
-    </p>
+        @if (!compact()) {
+        <p class="meta">
+            <strong>Temps de préparation :</strong> {{ recipe()?.preparationTime
+            }} min<br />
+            <strong>Temps de cuisson :</strong> {{ recipe()?.bakeTime }} min<br />
+            <strong>Temps de repos :</strong> {{ recipe()?.restTime }} min<br />
+            <strong>Personnes :</strong> {{ recipe()?.people }}<br />
+            <strong>Four :</strong> {{ recipe()?.oven ? 'Oui ✅' : 'Non ❌' }}
+        </p>
 
-    <h4>Ingrédients :</h4>
-    <ul>
-      @for (food of recipe()?.foods; track food.id) {
-      <li>{{ food.name }}</li>
-      }
-    </ul>
-    } @if (isAdmin()) {
-    <button (click)="approveRecipe(recipe()); $event.stopPropagation()">Accepter</button>
-    <button (click)="rejectRecipe(recipe()); $event.stopPropagation()">Refuser</button>
-    }
-  </div>
+        <h4>Ingrédients :</h4>
+        <ul>
+            @for (food of recipe()?.foods; track food.id) {
+            <li>{{ food.name }}</li>
+            }
+        </ul>
+        } @if (isAdmin()) {
+        <button (click)="approveRecipe(recipe()); $event.stopPropagation()">
+            Accepter
+        </button>
+        <button (click)="rejectRecipe(recipe()); $event.stopPropagation()">
+            Refuser
+        </button>
+        }
+    </div>
 </div>

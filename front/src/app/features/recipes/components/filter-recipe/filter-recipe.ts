@@ -89,8 +89,8 @@ export class FilterRecipe implements OnInit {
     this.updateFilters();
   }
 
-  onTimeChange(value: { min: number; max: number }): void {
-    this.filters.update((f) => ({ ...f, time: value }));
+  onPreparationTimeChange(value: { min: number; max: number }): void {
+    this.filters.update((f) => ({ ...f, preparationTime: value }));
     this.updateFilters();
   }
 

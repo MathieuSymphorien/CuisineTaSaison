@@ -26,7 +26,9 @@ export class RecipeDetail implements OnInit {
 
   name = signal("");
   description = signal("");
-  time = signal(0);
+  preparationTime = signal(0);
+  bakeTime = signal(0);
+  restTime = signal(0);
   oven = signal(false);
   people = signal(0);
   stepsText = signal("");
@@ -37,7 +39,9 @@ export class RecipeDetail implements OnInit {
     this.recipe.set(r);
     this.name.set(r.name);
     this.description.set(r.description);
-    this.time.set(r.time);
+    this.preparationTime.set(r.preparationTime);
+    this.bakeTime.set(r.bakeTime);
+    this.restTime.set(r.restTime);
     this.oven.set(r.oven);
     this.people.set(r.people);
     this.stepsText.set(r.steps.join("\n"));
@@ -58,7 +62,9 @@ export class RecipeDetail implements OnInit {
     const r = this.data.recipe;
     this.name.set(r.name);
     this.description.set(r.description);
-    this.time.set(r.time);
+    this.preparationTime.set(r.preparationTime);
+    this.bakeTime.set(r.bakeTime);
+    this.restTime.set(r.restTime);
     this.oven.set(r.oven);
     this.people.set(r.people);
     this.stepsText.set(r.steps.join("\n"));
@@ -77,7 +83,9 @@ export class RecipeDetail implements OnInit {
     const updatedRecipe = {
       name: this.name(),
       description: this.description(),
-      time: this.time(),
+      preparationTime: this.preparationTime(),
+      bakeTime: this.bakeTime(),
+      restTime: this.restTime(),
       oven: this.oven(),
       people: this.people(),
       steps: this.getStepsArray(),
