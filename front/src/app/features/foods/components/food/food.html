@@ -1,14 +1,27 @@
-<div
-  class="food-card"
-  [style.background-color]="getBackgroundColor(food()?.category)"
-  (click)="openDetail()"
+<mat-card
+    appearance="outlined"
+    class="food-card"
+    [style.background]="getBackgroundColor(food()?.category)"
+    (click)="openDetail()"
 >
-  <!-- <img [src]="food()?.image" alt="{{ food()?.name }}" /> -->
-  <div>
-    <h3>{{ food()?.name }}</h3>
-  </div>
-  @if (isAdmin()) {
-    <button (click)="approveFood(food()); $event.stopPropagation()">Accepter</button>
-    <button (click)="rejectFood(food()); $event.stopPropagation()">Refuser</button>
-  }
-</div>
+    <mat-card-header>
+        <mat-card-title> {{ food()?.name }} </mat-card-title>
+    </mat-card-header>
+
+    @if (isAdmin()) {
+    <mat-card-actions align="end">
+        <button
+            matButton
+            (click)="approveFood(food()); $event.stopPropagation()"
+        >
+            <mat-icon>check</mat-icon>
+        </button>
+        <button
+            mat-button
+            (click)="rejectFood(food()); $event.stopPropagation()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-actions>
+    }
+</mat-card>

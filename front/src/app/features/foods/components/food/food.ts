@@ -1,12 +1,17 @@
 import { Component, inject, input, output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 import { FoodModel } from "src/app/shared/models/food.model";
 import { AdminService } from "src/app/features/auth/services/admin.service";
 import { AuthService } from "src/app/features/auth/services/auth.service";
 import { FoodDetail } from "../food-detail/food-detail";
+import { ArgumentOutOfRangeError } from "rxjs";
 
 @Component({
   selector: "app-food",
+  imports: [MatCardModule, MatIconModule, MatButtonModule],
   standalone: true,
   templateUrl: "./food.html",
   styleUrls: ["./food.css"],
@@ -52,23 +57,16 @@ export class Food {
   }
 
   getBackgroundColor(category: FoodModel["category"] | undefined): string {
-    switch (category) {
-      case "FRUIT":
-        return "#7BC67B";
-      case "LEGUME":
-        return "#4AA3DF";
-      case "VIANDE":
-        return "#D9534F";
-      case "POISSON":
-        return "#5BC0DE";
-      case "CEREALE":
-        return "#C5A880";
-      case "EPICE":
-        return "#F0AD4E";
-      case "LACTE":
-        return "#F7E9D0";
-      default:
-        return "#AAAAAA";
-    }
+    const colors = {
+      FRUIT: "#7BC67B",
+      LEGUME: "#4AA3DF",
+      VIANDE: "#D9534F",
+      POISSON: "#5BC0DE",
+      CEREALE: "#C5A880",
+      EPICE: "#F0AD4E",
+      LACTE: "#F7E9D0",
+      AUTRE: "#AAAAAA",
+    };
+    return category ? colors[category] : "#AAAAAA";
   }
 }
