@@ -34,7 +34,7 @@ export class RecipeProposal implements OnInit {
   oven = signal(false);
   people = signal(0);
   stepsText = signal("");
-  seasonRatio = signal(0);
+  // seasonRatio = signal(0);
   availableFoods = signal<FoodModel[]>([]);
   availableFoodNames = signal<string[]>([]);
   selectedFoodNames = signal<string[]>([]);
@@ -78,7 +78,7 @@ export class RecipeProposal implements OnInit {
     this.stepsText.set("");
     this.selectedFoodNames.set([]);
     this.selectedFoodIds.set([]);
-    this.seasonRatio.set(0);
+    // this.seasonRatio.set(0);
   }
 
   submitProposal() {
@@ -111,7 +111,7 @@ export class RecipeProposal implements OnInit {
         people: this.people(),
         steps: steps,
         foodIds: this.selectedFoodIds(),
-        seasonRatio: this.seasonRatio(),
+        // seasonRatio: this.seasonRatio(),
         image: "",
         approved: false,
       })

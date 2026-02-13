@@ -1,78 +1,70 @@
 <div class="proposal-form">
-  @if (errorMessage()) {
-  <div class="message error">{{ errorMessage() }}</div>
-  } @if (successMessage()) {
-  <div class="message success">{{ successMessage() }}</div>
-  }
+    @if (errorMessage()) {
+    <div class="message error">{{ errorMessage() }}</div>
+    } @if (successMessage()) {
+    <div class="message success">{{ successMessage() }}</div>
+    }
 
-  <app-filter-string
-    label="Nom de la recette"
-    [value]="name()"
-    (valueChange)="name.set($event)"
-  ></app-filter-string>
+    <app-filter-string
+        label="Nom de la recette"
+        [value]="name()"
+        (valueChange)="name.set($event)"
+    ></app-filter-string>
 
-  <app-filter-textarea
-    label="Description"
-    [value]="description()"
-    placeholder="Décrivez votre recette..."
-    [rows]="4"
-    (valueChange)="description.set($event)"
-  ></app-filter-textarea>
+    <app-filter-textarea
+        label="Description"
+        [value]="description()"
+        placeholder="Décrivez votre recette..."
+        [rows]="4"
+        (valueChange)="description.set($event)"
+    ></app-filter-textarea>
 
-  <div class="form-row">
-    <app-filter-number
-      label="Temps de préparation (minutes)"
-      [value]="time()"
-      [min]="1"
-      placeholder="30"
-      (valueChange)="time.set($event)"
-    ></app-filter-number>
+    <div class="form-row">
+        <app-filter-number
+            label="Temps de préparation (minutes)"
+            [value]="time()"
+            [min]="1"
+            placeholder="30"
+            (valueChange)="time.set($event)"
+        ></app-filter-number>
 
-    <app-filter-number
-      label="Nombre de personnes"
-      [value]="people()"
-      [min]="1"
-      placeholder="4"
-      (valueChange)="people.set($event)"
-    ></app-filter-number>
-  </div>
+        <app-filter-number
+            label="Nombre de personnes"
+            [value]="people()"
+            [min]="1"
+            placeholder="4"
+            (valueChange)="people.set($event)"
+        ></app-filter-number>
+    </div>
 
-  <app-filter-boolean
-    label="Utilisation du four"
-    [value]="oven()"
-    (valueChange)="oven.set($event)"
-  ></app-filter-boolean>
+    <app-filter-boolean
+        label="Utilisation du four"
+        [value]="oven()"
+        (valueChange)="oven.set($event)"
+    ></app-filter-boolean>
 
-  <app-filter-textarea
-    label="Étapes de la recette"
-    [value]="stepsText()"
-    placeholder="Étape 1: ...&#10;Étape 2: ..."
-    [rows]="6"
-    hint="Séparez chaque étape par un retour à la ligne"
-    (valueChange)="stepsText.set($event)"
-  ></app-filter-textarea>
+    <app-filter-textarea
+        label="Étapes de la recette"
+        [value]="stepsText()"
+        placeholder="Étape 1: ...&#10;Étape 2: ..."
+        [rows]="6"
+        hint="Séparez chaque étape par un retour à la ligne"
+        (valueChange)="stepsText.set($event)"
+    ></app-filter-textarea>
 
-  <app-filter-multi-select
-    label="Ingrédients"
-    [options]="availableFoodNames()"
-    [value]="selectedFoodNames()"
-    (valueChange)="onFoodsChange($event)"
-  ></app-filter-multi-select>
+    <app-filter-multi-select
+        label="Ingrédients"
+        [options]="availableFoodNames()"
+        [value]="selectedFoodNames()"
+        (valueChange)="onFoodsChange($event)"
+    ></app-filter-multi-select>
 
-  <app-filter-number
-    label="Ratio de saisonnalité (optionnel, 0-100)"
-    [value]="seasonRatio()"
-    [min]="0"
-    [max]="100"
-    placeholder="0-100"
-    (valueChange)="seasonRatio.set($event)"
-  ></app-filter-number>
-
-  <button
-    class="submit-button"
-    (click)="submitProposal()"
-    [disabled]="isSubmitting()"
-  >
-    @if (isSubmitting()) { Envoi en cours... } @else { Proposer cette recette }
-  </button>
+    <button
+        class="submit-button"
+        (click)="submitProposal()"
+        [disabled]="isSubmitting()"
+    >
+        @if (isSubmitting()) { Envoi en cours... } @else { Proposer cette
+        recette }
+    </button>
 </div>

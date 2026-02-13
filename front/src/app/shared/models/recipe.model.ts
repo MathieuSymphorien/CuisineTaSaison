@@ -10,7 +10,7 @@ export interface RecipeModel {
   steps: string[];
   foods: FoodModel[];
   image: string; // FEATURE IMAGE POUR PLUS TARD
-  seasonRatio?: number;
+  // seasonRatio?: number;
   approved: boolean;
 }
 
@@ -23,6 +23,6 @@ export interface CreateRecipeDto {
   steps: string[];
   foodIds: number[];
   image: string;
-  seasonRatio?: number;
+  // seasonRatio?: number;
   approved: boolean;
 }
