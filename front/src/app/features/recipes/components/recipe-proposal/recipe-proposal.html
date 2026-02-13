@@ -6,13 +6,13 @@
     }
 
     <app-filter-string
-        label="Nom de la recette"
+        label="Nom de la recette *"
         [value]="name()"
         (valueChange)="name.set($event)"
     ></app-filter-string>
 
     <app-filter-textarea
-        label="Description"
+        label="Description *"
         [value]="description()"
         placeholder="Décrivez votre recette..."
         [rows]="4"
@@ -21,14 +21,14 @@
 
     <div class="form-row">
         <app-filter-number
-            label="Temps de préparation (minutes)*"
+            label="Temps de préparation (minutes) *"
             [value]="preparationTime()"
             [min]="1"
             placeholder="30"
             (valueChange)="preparationTime.set($event)"
         ></app-filter-number>
         <app-filter-number
-            label="Temps de cuisson (minutes)*"
+            label="Temps de cuisson (minutes) *"
             [value]="bakeTime()"
             [min]="1"
             placeholder="30"
@@ -42,7 +42,7 @@
             (valueChange)="restTime.set($event)"
         ></app-filter-number>
         <app-filter-number
-            label="Nombre de personnes"
+            label="Nombre de personnes *"
             [value]="people()"
             [min]="1"
             placeholder="4"
@@ -57,7 +57,7 @@
     ></app-filter-boolean>
 
     <app-filter-textarea
-        label="Étapes de la recette"
+        label="Étapes de la recette *"
         [value]="stepsText()"
         placeholder="Étape 1: ...&#10;Étape 2: ..."
         [rows]="6"
@@ -66,7 +66,7 @@
     ></app-filter-textarea>
 
     <app-filter-multi-select
-        label="Ingrédients"
+        label="Ingrédients *"
         [options]="availableFoodNames()"
         [value]="selectedFoodNames()"
         (valueChange)="onFoodsChange($event)"
