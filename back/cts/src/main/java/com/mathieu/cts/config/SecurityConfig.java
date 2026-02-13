@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -39,30 +38,48 @@ public class SecurityConfig {
     // désactive la création de l'utilisateur par défaut
     @Bean
     public org.springframework.security.core.userdetails.UserDetailsService userDetailsService() {
-        return username -> null; 
+        return username -> null;
     }
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+        throws Exception {
+        CsrfTokenRequestAttributeHandler requestHandler =
+            new CsrfTokenRequestAttributeHandler();
 
         http
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .csrfTokenRequestHandler(requestHandler)
+            .csrf(csrf ->
+                csrf
+                    .csrfTokenRepository(
+                        CookieCsrfTokenRepository.withHttpOnlyFalse()
+                    )
+                    .csrfTokenRequestHandler(requestHandler)
             )
             .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/foods/**").permitAll()
-                .requestMatchers("/api/recipes/**").permitAll()
-                .requestMatchers("/error").permitAll()
-                .requestMatchers("/api/admin/**").authenticated()
-                .anyRequest().denyAll()
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .authorizeHttpRequests(auth ->
+                auth
+                    .requestMatchers("/api/auth/**")
+                    .permitAll()
+                    .requestMatchers("/api/foods/**")
+                    .permitAll()
+                    .requestMatchers("/api/data/**")
+                    .permitAll()
+                    .requestMatchers("/api/recipes/**")
+                    .permitAll()
+                    .requestMatchers("/error")
+                    .permitAll()
+                    .requestMatchers("/api/admin/**")
+                    .authenticated()
+                    .anyRequest()
+                    .denyAll()
+            )
+            .addFilterBefore(
+                jwtAuthenticationFilter(),
+                UsernamePasswordAuthenticationFilter.class
+            );
         return http.build();
     }
 
@@ -76,11 +93,11 @@ public class SecurityConfig {
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+            new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -93,10 +110,16 @@ public class SecurityConfig {
      * pour qu'Angular puisse le lire dès le premier GET.
      */
     private static class CsrfCookieFilter extends OncePerRequestFilter {
+
         @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                FilterChain filterChain) throws ServletException, IOException {
-            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+        ) throws ServletException, IOException {
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute(
+                CsrfToken.class.getName()
+            );
             if (csrfToken != null) {
                 csrfToken.getToken();
             }
