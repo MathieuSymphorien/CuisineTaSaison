@@ -67,6 +67,5 @@ volumes:
 networks:
   cts-internal:
     driver: bridge
-    internal: true
   traefik-network:
     external: true
