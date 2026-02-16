@@ -1,23 +1,12 @@
 package com.mathieu.cts.controllers;
 
-import com.mathieu.cts.entities.FoodCategory;
-import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.entities.DTO.food.FoodCreateDTO;
 import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
 import com.mathieu.cts.entities.DTO.food.FoodUpdateDTO;
+import com.mathieu.cts.entities.FoodCategory;
+import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.services.FoodService;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import jakarta.validation.Valid;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +14,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/foods")
@@ -39,12 +35,18 @@ public class FoodController {
         @RequestParam(required = false) FoodCategory category,
         @RequestParam(required = false) List<Months> months
     ) {
-        List<FoodResponseDTO> foods = foodService.getAllFoods(name, category, months);
+        List<FoodResponseDTO> foods = foodService.getAllFoods(
+            name,
+            category,
+            months
+        );
         return ResponseEntity.ok(foods);
     }
 
     @GetMapping("/seasonal")
-    public ResponseEntity<List<FoodResponseDTO>> getSeasonalFruitsAndVegetables() {
+    public ResponseEntity<
+        List<FoodResponseDTO>
+    > getSeasonalFruitsAndVegetables() {
         return ResponseEntity.ok(foodService.getSeasonalFruitsAndVegetables());
     }
 
@@ -55,13 +57,18 @@ public class FoodController {
     }
 
     @PostMapping
-    public ResponseEntity<FoodResponseDTO> createFood(@Valid @RequestBody FoodCreateDTO createDTO) {
+    public ResponseEntity<FoodResponseDTO> createFood(
+        @Valid @RequestBody FoodCreateDTO createDTO
+    ) {
         FoodResponseDTO createdFood = foodService.createFood(createDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFood);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FoodResponseDTO> updateFood(@PathVariable Long id, @Valid @RequestBody FoodUpdateDTO updateDTO) {
+    public ResponseEntity<FoodResponseDTO> updateFood(
+        @PathVariable Long id,
+        @Valid @RequestBody FoodUpdateDTO updateDTO
+    ) {
         FoodResponseDTO updatedFood = foodService.updateFood(id, updateDTO);
         return ResponseEntity.ok(updatedFood);
     }
@@ -77,7 +84,9 @@ public class FoodController {
     private final Path root = Paths.get("uploads");
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(
+        @RequestParam("file") MultipartFile file
+    ) {
         try {
             if (file.isEmpty()) {
                 return ResponseEntity.badRequest().body("Fichier vide");
@@ -87,19 +96,26 @@ public class FoodController {
                 Files.createDirectories(root);
             }
 
-            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String filename =
+                UUID.randomUUID() + "_" + file.getOriginalFilename();
             Path destination = root.resolve(filename);
-            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(
+                file.getInputStream(),
+                destination,
+                StandardCopyOption.REPLACE_EXISTING
+            );
 
             return ResponseEntity.ok(filename);
-
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erreur : " + e.getMessage());
+            return ResponseEntity.internalServerError().body(
+                "Erreur : " + e.getMessage()
+            );
         }
     }
 
     @GetMapping("/images/{filename:.+}")
-    public ResponseEntity<UrlResource> getImage(@PathVariable String filename) throws IOException {
+    public ResponseEntity<UrlResource> getImage(@PathVariable String filename)
+        throws IOException {
         Path file = root.resolve(filename);
         if (!Files.exists(file)) {
             return ResponseEntity.notFound().build();
@@ -108,7 +124,7 @@ public class FoodController {
         UrlResource resource = new UrlResource(file.toUri());
 
         return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(resource);
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(resource);
     }
 }

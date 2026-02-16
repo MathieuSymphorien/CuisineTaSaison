@@ -1,5 +1,9 @@
 package com.mathieu.cts.services;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.mathieu.cts.entities.DTO.food.FoodCreateDTO;
 import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
 import com.mathieu.cts.entities.Food;
@@ -8,7 +12,8 @@ import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.exceptions.FoodAlreadyExistsException;
 import com.mathieu.cts.exceptions.FoodNotFoundException;
 import com.mathieu.cts.repositories.FoodRepository;
-
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 /**
  * Tests unitaires pour FoodService.
@@ -61,11 +59,19 @@ class FoodServiceTest {
         pomme.setId(1L);
         pomme.setName("Pomme");
         pomme.setCategory(FoodCategory.FRUIT);
-        pomme.setMonths(List.of(Months.SEPTEMBRE, Months.OCTOBRE, Months.NOVEMBRE));
+        pomme.setMonths(
+            List.of(Months.SEPTEMBRE, Months.OCTOBRE, Months.NOVEMBRE)
+        );
         pomme.setApproved(true);
 
-        pommeDTO = new FoodResponseDTO(1L, "Pomme", FoodCategory.FRUIT, null,
-                List.of(Months.SEPTEMBRE, Months.OCTOBRE, Months.NOVEMBRE), true);
+        pommeDTO = new FoodResponseDTO(
+            1L,
+            "Pomme",
+            FoodCategory.FRUIT,
+            null,
+            List.of(Months.SEPTEMBRE, Months.OCTOBRE, Months.NOVEMBRE),
+            true
+        );
     }
 
     // ==================== createFood ====================
@@ -74,12 +80,17 @@ class FoodServiceTest {
     @DisplayName("Créer un aliment avec succès")
     void createFood_success() {
         // Arrange : on prépare le DTO d'entrée et on simule le comportement du repo
-        FoodCreateDTO createDTO = new FoodCreateDTO("Pomme", FoodCategory.FRUIT,
-                List.of(Months.SEPTEMBRE, Months.OCTOBRE));
+        FoodCreateDTO createDTO = new FoodCreateDTO(
+            "Pomme",
+            FoodCategory.FRUIT,
+            List.of(Months.SEPTEMBRE, Months.OCTOBRE)
+        );
 
         when(foodRepository.existsByNameIgnoreCase("Pomme")).thenReturn(false);
         when(foodRepository.save(any(Food.class))).thenReturn(pomme);
-        when(modelMapper.map(any(Food.class), eq(FoodResponseDTO.class))).thenReturn(pommeDTO);
+        when(
+            modelMapper.map(any(Food.class), eq(FoodResponseDTO.class))
+        ).thenReturn(pommeDTO);
 
         // Act : on appelle la méthode
         FoodResponseDTO result = foodService.createFood(createDTO);
@@ -97,8 +108,11 @@ class FoodServiceTest {
     @DisplayName("Créer un aliment qui existe déjà → exception")
     void createFood_alreadyExists_throwsException() {
         // Arrange : on simule qu'un aliment avec ce nom existe déjà
-        FoodCreateDTO createDTO = new FoodCreateDTO("Pomme", FoodCategory.FRUIT,
-                List.of(Months.SEPTEMBRE));
+        FoodCreateDTO createDTO = new FoodCreateDTO(
+            "Pomme",
+            FoodCategory.FRUIT,
+            List.of(Months.SEPTEMBRE)
+        );
 
         when(foodRepository.existsByNameIgnoreCase("Pomme")).thenReturn(true);
 
@@ -118,7 +132,9 @@ class FoodServiceTest {
     void getFoodById_found() {
         // Arrange
         when(foodRepository.findById(1L)).thenReturn(Optional.of(pomme));
-        when(modelMapper.map(pomme, FoodResponseDTO.class)).thenReturn(pommeDTO);
+        when(modelMapper.map(pomme, FoodResponseDTO.class)).thenReturn(
+            pommeDTO
+        );
 
         // Act
         FoodResponseDTO result = foodService.getFoodById(1L);
@@ -174,14 +190,20 @@ class FoodServiceTest {
         unapproved.setMonths(List.of(Months.JANVIER));
         unapproved.setApproved(false);
 
-        FoodResponseDTO approvedDTO = new FoodResponseDTO(2L, "Carotte", FoodCategory.LEGUME,
-                null, List.of(Months.JANVIER), true);
+        FoodResponseDTO approvedDTO = new FoodResponseDTO(
+            2L,
+            "Carotte",
+            FoodCategory.LEGUME,
+            null,
+            List.of(Months.JANVIER),
+            true
+        );
 
         when(foodRepository.findById(2L)).thenReturn(Optional.of(unapproved));
         when(foodRepository.save(any(Food.class))).thenReturn(unapproved);
-        when(modelMapper.map(any(Food.class), eq(FoodResponseDTO.class))).thenReturn(approvedDTO);
-
-        FoodResponseDTO result = foodService.approveFood(2L);
+        when(
+            modelMapper.map(any(Food.class), eq(FoodResponseDTO.class))
+        ).thenReturn(approvedDTO);
 
         // Après approbation, approved doit être true
         assertTrue(unapproved.getApproved());

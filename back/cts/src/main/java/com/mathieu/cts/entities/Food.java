@@ -11,11 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import lombok.Data;
-import com.mathieu.cts.entities.Months;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
+
 @Data
 @Entity
 @Table(name = "foods")
@@ -33,15 +32,17 @@ public class Food {
     private FoodCategory category;
 
     @Column
-    private String image;   // FEATURE IMAGE POUR PLUS TARD
+    private String image; // FEATURE IMAGE POUR PLUS TARD
 
     @ElementCollection
-    @CollectionTable(name = "entite_months", joinColumns = @JoinColumn(name = "entite_id"))
+    @CollectionTable(
+        name = "entite_months",
+        joinColumns = @JoinColumn(name = "entite_id")
+    )
     @Column(name = "month", nullable = false)
     @Enumerated(EnumType.STRING)
     private List<Months> months = new ArrayList<>();
 
     @Column(nullable = false)
     private Boolean approved = false;
-
 }
