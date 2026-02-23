@@ -1,5 +1,6 @@
 package com.mathieu.cts.entities.DTO.recipe;
 
+import com.mathieu.cts.entities.RecipeFood;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -61,5 +62,5 @@ public class RecipeCreateDTO {
 
     @NotNull(message = "Les ingrédients sont obligatoires")
     @Size(min = 1, message = "Au moins un ingrédient est requis")
-    private List<Long> foodIds;
+    private List<RecipeFoodDTO> recipeFoods;
 }

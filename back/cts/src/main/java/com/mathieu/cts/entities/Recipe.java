@@ -43,13 +43,12 @@ public class Recipe {
     @Column(name = "step")
     private List<String> steps;
 
-    @ManyToMany
-    @JoinTable(
-        name = "recipe_foods",
-        joinColumns = @JoinColumn(name = "recipe_id"),
-        inverseJoinColumns = @JoinColumn(name = "food_id")
+    @OneToMany(
+        mappedBy = "recipe",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
     )
-    private List<Food> foods;
+    private List<RecipeFood> recipeFoods;
 
     @Column
     private String image; // FEATURE IMAGE POUR PLUS TARD

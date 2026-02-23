@@ -2,11 +2,13 @@ package com.mathieu.cts.services;
 
 import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeCreateDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeFoodDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeUpdateDTO;
 import com.mathieu.cts.entities.Food;
 import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.entities.Recipe;
+import com.mathieu.cts.entities.RecipeFood;
 import com.mathieu.cts.exceptions.FoodNotFoundException;
 import com.mathieu.cts.exceptions.RecipeNotFoundException;
 import com.mathieu.cts.repositories.FoodRepository;
@@ -135,7 +137,25 @@ public class RecipeService {
         recipe.setOven(createDTO.getOven());
         recipe.setPeople(createDTO.getPeople());
         recipe.setSteps(createDTO.getSteps());
-        recipe.setFoods(findFoodsByIds(createDTO.getFoodIds()));
+
+        // List<RecipeFood> recipeFoods = new ArrayList<>();
+        // for (RecipeFoodDTO foodToCreate : createDTO.getRecipeFoods()) {
+        //     RecipeFood recipeFood = new RecipeFood();
+        //     Food food = foodRepository
+        //         .findById(foodToCreate.getFoodId())
+        //         .orElseThrow(() ->
+        //             new FoodNotFoundException(foodToCreate.getFoodId())
+        //         );
+        //     recipeFood.setFood(food);
+        //     recipeFood.setQuantity(foodToCreate.getQuantity());
+        //     recipeFood.setUnits(foodToCreate.getUnit());
+        //     recipeFood.setRecipe(recipe);
+        //     recipeFoods.add(recipeFood);
+        // }
+        recipe.setRecipeFoods(
+            buildRecipeFoods(createDTO.getRecipeFoods(), recipe)
+        );
+
         recipe.setApproved(false);
 
         Recipe savedRecipe = recipeRepository.save(recipe);
@@ -172,8 +192,26 @@ public class RecipeService {
         if (updateDTO.getSteps() != null) {
             existingRecipe.setSteps(updateDTO.getSteps());
         }
-        if (updateDTO.getFoodIds() != null) {
-            existingRecipe.setFoods(findFoodsByIds(updateDTO.getFoodIds()));
+        if (updateDTO.getRecipeFoods() != null) {
+            existingRecipe.getRecipeFoods().clear();
+            existingRecipe
+                .getRecipeFoods()
+                .addAll(
+                    buildRecipeFoods(updateDTO.getRecipeFoods(), existingRecipe)
+                );
+            // for (RecipeFoodDTO foodToUpdate : updateDTO.getRecipeFoods()) {
+            //     RecipeFood recipeFood = new RecipeFood();
+            //     Food food = foodRepository
+            //         .findById(foodToUpdate.getFoodId())
+            //         .orElseThrow(() ->
+            //             new FoodNotFoundException(foodToUpdate.getFoodId())
+            //         );
+            //     recipeFood.setFood(food);
+            //     recipeFood.setQuantity(foodToUpdate.getQuantity());
+            //     recipeFood.setUnits(foodToUpdate.getUnit());
+            //     recipeFood.setRecipe(existingRecipe);
+            //     existingRecipe.getRecipeFoods().add(recipeFood);
+            // }
         }
 
         Recipe updatedRecipe = recipeRepository.save(existingRecipe);
@@ -215,16 +253,38 @@ public class RecipeService {
 
     // ===== Méthodes utilitaires =====
 
-    private List<Food> findFoodsByIds(List<Long> foodIds) {
-        return foodIds
-            .stream()
-            .map(foodId ->
-                foodRepository
-                    .findById(foodId)
-                    .orElseThrow(() -> new FoodNotFoundException(foodId))
-            )
-            .collect(Collectors.toList());
+    // Méthode générique pour construire la liste des RecipeFood à partir des DTO
+    private List<RecipeFood> buildRecipeFoods(
+        List<RecipeFoodDTO> dtos,
+        Recipe recipe
+    ) {
+        List<RecipeFood> recipeFoods = new ArrayList<>();
+        for (RecipeFoodDTO foodToBuild : dtos) {
+            RecipeFood recipeFood = new RecipeFood();
+            Food food = foodRepository
+                .findById(foodToBuild.getFoodId())
+                .orElseThrow(() ->
+                    new FoodNotFoundException(foodToBuild.getFoodId())
+                );
+            recipeFood.setFood(food);
+            recipeFood.setQuantity(foodToBuild.getQuantity());
+            recipeFood.setUnits(foodToBuild.getUnit());
+            recipeFood.setRecipe(recipe);
+            recipeFoods.add(recipeFood);
+        }
+        return recipeFoods;
     }
+
+    // private List<RecipeFood> findRecipeFoods(List<RecipeFood> recipeFoods) {
+    //     return recipeFoods
+    //         .stream()
+    //         .map(recipeFood -> {
+    //             Long foodId = recipeFood.getFood().getId();
+    //             if (foodRepository.findById(foodId) != null)
+    //                 return recipeFood;
+    //         })
+    //         .toList();
+    // }
 
     private RecipeResponseDTO toResponseDTO(Recipe recipe) {
         RecipeResponseDTO dto = new RecipeResponseDTO();
@@ -240,16 +300,24 @@ public class RecipeService {
         dto.setImage(recipe.getImage());
         dto.setSeasonRatio(recipe.getSeasonRatio());
         dto.setApproved(recipe.getApproved());
-
-        // Convertir les foods en FoodResponseDTO
-        if (recipe.getFoods() != null) {
-            List<FoodResponseDTO> foodDTOs = recipe
-                .getFoods()
-                .stream()
-                .map(food -> modelMapper.map(food, FoodResponseDTO.class))
-                .collect(Collectors.toList());
-            dto.setFoods(foodDTOs);
+        List<RecipeFoodDTO> recipeFoodDTOs = new ArrayList<>();
+        for (RecipeFood recipefood : recipe.getRecipeFoods()) {
+            RecipeFoodDTO recipeFoodDTO = new RecipeFoodDTO();
+            recipeFoodDTO.setFoodId(recipefood.getFood().getId());
+            recipeFoodDTO.setQuantity(recipefood.getQuantity());
+            recipeFoodDTO.setUnit(recipefood.getUnits());
+            recipeFoodDTOs.add(recipeFoodDTO);
         }
+        dto.setRecipeFoods(recipeFoodDTOs);
+        // Convertir les recipe food en FoodResponseDTO
+        // if (recipe.getRecipeFoods() != null) {
+        //     List<FoodResponseDTO> foodDTOs = recipe
+        //         .getRecipeFoods()
+        //         .stream()
+        //         .map(food -> modelMapper.map(food, FoodResponseDTO.class))
+        //         .collect(Collectors.toList());
+        //     dto.setFoods(foodDTOs);
+        // }
 
         return dto;
     }

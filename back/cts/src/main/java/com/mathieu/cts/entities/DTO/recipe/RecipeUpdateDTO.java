@@ -1,5 +1,6 @@
 package com.mathieu.cts.entities.DTO.recipe;
 
+import com.mathieu.cts.entities.RecipeFood;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import java.util.List;
@@ -52,5 +53,5 @@ public class RecipeUpdateDTO {
     private List<String> steps;
 
     @Size(min = 1, message = "Au moins un ingrédient est requis")
-    private List<Long> foodIds;
+    private List<RecipeFoodDTO> recipeFoods;
 }

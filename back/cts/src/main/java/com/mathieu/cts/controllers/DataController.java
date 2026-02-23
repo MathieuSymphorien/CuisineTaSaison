@@ -2,6 +2,7 @@ package com.mathieu.cts.controllers;
 
 import com.mathieu.cts.entities.FoodCategory;
 import com.mathieu.cts.entities.Months;
+import com.mathieu.cts.entities.Units;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,5 +18,10 @@ public class DataController {
     @GetMapping("/months")
     public ResponseEntity<Months[]> getMonths() {
         return ResponseEntity.ok(Months.values());
+    }
+
+    @GetMapping("/units")
+    public ResponseEntity<Units[]> getUnits() {
+        return ResponseEntity.ok(Units.values());
     }
 }

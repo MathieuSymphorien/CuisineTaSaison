@@ -1,6 +1,5 @@
 package com.mathieu.cts.entities.DTO.recipe;
 
-import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +22,7 @@ public class RecipeResponseDTO {
     private Boolean oven;
     private Integer people;
     private List<String> steps;
-    private List<FoodResponseDTO> foods;
+    private List<RecipeFoodDTO> recipeFoods;
     private String image;
     private Double seasonRatio;
     private Boolean approved;
