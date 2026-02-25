@@ -1,6 +1,18 @@
 <div class="home-page">
     <app-header></app-header>
     <div class="home-container">
+        <h1>Bienvenue sur Cuisine Ta Saison !</h1>
+        <p>
+            Ce site est dédié à la cuisine de saison, mettant en avant les
+            aliments de saison pour chaque période de l'année. Découvrez des
+            recettes savoureuses et des informations sur les produits de saison
+            pour vous aider à cuisiner de manière plus durable et délicieuse
+            tout au long de l'année.
+        </p>
+        <p><strong>Ce site est en cours de développement. </strong></p>
+
+        <h2>Fruit et Légume de saison</h2>
+        <h3>{{ currentMonth }}</h3>
         <div class="food-list">
             <app-food-list [foods]="foods"></app-food-list>
         </div>

@@ -17,8 +17,8 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
 export class Home {
   foods: FoodModel[] = [];
   recipes: RecipeModel[] = [];
-  season = "season";
-  month = "oct";
+
+  currentMonth: string;
 
   private readonly foodApiService = inject(FoodApiService);
   private readonly recipeApiService = inject(RecipeApiService);
@@ -26,9 +26,6 @@ export class Home {
   ngOnInit(): void {
     this.loadFoods();
     this.loadRecipes();
-    // this.season = this.mockData.getSeason().season;
-    //   this.month = this.mockData.getMonth().month;
-    // this.recipes = this.mockData.getRecipes();
   }
 
   loadFoods(): void {
@@ -46,7 +43,6 @@ export class Home {
     this.recipeApiService.getAllRecipes().subscribe({
       next: (recipes) => {
         this.recipes = recipes;
-        // console.log(recipes);
       },
       error: (err) => {
         console.error("Erreur lors de la récupération des recettes:", err);
@@ -54,8 +50,11 @@ export class Home {
     });
   }
 
-  // constructor(private mockData: MockDataService) {}
-  // ngOnInit() {
-  //   this.foods = this.mockData.getFoods();
-  // }
+  constructor() {
+    const date = new Date();
+    const options: Intl.DateTimeFormatOptions = { month: "long" };
+    this.currentMonth = date.toLocaleDateString("fr-FR", options);
+    this.currentMonth =
+      this.currentMonth.charAt(0).toUpperCase() + this.currentMonth.slice(1);
+  }
 }
