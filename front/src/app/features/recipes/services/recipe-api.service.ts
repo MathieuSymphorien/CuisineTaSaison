@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import {
   CreateRecipeDto,
   RecipeModel,
+  RecipeModel2,
 } from "src/app/shared/models/recipe.model";
 import { Month } from "src/app/shared/models/month.model";
 import { BaseApiService } from "../../../core/services/base-api.service";
@@ -23,7 +24,8 @@ export interface RecipeFilters {
 })
 export class RecipeApiService extends BaseApiService<
   RecipeModel,
-  CreateRecipeDto
+  CreateRecipeDto,
+  RecipeModel2
 > {
   protected readonly apiUrl = "/api/recipes";
 

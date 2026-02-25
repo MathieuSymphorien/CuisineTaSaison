@@ -17,8 +17,8 @@
 
         <h4>Ingrédients :</h4>
         <ul>
-            @for (food of recipe()?.foods; track food.id) {
-            <li>{{ food.name }}</li>
+            @for (food of recipe()?.recipeFoods; track food.foodName) {
+            <li>{{ food.quantity }} {{ food.unit }} {{ food.foodName }}</li>
             }
         </ul>
         } @if (isAdmin()) {

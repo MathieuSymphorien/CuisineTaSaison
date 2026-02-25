@@ -1,15 +1,20 @@
 import { Component, inject, signal, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormsModule } from "@angular/forms";
-import { RecipeModel } from "src/app/shared/models/recipe.model";
+import {
+  RecipeFoodRequest,
+  RecipeFoodResponse,
+  RecipeModel,
+} from "src/app/shared/models/recipe.model";
 import { AuthService } from "src/app/features/auth/services/auth.service";
 import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.service";
 import { NotificationService } from "src/app/core/services/notification.service";
+import { RecipeFoodControl } from "src/app/shared/components/recipe-food/recipe-food";
 
 @Component({
   selector: "app-recipe-detail",
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RecipeFoodControl],
   templateUrl: "./recipe-detail.html",
   styleUrls: ["./recipe-detail.css"],
 })
@@ -34,6 +39,9 @@ export class RecipeDetail implements OnInit {
   stepsText = signal("");
   recipe = signal<RecipeModel | null>(null);
 
+  recipeFoodResponses = signal<RecipeFoodResponse[]>([]);
+  recipeFoodRequests = signal<RecipeFoodRequest[]>([]);
+
   ngOnInit() {
     const r = this.data.recipe;
     this.recipe.set(r);
@@ -45,6 +53,7 @@ export class RecipeDetail implements OnInit {
     this.oven.set(r.oven);
     this.people.set(r.people);
     this.stepsText.set(r.steps.join("\n"));
+    this.recipeFoodResponses.set(r.recipeFoods);
   }
 
   close() {
@@ -87,6 +96,7 @@ export class RecipeDetail implements OnInit {
       bakeTime: this.bakeTime(),
       restTime: this.restTime(),
       oven: this.oven(),
+      recipeFoods: this.recipeFoodRequests(),
       people: this.people(),
       steps: this.getStepsArray(),
     };

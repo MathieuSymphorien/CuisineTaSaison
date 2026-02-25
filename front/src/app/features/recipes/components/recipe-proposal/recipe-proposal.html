@@ -1,10 +1,4 @@
 <div class="proposal-form">
-    @if (errorMessage()) {
-    <div class="message error">{{ errorMessage() }}</div>
-    } @if (successMessage()) {
-    <div class="message success">{{ successMessage() }}</div>
-    }
-
     <app-filter-string
         label="Nom de la recette *"
         [value]="name()"
@@ -65,13 +59,12 @@
         (valueChange)="stepsText.set($event)"
     ></app-filter-textarea>
 
-    <app-filter-multi-select
-        label="Ingrédients *"
-        [options]="availableFoodNames()"
-        [value]="selectedFoodNames()"
-        (valueChange)="onFoodsChange($event)"
-    ></app-filter-multi-select>
-
+    <p>Ingredient</p>
+    <app-recipe-food
+        [recipeFoodResponses]="recipeFoodResponses()"
+        (recipeFoodRequests)="recipeFoodRequests.set($event)"
+    >
+    </app-recipe-food>
     <button
         class="submit-button"
         (click)="submitProposal()"
@@ -80,4 +73,10 @@
         @if (isSubmitting()) { Envoi en cours... } @else { Proposer cette
         recette }
     </button>
+
+    @if (errorMessage()) {
+    <div class="message error">{{ errorMessage() }}</div>
+    } @if (successMessage()) {
+    <div class="message success">{{ successMessage() }}</div>
+    }
 </div>

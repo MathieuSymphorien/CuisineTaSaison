@@ -1,0 +1,75 @@
+<button matFab aria-label="add icon" (click)="addRecipeFood()">
+    <mat-icon>add</mat-icon>
+</button>
+<table mat-table [dataSource]="internalValue()" class="mat-elevation-z8">
+    <ng-container matColumnDef="foodId">
+        <th mat-header-cell *matHeaderCellDef>Ingrédient</th>
+        <td mat-cell *matCellDef="let element">
+            <mat-form-field>
+                <mat-label>Ingredient</mat-label>
+                <mat-select
+                    [(value)]="element.foodName"
+                    (selectionChange)="element.foodName = $event.value; onValueChange()"
+                >
+                    @for (item of availableFoodNames(); track item) {
+                    <mat-option [value]="item">{{ item }}</mat-option>
+                    } @empty {
+                    <li>No items found.</li>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Quantité</th>
+        <td mat-cell *matCellDef="let element">
+            <mat-form-field class="example-full-width">
+                <mat-label>Quantité</mat-label>
+                <input
+                    type="number"
+                    matInput
+                    [(ngModel)]="element.quantity"
+                    (change)="onValueChange()"
+                    min="0"
+                />
+            </mat-form-field>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unit">
+        <th mat-header-cell *matHeaderCellDef>Unité</th>
+        <td mat-cell *matCellDef="let element">
+            <mat-form-field>
+                <mat-label>Unité</mat-label>
+                <mat-select
+                    [(value)]="element.unit"
+                    (selectionChange)="element.unit = $event.value; onValueChange()"
+                >
+                    @for (item of availableUnits(); track item) {
+                    <mat-option [value]="item">{{ item }}</mat-option>
+                    } @empty {
+                    <li>No items found.</li>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <button
+                matFab
+                aria-label="delete icon"
+                (click)="removeRecipeFood(element)"
+            >
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

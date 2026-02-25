@@ -1,12 +1,20 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { FoodModel } from "src/app/shared/models/food.model";
 import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.service";
-import { FoodApiService } from "src/app/features/foods/services/food-api.service";
+import { MatTableModule } from "@angular/material/table";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
+import { FormsModule } from "@angular/forms";
 import { FilterStringComponent } from "src/app/shared/components/filter/filter-string/filter-string";
 import { FilterNumberComponent } from "src/app/shared/components/filter/filter-number/filter-number";
 import { FilterBooleanComponent } from "src/app/shared/components/filter/filter-boolean/filter-boolean";
 import { FilterTextareaComponent } from "src/app/shared/components/filter/filter-textarea/filter-textarea";
-import { FilterMultiSelectComponent } from "src/app/shared/components/filter/filter-multi-select/filter-multi-select";
+import { RecipeFoodControl } from "src/app/shared/components/recipe-food/recipe-food";
+import {
+  RecipeFoodRequest,
+  RecipeFoodResponse,
+} from "src/app/shared/models/recipe.model";
 
 @Component({
   selector: "app-recipe-proposal",
@@ -15,14 +23,19 @@ import { FilterMultiSelectComponent } from "src/app/shared/components/filter/fil
     FilterNumberComponent,
     FilterBooleanComponent,
     FilterTextareaComponent,
-    FilterMultiSelectComponent,
+    RecipeFoodControl,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+    MatInputModule,
+    FormsModule,
   ],
   templateUrl: "./recipe-proposal.html",
   styleUrls: ["./recipe-proposal.css"],
 })
-export class RecipeProposal implements OnInit {
+export class RecipeProposal {
   private readonly recipeApiService = inject(RecipeApiService);
-  private readonly foodApiService = inject(FoodApiService);
 
   isSubmitting = signal(false);
   errorMessage = signal<string | null>(null);
@@ -36,33 +49,9 @@ export class RecipeProposal implements OnInit {
   oven = signal(false);
   people = signal(0);
   stepsText = signal("");
-  // seasonRatio = signal(0);
-  availableFoods = signal<FoodModel[]>([]);
-  availableFoodNames = signal<string[]>([]);
-  selectedFoodNames = signal<string[]>([]);
-  selectedFoodIds = signal<number[]>([]);
 
-  ngOnInit() {
-    this.loadAvailableFoods();
-  }
-
-  private loadAvailableFoods() {
-    this.foodApiService.getAllFoods().subscribe({
-      next: (foods) => {
-        this.availableFoods.set(foods);
-        this.availableFoodNames.set(foods.map((f) => f.name));
-      },
-      error: (err) => console.error("Erreur chargement aliments:", err),
-    });
-  }
-
-  onFoodsChange(foodNames: string[]) {
-    this.selectedFoodNames.set(foodNames);
-    const foodIds = this.availableFoods()
-      .filter((f) => foodNames.includes(f.name))
-      .map((f) => f.id);
-    this.selectedFoodIds.set(foodIds);
-  }
+  recipeFoodResponses = signal<RecipeFoodResponse[]>([]);
+  recipeFoodRequests = signal<RecipeFoodRequest[]>([]);
 
   private getStepsArray(): string[] {
     return this.stepsText()
@@ -80,9 +69,6 @@ export class RecipeProposal implements OnInit {
     this.oven.set(false);
     this.people.set(0);
     this.stepsText.set("");
-    this.selectedFoodNames.set([]);
-    this.selectedFoodIds.set([]);
-    // this.seasonRatio.set(0);
   }
 
   submitProposal() {
@@ -100,7 +86,7 @@ export class RecipeProposal implements OnInit {
       this.restTime() < 0 ||
       this.people() <= 0 ||
       steps.length === 0 ||
-      this.selectedFoodIds().length === 0
+      this.recipeFoodRequests().length === 0
     ) {
       this.errorMessage.set("Veuillez remplir tous les champs obligatoires.");
       return;
@@ -118,14 +104,16 @@ export class RecipeProposal implements OnInit {
         oven: this.oven(),
         people: this.people(),
         steps: steps,
-        foodIds: this.selectedFoodIds(),
+        recipeFoods: this.recipeFoodRequests(),
         // seasonRatio: this.seasonRatio(),
         image: "",
         approved: false,
       })
       .subscribe({
         next: () => {
-          this.successMessage.set("Merci pour votre proposition de recette !");
+          this.successMessage.set(
+            "Merci pour votre proposition de recette ! Un admin la validera prochainement.",
+          );
           this.resetForm();
           this.isSubmitting.set(false);
         },
