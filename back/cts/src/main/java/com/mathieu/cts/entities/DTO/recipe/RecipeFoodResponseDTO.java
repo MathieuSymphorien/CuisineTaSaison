@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeFoodDTO {
+public class RecipeFoodResponseDTO {
 
     private Long foodId;
+    private String foodName;
     private Double quantity;
     private Units unit;
 }

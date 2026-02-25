@@ -22,7 +22,7 @@ public class RecipeResponseDTO {
     private Boolean oven;
     private Integer people;
     private List<String> steps;
-    private List<RecipeFoodDTO> recipeFoods;
+    private List<RecipeFoodResponseDTO> recipeFoods;
     private String image;
     private Double seasonRatio;
     private Boolean approved;

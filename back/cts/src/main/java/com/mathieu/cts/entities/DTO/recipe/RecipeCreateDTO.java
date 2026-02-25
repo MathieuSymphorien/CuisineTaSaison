@@ -62,5 +62,5 @@ public class RecipeCreateDTO {
 
     @NotNull(message = "Les ingrédients sont obligatoires")
     @Size(min = 1, message = "Au moins un ingrédient est requis")
-    private List<RecipeFoodDTO> recipeFoods;
+    private List<RecipeFoodRequestDTO> recipeFoods;
 }

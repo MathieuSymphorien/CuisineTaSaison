@@ -1,8 +1,8 @@
 package com.mathieu.cts.services;
 
-import com.mathieu.cts.entities.DTO.food.FoodResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeCreateDTO;
-import com.mathieu.cts.entities.DTO.recipe.RecipeFoodDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeFoodRequestDTO;
+import com.mathieu.cts.entities.DTO.recipe.RecipeFoodResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeResponseDTO;
 import com.mathieu.cts.entities.DTO.recipe.RecipeUpdateDTO;
 import com.mathieu.cts.entities.Food;
@@ -19,7 +19,6 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RecipeService {
 
-    private final ModelMapper modelMapper;
     private final RecipeRepository recipeRepository;
     private final FoodRepository foodRepository;
 
@@ -138,20 +136,6 @@ public class RecipeService {
         recipe.setPeople(createDTO.getPeople());
         recipe.setSteps(createDTO.getSteps());
 
-        // List<RecipeFood> recipeFoods = new ArrayList<>();
-        // for (RecipeFoodDTO foodToCreate : createDTO.getRecipeFoods()) {
-        //     RecipeFood recipeFood = new RecipeFood();
-        //     Food food = foodRepository
-        //         .findById(foodToCreate.getFoodId())
-        //         .orElseThrow(() ->
-        //             new FoodNotFoundException(foodToCreate.getFoodId())
-        //         );
-        //     recipeFood.setFood(food);
-        //     recipeFood.setQuantity(foodToCreate.getQuantity());
-        //     recipeFood.setUnits(foodToCreate.getUnit());
-        //     recipeFood.setRecipe(recipe);
-        //     recipeFoods.add(recipeFood);
-        // }
         recipe.setRecipeFoods(
             buildRecipeFoods(createDTO.getRecipeFoods(), recipe)
         );
@@ -199,19 +183,6 @@ public class RecipeService {
                 .addAll(
                     buildRecipeFoods(updateDTO.getRecipeFoods(), existingRecipe)
                 );
-            // for (RecipeFoodDTO foodToUpdate : updateDTO.getRecipeFoods()) {
-            //     RecipeFood recipeFood = new RecipeFood();
-            //     Food food = foodRepository
-            //         .findById(foodToUpdate.getFoodId())
-            //         .orElseThrow(() ->
-            //             new FoodNotFoundException(foodToUpdate.getFoodId())
-            //         );
-            //     recipeFood.setFood(food);
-            //     recipeFood.setQuantity(foodToUpdate.getQuantity());
-            //     recipeFood.setUnits(foodToUpdate.getUnit());
-            //     recipeFood.setRecipe(existingRecipe);
-            //     existingRecipe.getRecipeFoods().add(recipeFood);
-            // }
         }
 
         Recipe updatedRecipe = recipeRepository.save(existingRecipe);
@@ -255,11 +226,11 @@ public class RecipeService {
 
     // Méthode générique pour construire la liste des RecipeFood à partir des DTO
     private List<RecipeFood> buildRecipeFoods(
-        List<RecipeFoodDTO> dtos,
+        List<RecipeFoodRequestDTO> dtos,
         Recipe recipe
     ) {
         List<RecipeFood> recipeFoods = new ArrayList<>();
-        for (RecipeFoodDTO foodToBuild : dtos) {
+        for (RecipeFoodRequestDTO foodToBuild : dtos) {
             RecipeFood recipeFood = new RecipeFood();
             Food food = foodRepository
                 .findById(foodToBuild.getFoodId())
@@ -275,17 +246,6 @@ public class RecipeService {
         return recipeFoods;
     }
 
-    // private List<RecipeFood> findRecipeFoods(List<RecipeFood> recipeFoods) {
-    //     return recipeFoods
-    //         .stream()
-    //         .map(recipeFood -> {
-    //             Long foodId = recipeFood.getFood().getId();
-    //             if (foodRepository.findById(foodId) != null)
-    //                 return recipeFood;
-    //         })
-    //         .toList();
-    // }
-
     private RecipeResponseDTO toResponseDTO(Recipe recipe) {
         RecipeResponseDTO dto = new RecipeResponseDTO();
         dto.setId(recipe.getId());
@@ -300,24 +260,16 @@ public class RecipeService {
         dto.setImage(recipe.getImage());
         dto.setSeasonRatio(recipe.getSeasonRatio());
         dto.setApproved(recipe.getApproved());
-        List<RecipeFoodDTO> recipeFoodDTOs = new ArrayList<>();
+        List<RecipeFoodResponseDTO> recipeFoodDTOs = new ArrayList<>();
         for (RecipeFood recipefood : recipe.getRecipeFoods()) {
-            RecipeFoodDTO recipeFoodDTO = new RecipeFoodDTO();
+            RecipeFoodResponseDTO recipeFoodDTO = new RecipeFoodResponseDTO();
             recipeFoodDTO.setFoodId(recipefood.getFood().getId());
+            recipeFoodDTO.setFoodName(recipefood.getFood().getName());
             recipeFoodDTO.setQuantity(recipefood.getQuantity());
             recipeFoodDTO.setUnit(recipefood.getUnits());
             recipeFoodDTOs.add(recipeFoodDTO);
         }
         dto.setRecipeFoods(recipeFoodDTOs);
-        // Convertir les recipe food en FoodResponseDTO
-        // if (recipe.getRecipeFoods() != null) {
-        //     List<FoodResponseDTO> foodDTOs = recipe
-        //         .getRecipeFoods()
-        //         .stream()
-        //         .map(food -> modelMapper.map(food, FoodResponseDTO.class))
-        //         .collect(Collectors.toList());
-        //     dto.setFoods(foodDTOs);
-        // }
 
         return dto;
     }

@@ -53,5 +53,5 @@ public class RecipeUpdateDTO {
     private List<String> steps;
 
     @Size(min = 1, message = "Au moins un ingrédient est requis")
-    private List<RecipeFoodDTO> recipeFoods;
+    private List<RecipeFoodRequestDTO> recipeFoods;
 }
