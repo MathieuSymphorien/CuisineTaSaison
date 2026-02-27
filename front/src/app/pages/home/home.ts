@@ -1,4 +1,5 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, AfterViewInit } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { FoodList } from "src/app/features/foods/components/food-list/food-list";
@@ -10,11 +11,11 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
 
 @Component({
   selector: "app-home",
-  imports: [Header, Footer, FoodList, RecipeCarousel],
+  imports: [Header, Footer, FoodList, RecipeCarousel, RouterLink],
   templateUrl: "./home.html",
   styleUrls: ["./home.css"],
 })
-export class Home {
+export class Home implements AfterViewInit {
   foods: FoodModel[] = [];
   recipes: RecipeModel[] = [];
 
@@ -23,9 +24,21 @@ export class Home {
   private readonly foodApiService = inject(FoodApiService);
   private readonly recipeApiService = inject(RecipeApiService);
 
+  constructor() {
+    const date = new Date();
+    const options: Intl.DateTimeFormatOptions = { month: "long" };
+    this.currentMonth = date.toLocaleDateString("fr-FR", options);
+    this.currentMonth =
+      this.currentMonth.charAt(0).toUpperCase() + this.currentMonth.slice(1);
+  }
+
   ngOnInit(): void {
     this.loadFoods();
     this.loadRecipes();
+  }
+
+  ngAfterViewInit(): void {
+    this.initScrollAnimations();
   }
 
   loadFoods(): void {
@@ -50,11 +63,27 @@ export class Home {
     });
   }
 
-  constructor() {
-    const date = new Date();
-    const options: Intl.DateTimeFormatOptions = { month: "long" };
-    this.currentMonth = date.toLocaleDateString("fr-FR", options);
-    this.currentMonth =
-      this.currentMonth.charAt(0).toUpperCase() + this.currentMonth.slice(1);
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  private initScrollAnimations(): void {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll(".fade-in").forEach((el) => {
+      observer.observe(el);
+    });
   }
 }

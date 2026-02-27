@@ -1,25 +1,56 @@
-<div class="home-page">
-    <app-header></app-header>
-    <div class="home-container">
-        <h1>Bienvenue sur Cuisine Ta Saison !</h1>
-        <p>
-            Ce site est dédié à la cuisine de saison, mettant en avant les
-            aliments de saison pour chaque période de l'année. Découvrez des
-            recettes savoureuses et des informations sur les produits de saison
-            pour vous aider à cuisiner de manière plus durable et délicieuse
-            tout au long de l'année.
-        </p>
-        <p><strong>Ce site est en cours de développement. </strong></p>
+<app-header></app-header>
 
-        <h2>Fruit et Légume de saison</h2>
-        <h3>{{ currentMonth }}</h3>
-        <div class="food-list">
+<!-- Section 1 : Hero -->
+<section class="hero">
+    <div class="hero-decoration hero-circle-1"></div>
+    <div class="hero-decoration hero-circle-2"></div>
+    <div class="hero-decoration hero-circle-3"></div>
+
+    <div class="hero-content fade-in">
+        <h1 class="hero-title">Cuisine ta saison 🍅</h1>
+        <p class="hero-subtitle">
+            Découvrez quels produits sont de saison et l'inspiration pour de
+            savoureuses recettes.
+        </p>
+        <p class="hero-subtitle">
+            <strong>Site web en cours de développement.</strong>
+        </p>
+        <button class="hero-cta" (click)="scrollToSection('foods-section')">
+            Découvrir les produits
+        </button>
+    </div>
+
+    <div class="scroll-indicator" (click)="scrollToSection('foods-section')">
+        <span class="scroll-chevron"></span>
+    </div>
+</section>
+
+<!-- Section 2 : Aliments de saison -->
+<section class="section foods-section" id="foods-section">
+    <div class="section-content">
+        <h2 class="section-title fade-in">
+            En {{ currentMonth }}, c'est la saison de...
+        </h2>
+        <div class="food-list fade-in">
             <app-food-list [foods]="foods"></app-food-list>
         </div>
-        <div class="recipe-list">
-            <app-recipe-carousel [recipes]="recipes"></app-recipe-carousel>
-            <br />
-        </div>
+        <a routerLink="/aliment" class="cta-link fade-in">
+            Voir tous les aliments &rarr;
+        </a>
     </div>
-</div>
+</section>
+
+<!-- Section 3 : Recettes -->
+<section class="section recipes-section">
+    <div class="section-content">
+        <h2 class="section-title fade-in">Des recettes pour en profiter</h2>
+        <div class="recipe-list fade-in">
+            <app-recipe-carousel [recipes]="recipes"></app-recipe-carousel>
+        </div>
+        <a routerLink="/recette" class="cta-link fade-in">
+            Explorer les recettes &rarr;
+        </a>
+    </div>
+</section>
+
 <app-footer></app-footer>
