@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
@@ -11,6 +11,7 @@ import { AuthService } from "src/app/features/auth/services/auth.service";
   selector: "app-header",
   imports: [
     RouterLink,
+    RouterLinkActive,
     MatSidenavModule,
     MatListModule,
     MatIconModule,
@@ -24,9 +25,13 @@ export class Header {
   private readonly authService = inject(AuthService);
   readonly isAdmin = this.authService.isAdmin;
 
-  sidenavOpened = true;
+  sidenavOpened = false;
 
   toggleSidenav() {
     this.sidenavOpened = !this.sidenavOpened;
+  }
+
+  closeSidenav() {
+    this.sidenavOpened = false;
   }
 }

@@ -1,21 +1,51 @@
-<mat-sidenav-container class="sidenav-container">
-    <!-- Sidebar -->
-    <mat-sidenav mode="side" [opened]="sidenavOpened">
+<!-- Burger button flottant -->
+<button
+    class="burger-btn"
+    [class.open]="sidenavOpened"
+    (click)="toggleSidenav()"
+    aria-label="Menu"
+>
+    <span class="burger-bar"></span>
+    <span class="burger-bar"></span>
+    <span class="burger-bar"></span>
+</button>
+
+<!-- Sidebar overlay -->
+<mat-sidenav-container
+    class="sidenav-container"
+    [class.sidenav-opened]="sidenavOpened"
+>
+    <mat-sidenav
+        #sidenav
+        mode="over"
+        [opened]="sidenavOpened"
+        (closedStart)="sidenavOpened = false"
+    >
         <!-- Logo -->
         <div class="logo-container">
-            <a routerLink="/">
+            <a routerLink="/" (click)="closeSidenav()">
                 <img src="/assets/logo.svg" alt="logo" class="logo" />
             </a>
         </div>
 
-        <!-- Navigation avec Material List -->
+        <!-- Navigation -->
         <mat-nav-list>
-            <a mat-list-item routerLink="/aliment" routerLinkActive="active">
+            <a
+                mat-list-item
+                routerLink="/aliment"
+                routerLinkActive="active"
+                (click)="closeSidenav()"
+            >
                 <mat-icon matListItemIcon>restaurant</mat-icon>
                 <span matListItemTitle>Aliment</span>
             </a>
 
-            <a mat-list-item routerLink="/recette" routerLinkActive="active">
+            <a
+                mat-list-item
+                routerLink="/recette"
+                routerLinkActive="active"
+                (click)="closeSidenav()"
+            >
                 <mat-icon matListItemIcon>menu_book</mat-icon>
                 <span matListItemTitle>Recette</span>
             </a>
@@ -24,27 +54,33 @@
                 mat-list-item
                 routerLink="/proposition"
                 routerLinkActive="active"
+                (click)="closeSidenav()"
             >
                 <mat-icon matListItemIcon>lightbulb</mat-icon>
                 <span matListItemTitle>Proposition</span>
             </a>
 
-            <a mat-list-item routerLink="/connexion" routerLinkActive="active">
+            <a
+                mat-list-item
+                routerLink="/connexion"
+                routerLinkActive="active"
+                (click)="closeSidenav()"
+            >
                 <mat-icon matListItemIcon>login</mat-icon>
                 <span matListItemTitle>Login</span>
             </a>
 
             @if (isAdmin()) {
-            <a mat-list-item routerLink="/admin" routerLinkActive="active">
+            <a
+                mat-list-item
+                routerLink="/admin"
+                routerLinkActive="active"
+                (click)="closeSidenav()"
+            >
                 <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
                 <span matListItemTitle>Admin</span>
             </a>
             }
         </mat-nav-list>
     </mat-sidenav>
-
-    <!-- Contenu principal -->
-    <!--<mat-sidenav-content>
-        <router-outlet />
-    </mat-sidenav-content>-->
 </mat-sidenav-container>

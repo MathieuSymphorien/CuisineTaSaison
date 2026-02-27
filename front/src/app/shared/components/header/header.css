@@ -1,10 +1,76 @@
-.sidenav-container {
-    height: 100vh;
+/* ===== Burger Button ===== */
+.burger-btn {
+    position: fixed;
+    top: var(--spacing-lg);
+    left: var(--spacing-lg);
+    z-index: 1100;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-sm);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-normal), background-color var(--transition-normal);
 }
 
-.sidenav {
-    /*width: 250px;*/
+.burger-btn:hover {
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-bg-hover);
+}
+
+.burger-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--color-secondary);
+    border-radius: 2px;
+    transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+/* Animation burger → croix */
+.burger-btn.open .burger-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.burger-btn.open .burger-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-btn.open .burger-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== Sidenav ===== */
+.sidenav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1050;
+    pointer-events: none;
+    background: transparent !important;
+}
+
+:host ::ng-deep .mat-drawer-container {
+    background: transparent !important;
+}
+
+.sidenav-container.sidenav-opened {
+    pointer-events: auto;
+}
+
+mat-sidenav {
+    width: 270px;
+    background-color: var(--color-bg-primary) !important;
     border-right: 1px solid var(--color-border-light);
+    padding-top: var(--spacing-md);
 }
 
 .logo-container {
@@ -19,7 +85,7 @@
     width: auto;
 }
 
-/* Style des liens actifs Material */
+/* Style des liens actifs */
 mat-nav-list a.active {
     background-color: rgba(124, 179, 66, 0.1);
     color: var(--color-primary);
@@ -29,6 +95,10 @@ mat-nav-list a.active {
     }
 }
 
-mat-sidenav-content {
-    padding: var(--spacing-xl);
+mat-nav-list a {
+    transition: background-color var(--transition-fast);
+}
+
+mat-nav-list a:hover {
+    background-color: var(--color-bg-hover);
 }
