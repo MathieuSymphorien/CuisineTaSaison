@@ -9,17 +9,16 @@ import com.mathieu.cts.entities.Months;
 import com.mathieu.cts.exceptions.FoodAlreadyExistsException;
 import com.mathieu.cts.exceptions.FoodNotFoundException;
 import com.mathieu.cts.repositories.FoodRepository;
-
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,11 @@ public class FoodService {
     private final FoodRepository foodRepository;
     private final ModelMapper modelMapper;
 
-    public List<FoodResponseDTO> getAllFoods(String name, FoodCategory category, List<Months> months) {
+    public List<FoodResponseDTO> getAllFoods(
+        String name,
+        FoodCategory category,
+        List<Months> months
+    ) {
         Specification<Food> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -40,34 +43,51 @@ public class FoodService {
             }
 
             if (name != null && !name.isEmpty()) {
-                predicates.add(criteriaBuilder.like(
-                    criteriaBuilder.lower(root.get("name")),
-                    "%" + name.toLowerCase() + "%"
-                ));
+                predicates.add(
+                    criteriaBuilder.like(
+                        criteriaBuilder.lower(root.get("name")),
+                        "%" + name.toLowerCase() + "%"
+                    )
+                );
             }
 
             if (category != null) {
-                predicates.add(criteriaBuilder.equal(root.get("category"), category));
+                predicates.add(
+                    criteriaBuilder.equal(root.get("category"), category)
+                );
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
 
-        return foodRepository.findAll(spec).stream()
+        return foodRepository
+            .findAll(spec)
+            .stream()
             .map(this::toResponseDTO)
             .collect(Collectors.toList());
     }
 
     public List<FoodResponseDTO> getSeasonalFruitsAndVegetables() {
-        Months currentMonth = Months.values()[java.time.LocalDate.now().getMonthValue() - 1];
-        return foodRepository.findSeasonalFruitsAndVegetables(currentMonth)
+        Months currentMonth =
+            Months.values()[java.time.LocalDate.now().getMonthValue() - 1];
+        Months monthBefore =
+            Months.values()[java.time.LocalDate.now().getMonthValue() - 2];
+        Months monthAfter =
+            Months.values()[java.time.LocalDate.now().getMonthValue()];
+        return foodRepository
+            .findSeasonalFruitsAndVegetables(
+                currentMonth,
+                monthBefore,
+                monthAfter
+            )
             .stream()
             .map(this::toResponseDTO)
             .collect(Collectors.toList());
     }
 
     public FoodResponseDTO getFoodById(Long id) {
-        Food food = foodRepository.findById(id)
+        Food food = foodRepository
+            .findById(id)
             .orElseThrow(() -> new FoodNotFoundException(id));
         return toResponseDTO(food);
     }
@@ -89,7 +109,8 @@ public class FoodService {
     }
 
     public FoodResponseDTO updateFood(Long id, FoodUpdateDTO updateDTO) {
-        Food existingFood = foodRepository.findById(id)
+        Food existingFood = foodRepository
+            .findById(id)
             .orElseThrow(() -> new FoodNotFoundException(id));
 
         // Mise à jour partielle : seuls les champs non-null sont mis à jour
@@ -117,13 +138,16 @@ public class FoodService {
     // ===== Méthodes Admin =====
 
     public List<FoodResponseDTO> getPendingFoods() {
-        return foodRepository.findByApprovedFalse().stream()
+        return foodRepository
+            .findByApprovedFalse()
+            .stream()
             .map(this::toResponseDTO)
             .collect(Collectors.toList());
     }
 
     public FoodResponseDTO approveFood(Long id) {
-        Food food = foodRepository.findById(id)
+        Food food = foodRepository
+            .findById(id)
             .orElseThrow(() -> new FoodNotFoundException(id));
         food.setApproved(true);
         Food savedFood = foodRepository.save(food);
