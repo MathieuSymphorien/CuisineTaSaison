@@ -13,18 +13,18 @@ import { MatTabsModule } from "@angular/material/tabs";
       <app-header></app-header>
       <div class="proposal-container">
         <div class="proposal-header">
-          <h1>Proposer un produit ou une recette</h1>
+          <h1>Proposer une recette ou un produit</h1>
           <p>Partagez vos découvertes de saison avec la communauté 🌱</p>
         </div>
         <mat-tab-group class="proposal-tabs">
-          <mat-tab label="Propositions d'ingrédients">
-            <div class="tab-content">
-              <app-food-proposal></app-food-proposal>
-            </div>
-          </mat-tab>
           <mat-tab label="Propositions de recettes">
             <div class="tab-content">
               <app-recipe-proposal></app-recipe-proposal>
+            </div>
+          </mat-tab>
+          <mat-tab label="Propositions d'ingrédients">
+            <div class="tab-content">
+              <app-food-proposal></app-food-proposal>
             </div>
           </mat-tab>
         </mat-tab-group>
