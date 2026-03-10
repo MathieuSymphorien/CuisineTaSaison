@@ -1,5 +1,4 @@
 <app-header></app-header>
-
 <!-- Section 1 : Hero -->
 <section class="hero">
     <div class="hero-decoration hero-circle-1"></div>
@@ -7,10 +6,13 @@
     <div class="hero-decoration hero-circle-3"></div>
 
     <div class="hero-content fade-in">
-        <h1 class="hero-title">Cuisine ta saison 🍅</h1>
+        <h1 class="hero-title">Cuisine ta saison {{ emoji }}</h1>
         <p class="hero-subtitle">
             Découvrez quels produits sont de saison et l'inspiration pour de
             savoureuses recettes.
+        </p>
+        <p class="hero-subtitle">
+            <strong>{{currentSeason}}</strong>
         </p>
         <p class="hero-subtitle">
             <strong>Site web en cours de développement.</strong>

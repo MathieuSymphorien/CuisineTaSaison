@@ -18,8 +18,9 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
 export class Home implements AfterViewInit {
   foods: FoodModel[] = [];
   recipes: RecipeModel[] = [];
-
+  currentSeason: string;
   currentMonth: string;
+  emoji: string;
 
   private readonly foodApiService = inject(FoodApiService);
   private readonly recipeApiService = inject(RecipeApiService);
@@ -30,6 +31,8 @@ export class Home implements AfterViewInit {
     this.currentMonth = date.toLocaleDateString("fr-FR", options);
     this.currentMonth =
       this.currentMonth.charAt(0).toUpperCase() + this.currentMonth.slice(1);
+    this.currentSeason = document.body.getAttribute("data-season") || "";
+    this.emoji = document.body.getAttribute("emoji-season") || "";
   }
 
   ngOnInit(): void {
@@ -79,7 +82,7 @@ export class Home implements AfterViewInit {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     document.querySelectorAll(".fade-in").forEach((el) => {
