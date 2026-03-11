@@ -19,6 +19,7 @@ import { Login } from "src/app/features/auth/components/login/login";
   `,
   styles: `
     .login-general {
+      background: var(--hero-gradient-head);
       display: flex;
     }
 

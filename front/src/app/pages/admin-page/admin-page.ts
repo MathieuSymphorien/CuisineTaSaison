@@ -37,6 +37,7 @@ import { RecipeModel } from "src/app/shared/models/recipe.model";
   `,
   styles: `
     .admin-page {
+      background: var(--hero-gradient-head);
       display: flex;
     }
     .admin-container {

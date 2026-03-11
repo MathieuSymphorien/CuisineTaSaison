@@ -1,5 +1,6 @@
 .food-page-general {
     display: flex;
+    background: var(--hero-gradient-head);
 }
 
 .food-page {

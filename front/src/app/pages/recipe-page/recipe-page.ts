@@ -32,6 +32,7 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
   styles: [
     `
       .recipe-general {
+        background: var(--hero-gradient-head);
         display: flex;
       }
       .recipe-page {

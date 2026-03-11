@@ -34,6 +34,7 @@ import { MatTabsModule } from "@angular/material/tabs";
   `,
   styles: `
     .proposal-general {
+      background: var(--hero-gradient-head);
       display: flex;
     }
 
