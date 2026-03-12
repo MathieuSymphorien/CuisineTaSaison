@@ -10,32 +10,42 @@ import { MatTabsModule } from "@angular/material/tabs";
   imports: [Header, Footer, FoodProposal, RecipeProposal, MatTabsModule],
   template: `
     <div class="proposal-general">
-      <app-header></app-header>
-      <div class="proposal-container">
-        <div class="proposal-header">
-          <h1>Proposer une recette ou un produit</h1>
-          <p>Partagez vos découvertes de saison avec la communauté 🌱</p>
+      <div class="proposal-content">
+        <app-header></app-header>
+        <div class="proposal-container">
+          <div class="proposal-header">
+            <h1>Proposer une recette ou un produit</h1>
+            <p>Partagez vos découvertes de saison avec la communauté 🌱</p>
+          </div>
+          <mat-tab-group class="proposal-tabs">
+            <mat-tab label="Propositions de recettes">
+              <div class="tab-content">
+                <app-recipe-proposal></app-recipe-proposal>
+              </div>
+            </mat-tab>
+            <mat-tab label="Propositions d'ingrédients">
+              <div class="tab-content">
+                <app-food-proposal></app-food-proposal>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
         </div>
-        <mat-tab-group class="proposal-tabs">
-          <mat-tab label="Propositions de recettes">
-            <div class="tab-content">
-              <app-recipe-proposal></app-recipe-proposal>
-            </div>
-          </mat-tab>
-          <mat-tab label="Propositions d'ingrédients">
-            <div class="tab-content">
-              <app-food-proposal></app-food-proposal>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
+      </div>
+      <div>
+        <app-footer></app-footer>
       </div>
     </div>
-    <app-footer></app-footer>
   `,
   styles: `
     .proposal-general {
       background: var(--hero-gradient-head);
       display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .proposal-content {
+      flex-grow: 1;
     }
 
     .proposal-container {

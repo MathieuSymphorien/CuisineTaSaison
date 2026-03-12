@@ -12,34 +12,45 @@ import { RecipeModel } from "src/app/shared/models/recipe.model";
   imports: [Header, Footer, FoodList, RecipeList],
   template: `
     <div class="admin-page">
-      <app-header></app-header>
-      <div class="admin-container">
-        <div class="admin-card">
-          <h1>Panneau d'administration</h1>
-        </div>
-        <div>
-          <h1>Aliments</h1>
-          <app-food-list
-            [foods]="foods"
-            (foodChanged)="onFoodChanged($event)"
-          ></app-food-list>
-        </div>
-        <div>
-          <h1>Recettes</h1>
-          <app-recipe-list
-            [recipes]="recipes"
-            (recipesChanged)="onRecipeChanged($event)"
-          ></app-recipe-list>
+      <div class="admin-content">
+        <app-header></app-header>
+        <div class="admin-container">
+          <div class="admin-card">
+            <h1>Panneau d'administration</h1>
+          </div>
+          <div>
+            <h1>Aliments</h1>
+            <app-food-list
+              [foods]="foods"
+              (foodChanged)="onFoodChanged($event)"
+            ></app-food-list>
+          </div>
+          <div>
+            <h1>Recettes</h1>
+            <app-recipe-list
+              [recipes]="recipes"
+              (recipesChanged)="onRecipeChanged($event)"
+            ></app-recipe-list>
+          </div>
         </div>
       </div>
+      <div>
+        <app-footer></app-footer>
+      </div>
     </div>
-    <app-footer></app-footer>
   `,
   styles: `
     .admin-page {
       background: var(--hero-gradient-head);
       display: flex;
+      min-height: 100vh;
+      flex-direction: column;
     }
+
+    .admin-content {
+      flex-grow: 1;
+    }
+
     .admin-container {
       max-width: 1200px;
       margin: 0 auto;

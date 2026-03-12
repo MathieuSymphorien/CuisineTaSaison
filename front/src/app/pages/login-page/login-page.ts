@@ -14,13 +14,15 @@ import { Login } from "src/app/features/auth/components/login/login";
       <div class="login-container">
         <app-login></app-login>
       </div>
+      <app-footer></app-footer>
     </div>
-    <app-footer></app-footer>
   `,
   styles: `
     .login-general {
       background: var(--hero-gradient-head);
       display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     .login-container {
