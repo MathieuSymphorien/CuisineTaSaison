@@ -51,14 +51,16 @@ import { MatTabsModule } from "@angular/material/tabs";
 
     .proposal-header h1 {
       color: var(--color-secondary);
-      font-size: 28px;
+      font-size: clamp(1.25rem, 2vw, 2rem);
+      /*font-size: 28px;*/
       margin-bottom: var(--spacing-sm);
       font-weight: 600;
     }
 
     .proposal-header p {
       color: var(--color-text-light);
-      font-size: 16px;
+      /*font-size: 16px;*/
+      font-size: clamp(0.875rem, 1.5vw, 1.125rem);
     }
 
     .proposal-tabs {
