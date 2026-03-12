@@ -15,25 +15,34 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
   imports: [Header, Footer, RecipeList, FilterRecipe],
   template: `
     <div class="recipe-general">
-      <app-header></app-header>
+      <div class="recipe-content">
+        <app-header></app-header>
 
-      <div class="recipe-page">
-        <div class="filters-container">
-          <app-filter-recipe (filtersChange)="applyFilters($event)">
-          </app-filter-recipe>
-        </div>
-        <div class="recipes-container">
-          <app-recipe-list [recipes]="recipes"></app-recipe-list>
+        <div class="recipe-page">
+          <div class="filters-container">
+            <app-filter-recipe (filtersChange)="applyFilters($event)">
+            </app-filter-recipe>
+          </div>
+          <div class="recipes-container">
+            <app-recipe-list [recipes]="recipes"></app-recipe-list>
+          </div>
         </div>
       </div>
+      <div>
+        <app-footer></app-footer>
+      </div>
     </div>
-    <app-footer></app-footer>
   `,
   styles: [
     `
       .recipe-general {
         background: var(--hero-gradient-head);
         display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .recipe-content {
+        flex-grow: 1;
       }
       .recipe-page {
         display: flex;
