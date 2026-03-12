@@ -100,6 +100,7 @@ export class FilterRecipe implements OnInit {
   }
 
   private updateFilters(): void {
+    console.log(this.filters());
     this.filtersChange.emit(this.filters());
   }
 }

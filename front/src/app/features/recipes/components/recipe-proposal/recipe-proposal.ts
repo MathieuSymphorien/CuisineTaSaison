@@ -105,9 +105,6 @@ export class RecipeProposal {
         people: this.people(),
         steps: steps,
         recipeFoods: this.recipeFoodRequests(),
-        // seasonRatio: this.seasonRatio(),
-        image: "",
-        approved: false,
       })
       .subscribe({
         next: () => {

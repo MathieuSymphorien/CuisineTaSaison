@@ -16,18 +16,6 @@ export interface RecipeModel {
   approved: boolean;
 }
 
-export interface RecipeModel2 {
-  name: string;
-  description: string;
-  preparationTime: number; // minutes
-  bakeTime: number; // minutes
-  restTime: number; // minutes
-  oven: boolean;
-  people: number;
-  steps: string[];
-  recipeFoods: RecipeFoodRequest[];
-}
-
 export interface CreateRecipeDto {
   name: string;
   description: string;
@@ -38,9 +26,18 @@ export interface CreateRecipeDto {
   people: number;
   steps: string[];
   recipeFoods: RecipeFoodRequest[];
-  image: string;
-  // seasonRatio?: number;
-  approved: boolean;
+}
+
+export interface UpdateRecipeDto {
+  name: string;
+  description: string;
+  preparationTime: number;
+  bakeTime: number;
+  restTime: number;
+  oven: boolean;
+  people: number;
+  steps: string[];
+  recipeFoods: RecipeFoodRequest[];
 }
 
 export interface RecipeFoodRequest {
