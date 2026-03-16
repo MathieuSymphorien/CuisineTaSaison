@@ -20,7 +20,6 @@ import jakarta.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +59,7 @@ public class RecipeService {
             if (timeMin != null && timeMin > 0) {
                 predicates.add(
                     criteriaBuilder.greaterThanOrEqualTo(
-                        root.get("time"),
+                        root.get("preparationTime"),
                         timeMin
                     )
                 );
@@ -69,7 +68,10 @@ public class RecipeService {
             // Filtre par temps max
             if (timeMax != null && timeMax > 0) {
                 predicates.add(
-                    criteriaBuilder.lessThanOrEqualTo(root.get("time"), timeMax)
+                    criteriaBuilder.lessThanOrEqualTo(
+                        root.get("preparationTime"),
+                        timeMax
+                    )
                 );
             }
 
@@ -80,16 +82,22 @@ public class RecipeService {
 
             // Filtre par mois (recettes contenant des aliments de saison)
             if (months != null && !months.isEmpty()) {
-                Join<Recipe, Food> foodsJoin = root.join("foods");
-                Join<Food, Months> monthsJoin = foodsJoin.join("months");
+                Join<Recipe, RecipeFood> recipeFoodsJoin = root.join(
+                    "recipeFoods"
+                );
+                Join<RecipeFood, Food> foodJoin = recipeFoodsJoin.join("food");
+                Join<Food, Months> monthsJoin = foodJoin.join("months");
                 predicates.add(monthsJoin.in(months));
                 query.distinct(true);
             }
 
             // Filtre par ingrédients à inclure (recettes contenant ces aliments)
             if (includeFoodIds != null && !includeFoodIds.isEmpty()) {
-                Join<Recipe, Food> includeFoodsJoin = root.join("foods");
-                predicates.add(includeFoodsJoin.get("id").in(includeFoodIds));
+                Join<Recipe, RecipeFood> recipeFoodsJoin = root.join(
+                    "recipeFoods"
+                );
+                Join<RecipeFood, Food> foodJoin = recipeFoodsJoin.join("food");
+                predicates.add(foodJoin.get("id").in(includeFoodIds));
                 query.distinct(true);
             }
 
@@ -97,9 +105,10 @@ public class RecipeService {
             if (excludeFoodIds != null && !excludeFoodIds.isEmpty()) {
                 Subquery<Long> subquery = query.subquery(Long.class);
                 Root<Recipe> subqueryRoot = subquery.from(Recipe.class);
-                Join<Recipe, Food> subqueryFoodJoin = subqueryRoot.join(
-                    "foods"
-                );
+                Join<Recipe, RecipeFood> subqueryRecipeFoodsJoin =
+                    subqueryRoot.join("recipeFoods");
+                Join<RecipeFood, Food> subqueryFoodJoin =
+                    subqueryRecipeFoodsJoin.join("food");
                 subquery
                     .select(subqueryRoot.get("id"))
                     .where(subqueryFoodJoin.get("id").in(excludeFoodIds));
