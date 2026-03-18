@@ -22,21 +22,20 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = localStorage.getItem("admin_token");
     let authReq = req;
 
-    // console.log("[Interceptor] URL:", req.url);
-    // console.log("[Interceptor] Token présent:", !!token);
-
     if (token) {
       authReq = req.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
       });
-      // console.log("[Interceptor] Header ajouté:", `Bearer ${token.substring(0, 20)}...`);
     }
 
     return next.handle(authReq).pipe(
       catchError((err: HttpErrorResponse) => {
-        if (err.status === 401 || err.status === 403) {
-          this.router.navigate([""]);
+        if (err.status === 401) {
+          // Token expiré ou invalide : on nettoie et on redirige vers le login
+          localStorage.removeItem("admin_token");
+          this.router.navigate(["/connexion"]);
         }
+        // 403 = authentifié mais pas autorisé → on laisse le composant gérer l'erreur
         return throwError(() => err);
       }),
     );
