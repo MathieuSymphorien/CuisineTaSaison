@@ -8,7 +8,7 @@ export interface SelectOption<T> {
 }
 
 @Component({
-  selector: "app-single-select",
+  selector: "app-multi-select",
   imports: [MatSelectModule, ReactiveFormsModule],
   standalone: true,
   template: `
@@ -16,7 +16,7 @@ export interface SelectOption<T> {
       <mat-label>{{ label() }}</mat-label>
       <mat-select
         [formControl]="control"
-        single
+        multiple
         (selectionChange)="valueChange.emit(control.value)"
       >
         @for (option of options(); track option.value) {
@@ -26,10 +26,10 @@ export interface SelectOption<T> {
     </mat-form-field>
   `,
 })
-export class SingleSelectComponent<T> {
+export class MultiSelectComponent<T> {
   label = input<string>("");
   options = input<SelectOption<T>[]>([]);
-  valueChange = output<T>();
+  valueChange = output<T[]>();
 
-  control = new FormControl<T>("" as T, { nonNullable: true });
+  control = new FormControl<T[]>([] as T[], { nonNullable: true });
 }

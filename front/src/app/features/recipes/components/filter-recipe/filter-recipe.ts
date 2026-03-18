@@ -1,9 +1,18 @@
-import { Component, inject, OnInit, output, signal } from "@angular/core";
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from "@angular/core";
 import { FilterStringComponent } from "src/app/shared/components/filter/filter-string/filter-string";
 import { FilterBooleanComponent } from "src/app/shared/components/filter/filter-boolean/filter-boolean";
-import { FilterMultiSelectComponent } from "src/app/shared/components/filter/filter-multi-select/filter-multi-select";
+import {
+  MultiSelectComponent,
+  SelectOption,
+} from "src/app/shared/components/filter/multi-select/multi-select";
 import { FilterRangeComponent } from "src/app/shared/components/filter/filter-range/filter-range";
-import { FilterMonthComponent } from "src/app/shared/components/filter/filter-month/filter-month";
 import { Month, MONTHS } from "src/app/shared/models/month.model";
 import { FoodApiService } from "src/app/features/foods/services/food-api.service";
 import { FoodModel } from "src/app/shared/models/food.model";
@@ -23,9 +32,8 @@ export interface RecipeFilterValues {
   imports: [
     FilterStringComponent,
     FilterBooleanComponent,
-    FilterMultiSelectComponent,
+    MultiSelectComponent,
     FilterRangeComponent,
-    FilterMonthComponent,
   ],
   templateUrl: "./filter-recipe.html",
   styleUrls: ["./filter-recipe.css"],
@@ -33,10 +41,16 @@ export interface RecipeFilterValues {
 export class FilterRecipe implements OnInit {
   private readonly foodApiService = inject(FoodApiService);
 
-  searchText = signal("");
   foods = signal<FoodModel[]>([]);
-  ingredientNames = signal<string[]>([]);
-  months = signal<Month[]>(Object.keys(MONTHS) as Month[]);
+
+  foodOptions = computed<SelectOption<number>[]>(() =>
+    this.foods().map((f) => ({ label: f.name, value: f.id })),
+  );
+
+  monthOptions: SelectOption<Month>[] = MONTHS.map((m) => ({
+    label: m,
+    value: m,
+  }));
 
   filtersChange = output<RecipeFilterValues>();
   filters = signal<RecipeFilterValues>({
@@ -54,17 +68,8 @@ export class FilterRecipe implements OnInit {
 
   private loadFoods(): void {
     this.foodApiService.getAllFoods().subscribe({
-      next: (foods) => {
-        this.foods.set(foods);
-        this.ingredientNames.set(foods.map((f) => f.name));
-      },
+      next: (foods) => this.foods.set(foods),
     });
-  }
-
-  private getFoodIdsByNames(names: string[]): number[] {
-    return this.foods()
-      .filter((f) => names.includes(f.name))
-      .map((f) => f.id);
   }
 
   onSearchChange(value: string): void {
@@ -77,20 +82,18 @@ export class FilterRecipe implements OnInit {
     this.updateFilters();
   }
 
-  onIncludeIngredientsChange(value: string[]): void {
-    const foodIds = this.getFoodIdsByNames(value);
-    this.filters.update((f) => ({ ...f, includeFoodIds: foodIds }));
+  onIncludeFoodsChange(value: number[]): void {
+    this.filters.update((f) => ({ ...f, includeFoodIds: value }));
     this.updateFilters();
   }
 
-  onExcludeIngredientsChange(value: string[]): void {
-    const foodIds = this.getFoodIdsByNames(value);
-    this.filters.update((f) => ({ ...f, excludeFoodIds: foodIds }));
+  onExludeFoodsChange(value: number[]): void {
+    this.filters.update((f) => ({ ...f, excludeFoodIds: value }));
     this.updateFilters();
   }
 
   onPreparationTimeChange(value: { min: number; max: number }): void {
-    this.filters.update((f) => ({ ...f, preparationTime: value }));
+    this.filters.update((f) => ({ ...f, time: value }));
     this.updateFilters();
   }
 
@@ -100,7 +103,6 @@ export class FilterRecipe implements OnInit {
   }
 
   private updateFilters(): void {
-    console.log(this.filters());
     this.filtersChange.emit(this.filters());
   }
 }

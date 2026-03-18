@@ -8,20 +8,19 @@
     </div>
 
     <div class="filter-card">
-        <app-filter-select
+        <app-single-select
             label="Catégorie *"
-            [options]="foodCategories"
-            [value]="category()"
+            [options]="categoryOptions"
             (valueChange)="onCategoryChange($event)"
-        ></app-filter-select>
+        ></app-single-select>
     </div>
 
     <div>
-        <app-filter-month
+        <app-multi-select
             label="Mois de disponibilité *"
-            [value]="months()"
+            [options]="monthOptions"
             (valueChange)="onMonthsChange($event)"
-        ></app-filter-month>
+        ></app-multi-select>
     </div>
 
     <button

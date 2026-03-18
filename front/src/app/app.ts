@@ -41,7 +41,6 @@ export class App {
   }
 
   setEmoji(): string {
-    console.log(this.season);
     switch (this.season) {
       case "Printemps":
         if (Math.random() < 0.2) {
@@ -80,7 +79,6 @@ export class App {
           return "🍎";
         }
       case "Hiver":
-        console.log(Math.random());
         if (Math.random() < 0.1) {
           return "❄️";
         } else if (Math.random() < 0.2) {

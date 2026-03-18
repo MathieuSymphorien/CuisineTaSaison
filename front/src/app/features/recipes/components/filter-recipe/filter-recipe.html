@@ -17,19 +17,19 @@
         </div>
 
         <div class="filter-card">
-            <app-filter-multi-select
-                label="Ingrédients à inclure"
-                [options]="ingredientNames()"
-                (valueChange)="onIncludeIngredientsChange($event)"
-            ></app-filter-multi-select>
+            <app-multi-select
+                label="Aliments à inclure"
+                [options]="foodOptions()"
+                (valueChange)="onIncludeFoodsChange($event)"
+            ></app-multi-select>
         </div>
 
         <div class="filter-card">
-            <app-filter-multi-select
-                label="Ingrédients à exclure"
-                [options]="ingredientNames()"
-                (valueChange)="onExcludeIngredientsChange($event)"
-            ></app-filter-multi-select>
+            <app-multi-select
+                label="Aliments à exclure"
+                [options]="foodOptions()"
+                (valueChange)="onExludeFoodsChange($event)"
+            ></app-multi-select>
         </div>
 
         <div class="filter-card">
@@ -40,10 +40,11 @@
         </div>
 
         <div class="filter-card wide">
-            <app-filter-month
+            <app-multi-select
                 label="Mois"
+                [options]="monthOptions"
                 (valueChange)="onMonthsChange($event)"
-            ></app-filter-month>
+            ></app-multi-select>
         </div>
     </div>
 </div>

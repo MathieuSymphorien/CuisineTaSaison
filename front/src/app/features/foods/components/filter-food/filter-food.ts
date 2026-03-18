@@ -1,8 +1,10 @@
 import { FoodCategory } from "../../../../shared/models/food.model";
 import { Component, output, signal } from "@angular/core";
-import { Month } from "src/app/shared/models/month.model";
-import { FilterMonthComponent } from "src/app/shared/components/filter/filter-month/filter-month";
-import { FilterMultiSelectComponent } from "src/app/shared/components/filter/filter-multi-select/filter-multi-select";
+import { Month, MONTHS } from "src/app/shared/models/month.model";
+import {
+  MultiSelectComponent,
+  SelectOption,
+} from "src/app/shared/components/filter/multi-select/multi-select";
 import { FilterStringComponent } from "src/app/shared/components/filter/filter-string/filter-string";
 
 export interface FoodFilterValues {
@@ -11,13 +13,20 @@ export interface FoodFilterValues {
   months: Month[];
 }
 
+const FOOD_CATEGORIES: FoodCategory[] = [
+  "LEGUME",
+  "FRUIT",
+  "CEREALE",
+  "VIANDE",
+  "POISSON",
+  "LACTE",
+  "EPICE",
+  "AUTRE",
+];
+
 @Component({
   selector: "app-filter-food",
-  imports: [
-    FilterStringComponent,
-    FilterMonthComponent,
-    FilterMultiSelectComponent,
-  ],
+  imports: [FilterStringComponent, MultiSelectComponent],
   styleUrls: ["./filter-food.css"],
   template: `
     <div class="filters-container">
@@ -32,18 +41,19 @@ export interface FoodFilterValues {
         </div>
 
         <div class="filter-card wide">
-          <app-filter-month
+          <app-multi-select
             label="Mois de disponibilité"
+            [options]="monthOptions"
             (valueChange)="onMonthsChange($event)"
-          ></app-filter-month>
+          ></app-multi-select>
         </div>
 
         <div class="filter-card">
-          <app-filter-multi-select
+          <app-multi-select
             label="Catégories"
-            [options]="foodCategory()"
+            [options]="categoryOptions"
             (valueChange)="onCategoryChange($event)"
-          ></app-filter-multi-select>
+          ></app-multi-select>
         </div>
       </div>
     </div>
@@ -51,9 +61,15 @@ export interface FoodFilterValues {
 })
 export class FilterFood {
   filtersChange = output<FoodFilterValues>();
-  foodCategory = signal<string[]>(
-    "LEGUME,FRUIT,CEREALE,VIANDE,POISSON,LACTE,EPICE,AUTRE".split(","),
-  );
+
+  monthOptions: SelectOption<Month>[] = MONTHS.map((m) => ({
+    label: m,
+    value: m,
+  }));
+  categoryOptions: SelectOption<FoodCategory>[] = FOOD_CATEGORIES.map((c) => ({
+    label: c,
+    value: c,
+  }));
 
   filters = signal<FoodFilterValues>({
     name: "",
@@ -71,8 +87,8 @@ export class FilterFood {
     this.updateFilters();
   }
 
-  onCategoryChange(value: string[]): void {
-    this.filters.update((f) => ({ ...f, categories: value as FoodCategory[] }));
+  onCategoryChange(value: FoodCategory[]): void {
+    this.filters.update((f) => ({ ...f, categories: value }));
     this.updateFilters();
   }
 
