@@ -3,7 +3,7 @@
         <app-filter-string
             label="Nom de l'aliment *"
             [value]="name()"
-            (valueChange)="onSearchChange($event)"
+            (valueChange)="name.set($event)"
         ></app-filter-string>
     </div>
 
@@ -11,7 +11,8 @@
         <app-single-select
             label="Catégorie *"
             [options]="categoryOptions"
-            (valueChange)="onCategoryChange($event)"
+            [value]="category()"
+            (valueChange)="category.set($event)"
         ></app-single-select>
     </div>
 
@@ -19,7 +20,8 @@
         <app-multi-select
             label="Mois de disponibilité *"
             [options]="monthOptions"
-            (valueChange)="onMonthsChange($event)"
+            [value]="months()"
+            (valueChange)="months.set($event)"
         ></app-multi-select>
     </div>
 

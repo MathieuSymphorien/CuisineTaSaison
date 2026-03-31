@@ -1,6 +1,5 @@
 import { Component, input, output } from "@angular/core";
 import { MatSelectModule } from "@angular/material/select";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
 
 export interface SelectOption<T> {
   label: string;
@@ -9,15 +8,14 @@ export interface SelectOption<T> {
 
 @Component({
   selector: "app-single-select",
-  imports: [MatSelectModule, ReactiveFormsModule],
+  imports: [MatSelectModule],
   standalone: true,
   template: `
     <mat-form-field>
       <mat-label>{{ label() }}</mat-label>
       <mat-select
-        [formControl]="control"
-        single
-        (selectionChange)="valueChange.emit(control.value)"
+        [value]="value()"
+        (selectionChange)="valueChange.emit($event.value)"
       >
         @for (option of options(); track option.value) {
           <mat-option [value]="option.value">{{ option.label }}</mat-option>
@@ -29,7 +27,6 @@ export interface SelectOption<T> {
 export class SingleSelectComponent<T> {
   label = input<string>("");
   options = input<SelectOption<T>[]>([]);
+  value = input<T | null>(null);
   valueChange = output<T>();
-
-  control = new FormControl<T>("" as T, { nonNullable: true });
 }

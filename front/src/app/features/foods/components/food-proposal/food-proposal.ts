@@ -34,21 +34,12 @@ export class FoodProposal {
     value: m,
   }));
 
-  categoryOptions: SelectOption<FoodCategory>[] = FOOD_CATEGORIES.map((c) => ({
-    label: c,
-    value: c,
-  }));
-
-  readonly foodCategories: FoodCategory[] = [
-    "LEGUME",
-    "FRUIT",
-    "CEREALE",
-    "VIANDE",
-    "POISSON",
-    "LACTE",
-    "EPICE",
-    "AUTRE",
-  ];
+  readonly categoryOptions: SelectOption<FoodCategory>[] = FOOD_CATEGORIES.map(
+    (c) => ({
+      label: c,
+      value: c,
+    }),
+  );
 
   name = signal("");
   category = signal<FoodCategory | null>(null);
@@ -58,24 +49,10 @@ export class FoodProposal {
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
 
-  onCategoryChange(event: FoodCategory) {
-    this.category.set(event || null);
-  }
-
-  onMonthsChange(event: Month[]) {
-    this.months.set(event);
-  }
-
-  onSearchChange(event: string) {
-    this.name.set(event);
-  }
-
   submitProposal() {
-    // Reset des messages
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    // Validation
     if (!this.name() || !this.category()) {
       this.errorMessage.set("Veuillez remplir le nom et la catégorie");
       return;
