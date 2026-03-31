@@ -69,6 +69,8 @@ export class RecipeProposal {
     this.oven.set(false);
     this.people.set(0);
     this.stepsText.set("");
+    this.recipeFoodResponses.set([]);
+    this.recipeFoodRequests.set([]);
   }
 
   submitProposal() {
