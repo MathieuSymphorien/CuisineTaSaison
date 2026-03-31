@@ -70,16 +70,9 @@ public class FoodService {
     public List<FoodResponseDTO> getSeasonalFruitsAndVegetables() {
         Months currentMonth =
             Months.values()[java.time.LocalDate.now().getMonthValue() - 1];
-        Months monthBefore =
-            Months.values()[java.time.LocalDate.now().getMonthValue() - 2];
-        Months monthAfter =
-            Months.values()[java.time.LocalDate.now().getMonthValue()];
+
         return foodRepository
-            .findSeasonalFruitsAndVegetables(
-                currentMonth,
-                monthBefore,
-                monthAfter
-            )
+            .findSeasonalFruitsAndVegetables(currentMonth)
             .stream()
             .map(this::toResponseDTO)
             .collect(Collectors.toList());
