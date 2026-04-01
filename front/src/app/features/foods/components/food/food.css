@@ -12,8 +12,7 @@
         transform var(--transition-fast),
         box-shadow var(--transition-fast);
     cursor: pointer;
-    min-width: 180px;
-    max-width: 220px;
+    width: 100%;
 }
 
 .food-card:hover {

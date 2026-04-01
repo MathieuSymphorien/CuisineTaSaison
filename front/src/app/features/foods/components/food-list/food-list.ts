@@ -18,14 +18,18 @@ import { FoodModel } from "src/app/shared/models/food.model";
   `,
   styles: `
     .food-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: var(--spacing-lg);
-      align-items: flex-start;
-      max-width: 1200px;
-      margin: 0 auto;
       padding: var(--spacing-md);
+    }
+
+    @media (max-width: 480px) {
+      .food-list {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+      }
     }
   `,
 })

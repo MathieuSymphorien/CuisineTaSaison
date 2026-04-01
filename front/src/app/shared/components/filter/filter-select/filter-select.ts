@@ -11,7 +11,7 @@ export interface SelectOption<T> {
   imports: [MatSelectModule],
   standalone: true,
   template: `
-    <mat-form-field>
+    <mat-form-field style="width: 100%">
       <mat-label>{{ label() }}</mat-label>
       <mat-select
         [value]="value()"

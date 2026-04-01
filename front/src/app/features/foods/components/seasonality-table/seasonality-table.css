@@ -40,6 +40,24 @@
     font-size: 14px;
 }
 
+@media (max-width: 968px) {
+    .seasonality-card {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .seasonality-table th,
+    .seasonality-table td {
+        padding: 4px;
+        font-size: 11px;
+    }
+
+    .seasonality-header h2 {
+        font-size: 18px;
+    }
+}
+
 .seasonality-table thead th {
     background: rgba(124, 179, 66, 0.1);
     color: var(--color-secondary);

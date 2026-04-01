@@ -1,5 +1,5 @@
 import { FoodModel } from "src/app/shared/models/food.model";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { FoodList } from "src/app/features/foods/components/food-list/food-list";
@@ -18,7 +18,13 @@ import { SeasonalityTable } from "src/app/features/foods/components/seasonality-
     <div class="food-page-general">
       <app-header></app-header>
       <div class="food-page">
-        <div class="filters-container">
+        <button
+          class="filters-toggle"
+          (click)="isFiltersOpen.set(!isFiltersOpen())"
+        >
+          <span class="burger-label">Filtres</span>
+        </button>
+        <div class="filters-container" [class.open]="isFiltersOpen()">
           <app-filter-food
             (filtersChange)="onFilterChange($event)"
           ></app-filter-food>
@@ -36,6 +42,7 @@ import { SeasonalityTable } from "src/app/features/foods/components/seasonality-
 })
 export class FoodPage implements OnInit {
   foods: FoodModel[] = [];
+  isFiltersOpen = signal(false);
 
   private readonly foodApiService = inject(FoodApiService);
 
