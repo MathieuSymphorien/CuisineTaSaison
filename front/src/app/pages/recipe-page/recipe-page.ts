@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { RecipeModel } from "src/app/shared/models/recipe.model";
@@ -19,7 +19,13 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
         <app-header></app-header>
 
         <div class="recipe-page">
-          <div class="filters-container">
+          <button
+            class="filters-toggle"
+            (click)="isFiltersOpen.set(!isFiltersOpen())"
+          >
+            <span class="burger-label">Filtres</span>
+          </button>
+          <div class="filters-container" [class.open]="isFiltersOpen()">
             <app-filter-recipe (filtersChange)="applyFilters($event)">
             </app-filter-recipe>
           </div>
@@ -46,14 +52,16 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
       }
       .recipe-page {
         display: flex;
-        padding: 2rem;
-        gap: 2rem;
+        padding: var(--spacing-xl);
+        gap: var(--spacing-xl);
         max-width: 1400px;
         margin: 0 auto;
         min-height: calc(100vh - 200px);
+        width: 100%;
+        box-sizing: border-box;
       }
       .filters-container {
-        flex: 0 0 320px;
+        flex: 0 0 300px;
         background-color: var(--color-bg-secondary);
         border-radius: var(--radius-lg);
         box-shadow: var(--shadow-md);
@@ -62,20 +70,65 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
         position: sticky;
         top: var(--spacing-lg);
       }
-
       .recipes-container {
         flex: 1;
         min-width: 0;
+      }
+      .filters-toggle {
+        display: none;
       }
 
       @media (max-width: 968px) {
         .recipe-page {
           flex-direction: column;
+          padding: var(--spacing-md);
+          gap: var(--spacing-md);
         }
-
         .filters-container {
           position: static;
-          flex: 1;
+          flex: none;
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .recipe-page {
+          padding: var(--spacing-sm);
+          padding-top: calc(48px + var(--spacing-lg) + var(--spacing-md));
+          gap: var(--spacing-sm);
+        }
+        .filters-toggle {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-sm);
+          background: var(--color-bg-secondary);
+          border: 1px solid var(--color-border-light);
+          border-radius: var(--radius-md);
+          padding: var(--spacing-sm) var(--spacing-md);
+          cursor: pointer;
+          width: 100%;
+          box-sizing: border-box;
+          box-shadow: var(--shadow-sm);
+        }
+        .burger-bar {
+          display: block;
+          width: 20px;
+          height: 2px;
+          background: var(--color-secondary);
+          border-radius: 2px;
+          flex-shrink: 0;
+        }
+        .burger-label {
+          color: var(--color-secondary);
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+        .filters-container {
+          display: none;
+        }
+        .filters-container.open {
+          display: block;
         }
       }
     `,
@@ -85,6 +138,7 @@ export class RecipePage implements OnInit {
   private readonly recipeApiService = inject(RecipeApiService);
 
   recipes: RecipeModel[] = [];
+  isFiltersOpen = signal(false);
 
   ngOnInit(): void {
     this.loadRecipes();

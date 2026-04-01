@@ -3,6 +3,8 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-lg);
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .filters-title {
@@ -24,6 +26,9 @@
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   border: 1px solid var(--color-border-light);
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
@@ -48,4 +53,31 @@ input[type="text"],
 input[type="number"],
 input[type="range"] {
   accent-color: var(--color-primary);
+}
+
+@media (max-width: 968px) {
+  .filters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filter-card.wide {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-card,
+  .filter-card.wide {
+    grid-column: span 1;
+  }
+
+  .filters-title {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-md);
+  }
 }

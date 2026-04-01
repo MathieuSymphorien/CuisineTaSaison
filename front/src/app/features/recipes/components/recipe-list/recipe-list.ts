@@ -18,13 +18,18 @@ import { RecipeModel } from "src/app/shared/models/recipe.model";
   `,
   styles: `
     .recipe-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: var(--spacing-lg);
-      max-width: 1200px;
-      margin: 0 auto;
       padding: var(--spacing-md);
+    }
+
+    @media (max-width: 480px) {
+      .recipe-list {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+      }
     }
   `,
 })
