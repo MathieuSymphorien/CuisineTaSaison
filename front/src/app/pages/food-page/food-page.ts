@@ -1,5 +1,6 @@
 import { FoodModel } from "src/app/shared/models/food.model";
 import { Component, inject, OnInit, signal } from "@angular/core";
+import { SeoService } from "src/app/core/services/seo.service";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { FoodList } from "src/app/features/foods/components/food-list/food-list";
@@ -45,8 +46,14 @@ export class FoodPage implements OnInit {
   isFiltersOpen = signal(false);
 
   private readonly foodApiService = inject(FoodApiService);
+  private readonly seoService = inject(SeoService);
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: "Aliments de saison",
+      description: "Parcourez tous les aliments de saison : légumes, fruits, céréales, poissons et plus. Filtrez par mois et catégorie.",
+      url: "/aliment",
+    });
     this.loadFoods();
   }
 

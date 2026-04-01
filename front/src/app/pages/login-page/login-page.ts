@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
+import { SeoService } from "src/app/core/services/seo.service";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { Login } from "src/app/features/auth/components/login/login";
@@ -30,4 +31,10 @@ import { Login } from "src/app/features/auth/components/login/login";
     }
   `,
 })
-export class LoginPage {}
+export class LoginPage implements OnInit {
+  private readonly seoService = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seoService.update({ title: "Connexion", description: "", noindex: true });
+  }
+}

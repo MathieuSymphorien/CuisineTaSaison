@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
+import { SeoService } from "src/app/core/services/seo.service";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { RecipeModel } from "src/app/shared/models/recipe.model";
@@ -136,11 +137,17 @@ import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.s
 })
 export class RecipePage implements OnInit {
   private readonly recipeApiService = inject(RecipeApiService);
+  private readonly seoService = inject(SeoService);
 
   recipes: RecipeModel[] = [];
   isFiltersOpen = signal(false);
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: "Recettes de saison",
+      description: "Découvrez des recettes cuisinées avec des ingrédients de saison. Filtrez par temps de préparation, aliments et mois.",
+      url: "/recette",
+    });
     this.loadRecipes();
   }
 

@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
+import { SeoService } from "src/app/core/services/seo.service";
 import { Header } from "../../shared/components/header/header";
 import { Footer } from "../../shared/components/footer/footer";
 import { FoodProposal } from "src/app/features/foods/components/food-proposal/food-proposal";
@@ -135,4 +136,14 @@ import { MatTabsModule } from "@angular/material/tabs";
     }
   `,
 })
-export class ProposalPage {}
+export class ProposalPage implements OnInit {
+  private readonly seoService = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seoService.update({
+      title: "Proposer une recette ou un aliment",
+      description: "Partagez vos découvertes de saison avec la communauté. Proposez une recette ou un nouvel aliment.",
+      url: "/proposition",
+    });
+  }
+}

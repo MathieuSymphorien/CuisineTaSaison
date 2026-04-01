@@ -8,6 +8,7 @@ import { RecipeModel } from "src/app/shared/models/recipe.model";
 import { RecipeCarousel } from "src/app/features/recipes/components/recipe-carousel/recipe-carousel";
 import { FoodApiService } from "src/app/features/foods/services/food-api.service";
 import { RecipeApiService } from "src/app/features/recipes/services/recipe-api.service";
+import { SeoService } from "src/app/core/services/seo.service";
 
 @Component({
   selector: "app-home",
@@ -24,8 +25,14 @@ export class Home implements AfterViewInit {
 
   private readonly foodApiService = inject(FoodApiService);
   private readonly recipeApiService = inject(RecipeApiService);
+  private readonly seoService = inject(SeoService);
 
   constructor() {
+    this.seoService.update({
+      title: "Accueil",
+      description: "Découvrez les aliments et recettes de saison. Mangez local, mangez frais, respectez les saisons.",
+      url: "/",
+    });
     const date = new Date();
     const options: Intl.DateTimeFormatOptions = { month: "long" };
     this.currentMonth = date.toLocaleDateString("fr-FR", options);
