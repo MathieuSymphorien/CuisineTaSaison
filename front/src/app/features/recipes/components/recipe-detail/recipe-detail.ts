@@ -54,6 +54,13 @@ export class RecipeDetail implements OnInit {
     this.people.set(r.people);
     this.stepsText.set(r.steps.join("\n"));
     this.recipeFoodResponses.set(r.recipeFoods);
+    this.recipeFoodRequests.set(
+      r.recipeFoods.map((f) => ({
+        foodId: f.foodId,
+        quantity: f.quantity,
+        unit: f.unit,
+      })),
+    );
   }
 
   close() {
