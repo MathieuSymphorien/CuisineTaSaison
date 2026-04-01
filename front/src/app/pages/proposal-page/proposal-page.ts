@@ -52,6 +52,8 @@ import { MatTabsModule } from "@angular/material/tabs";
       max-width: 900px;
       margin: 0 auto;
       padding: var(--spacing-xl);
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .proposal-header {
@@ -82,6 +84,31 @@ import { MatTabsModule } from "@angular/material/tabs";
 
     .tab-content {
       padding: var(--spacing-lg) 0;
+    }
+
+    @media (max-width: 968px) {
+      .proposal-container {
+        padding: var(--spacing-md);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .proposal-container {
+        padding: var(--spacing-sm);
+        padding-top: calc(48px + var(--spacing-lg) + var(--spacing-md));
+      }
+
+      .proposal-tabs {
+        padding: var(--spacing-sm);
+      }
+
+      .tab-content {
+        padding: var(--spacing-sm) 0;
+      }
+
+      .proposal-header h1 {
+        font-size: 1.25rem;
+      }
     }
 
     ::ng-deep .mat-mdc-tab-header {

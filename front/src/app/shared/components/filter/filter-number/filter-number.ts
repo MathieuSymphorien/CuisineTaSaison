@@ -4,6 +4,7 @@ import "src/app/shared/components/filter/filter-common.css";
 @Component({
   selector: "app-filter-number",
   standalone: true,
+  styles: [`:host { display: block; }`],
   template: `
     <div class="filter-box">
       <div class="header">{{ label() }}</div>

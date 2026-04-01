@@ -19,10 +19,13 @@ import "src/app/shared/components/filter/filter-common.css";
     </div>
   `,
   styles: `
+    :host { display: block; }
     textarea {
       resize: vertical;
       min-height: 100px;
       font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
     }
     .hint {
       font-size: 13px;

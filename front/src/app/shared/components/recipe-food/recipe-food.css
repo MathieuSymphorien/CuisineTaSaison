@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+table {
+  min-width: 480px;
+  width: 100%;
+}
+
+td, th {
+  padding: 8px 4px;
+}
